@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.23)
 project(ECECity C)
 set(CMAKE_C_STANDARD 99)
 
-
+# Projet principal
 file(GLOB_RECURSE SOURCES "src/*.c")
 include_directories("include")
 
@@ -12,3 +12,8 @@ include_directories("raylib")
 
 add_executable(ECECity ${SOURCES})
 target_link_libraries(ECECity raylib)
+
+# ajouts des tests unitaires
+add_subdirectory("tests")
+
+
