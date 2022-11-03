@@ -25,6 +25,9 @@ typedef struct Liste_t {
 /// Crée une liste vide.
 Liste_t* liste_alloc();
 
+/// Détruit une liste.
+void liste_free(Liste_t* liste);
+
 /// Regarde si la liste est vide.
 bool liste_estVide(Liste_t *liste);
 

@@ -12,6 +12,9 @@ void jeu_run(Jeu_t* jeu, ScreenInfo_t* ecran_depart)
 
     DBG_LOG("Lancement du jeu sur l'ecran: %s", ecran_depart->screen_name);
 
+    if (ecran_depart->on_enter_callback != NULL)
+        ecran_depart->on_enter_callback(jeu, ecran_depart);
+
     while (!WindowShouldClose() && !jeu->should_exit)
     {
         if (jeu->screen->update_callback != NULL)
@@ -25,6 +28,9 @@ void jeu_run(Jeu_t* jeu, ScreenInfo_t* ecran_depart)
 
         EndDrawing();
     }
+
+    if (jeu->screen->on_exit_callback != NULL)
+        jeu->screen->on_exit_callback(jeu, jeu->screen);
 }
 
 /// Change l'écran actuellement affiché avec celui passé en paramètre.

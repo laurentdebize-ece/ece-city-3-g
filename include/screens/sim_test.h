@@ -4,12 +4,13 @@
 
 #include "jeu.h"
 #include <stdlib.h>
+#include "sim/sim.h"
 
 typedef struct SimTestScreen_t {
     ScreenInfo_t screen_info;
 
     // les structures viennent après.
-
+    SimWorld_t* world;
 } SimTestScreen_t;
 
 // callbacks de l'écran.
