@@ -10,6 +10,16 @@ Liste_t* liste_alloc() {
     return liste;
 }
 
+void liste_free(Liste_t* liste) {
+    struct Maillon_t *maillon = liste->premier;
+    while (maillon != NULL) {
+        struct Maillon_t *tmp = maillon;
+        maillon = maillon->next;
+        free(tmp);
+    }
+    free(liste);
+}
+
 /// Regarde si la liste est vide.
 bool liste_estVide(Liste_t *liste) {
     return liste->taille == 0;
@@ -90,3 +100,4 @@ void* liste_supprimer_debut(Liste_t *liste) {
 
     return data;
 }
+
