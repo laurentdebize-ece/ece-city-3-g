@@ -3,12 +3,12 @@
 
 #include "tuile.h"
 
-void ouvrirFichier(ECECity* eceCity);
+void ouvrirFichier(SimWorld_t* eceCity);
 
-void afficherLectureFichier(ECECity* eceCity);
+void afficherLectureFichier(SimWorld_t* eceCity);
 
-void lireFichier(ECECity* eceCity);
+void lireFichier(SimWorld_t* eceCity);
 
-void ecrireFichier(ECECity* eceCity);
+void ecrireFichier(SimWorld_t* eceCity);
 
 #endif

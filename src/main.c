@@ -28,7 +28,7 @@ int main(void) {
 
     // NOTE: Textures MUST be loaded after Window initialization (OpenGL context is required)
 
-    ECECity eceCity = {0};
+    SimWorld_t eceCity = {0};
 
     initMap(&eceCity);
 
@@ -40,8 +40,8 @@ int main(void) {
 
     //affichageTypeBloc(&eceCity);
 
-    eceCity.carte.spritesheetTexture = LoadTexture("../resources/img/carte/spriteSheet.png");
-    eceCity.carte.spriteCheat = LoadImage("../resources/img/carte/tileCheat.png");
+    eceCity.loader.spriteSheetMapTexture = LoadTexture("../resources/img/carte/spriteSheet.png");
+    eceCity.loader.spriteCheat = LoadImage("../resources/img/carte/tileCheat.png");
 
     loadTextureLogoToolbar(&eceCity);
 
@@ -72,9 +72,9 @@ int main(void) {
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
-    UnloadTexture(eceCity.carte.spritesheetTexture);       // Texture unloading
+    UnloadTexture(eceCity.loader.spriteSheetMapTexture);       // Texture unloading
 
-    UnloadImage(eceCity.carte.spriteCheat);        // Unload image from CPU memory (RAM)
+    UnloadImage(eceCity.loader.spriteCheat);        // Unload image from CPU memory (RAM)
 
     CloseWindow();                // Close window and OpenGL context
     //--------------------------------------------------------------------------------------

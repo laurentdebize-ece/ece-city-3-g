@@ -1,9 +1,9 @@
 #include "carte.h"
+#include "sim/sim.h"
 #include "stdio.h"
-#include "stdlib.h"
 
 
-void initMap(ECECity *eceCity) {
+void initMap(SimWorld_t *eceCity) {
 
     eceCity->carte.Origine.celluleX = ORIGINEX;
     eceCity->carte.Origine.celluleY = ORIGINEY;
@@ -280,8 +280,7 @@ void initMap(ECECity *eceCity) {
 
 }
 
-
-void afficherFondMap(ECECity *eceCity) {
+void afficherFondMap(SimWorld_t *eceCity) {
 
     struct Buffer {
         Vector2D position;
@@ -291,18 +290,10 @@ void afficherFondMap(ECECity *eceCity) {
     struct Buffer buffer[100];
     int nbBuffer = 0;
 
-
     for (int y = 0; y < NBCELLULEY; y++) {
         for (int x = 0; x < NBCELLULEX; x++) {
             if (eceCity->carte.mapTile[y][x].typeBloc != VIDE) {
-                /*DrawTextureRec(eceCity->carte.spritesheetTexture,
-                               eceCity->carte.spriteSheet[eceCity->carte.mapTile[y][x].typeBloc].rectangle,
-                               (Vector2) {
-                                       (float) eceCity->carte.spriteSheet[eceCity->carte.mapTile[y][x].typeBloc].decalageXDecor +
-                                       (float) eceCity->carte.mapTile[y][x].position.x,
-                                       (float) eceCity->carte.mapTile[y][x].position.y +
-                                       (float) eceCity->carte.spriteSheet[eceCity->carte.mapTile[y][x].typeBloc].decalageYDecor},
-                               WHITE);*/
+
                 switch (eceCity->carte.mapTile[y][x].typeBloc) {
 
                     case ENERGY_4X6: {
@@ -391,22 +382,13 @@ void afficherFondMap(ECECity *eceCity) {
                     }
                 }
             }
-
-
-            /*DrawTextureRec(eceCity->carte.spritesheetTexture,
-                           eceCity->carte.spriteSheet[CONTOUR].rectangle, (Vector2) {
-                            (float) eceCity->carte.spriteSheet[CONTOUR].decalageXDecor +
-                            (float) eceCity->carte.mapTile[y][x].position.x,
-                            (float) eceCity->carte.mapTile[y][x].position.y +
-                            (float) eceCity->carte.spriteSheet[CONTOUR].decalageYDecor},
-                           WHITE);*/
         }
     }
 
     for (int y = 0; y < NBCELLULEY; y++) {
         for (int x = 0; x < NBCELLULEX; x++) {
             if (eceCity->carte.mapTile[y][x].typeBloc != VIDE) {
-                DrawTextureRec(eceCity->carte.spritesheetTexture,
+                DrawTextureRec(eceCity->loader.spriteSheetMapTexture,
                                eceCity->carte.spriteSheet[eceCity->carte.mapTile[y][x].typeBloc].rectangle,
                                (Vector2) {
                                        (float) eceCity->carte.spriteSheet[eceCity->carte.mapTile[y][x].typeBloc].decalageXDecor +
@@ -419,29 +401,28 @@ void afficherFondMap(ECECity *eceCity) {
     }
 
     for (int i = 0; i < nbBuffer; i++) {
-        DrawTextureRec(eceCity->carte.spritesheetTexture,
+        DrawTextureRec(eceCity->loader.spriteSheetMapTexture,
                        eceCity->carte.spriteSheet[buffer[i].typeBloc].rectangle, (Vector2) {
                         (float) eceCity->carte.spriteSheet[buffer[i].typeBloc].decalageXDecor +
                         (float) eceCity->carte.mapTile[buffer[i].position.y][buffer[i].position.x].position.x,
                         (float) eceCity->carte.mapTile[buffer[i].position.y][buffer[i].position.x].position.y +
                         (float) eceCity->carte.spriteSheet[buffer[i].typeBloc].decalageYDecor},
                        WHITE);
-
     }
-
 }
 
-void affichageHover(ECECity *eceCity) {
-    if (!eceCity->interactionExterieure.outOfMapBorders) {
-        if (eceCity->interactionExterieure.celluleIso.x >= 0 &&
-            eceCity->interactionExterieure.celluleIso.x < NBCELLULEX &&
-            eceCity->interactionExterieure.celluleIso.y >= 0 &&
-            eceCity->interactionExterieure.celluleIso.y < NBCELLULEY) {
-            if (eceCity->matrice[eceCity->interactionExterieure.celluleIso.y][eceCity->interactionExterieure.celluleIso.x] == '0') {
-                DrawTextureRec(eceCity->carte.spritesheetTexture, eceCity->carte.spriteSheet[HOOVER].rectangle,
+void affichageHover(SimWorld_t *eceCity) {
+    if (!eceCity->informationsSouris.outOfMapBorders) {
+        if (eceCity->informationsSouris.celluleIso.x >= 0 &&
+            eceCity->informationsSouris.celluleIso.x < NBCELLULEX &&
+            eceCity->informationsSouris.celluleIso.y >= 0 &&
+            eceCity->informationsSouris.celluleIso.y < NBCELLULEY) {
+            if (eceCity->matrice[eceCity->informationsSouris.celluleIso.y][eceCity->informationsSouris.celluleIso.x] ==
+                '0') {
+                DrawTextureRec(eceCity->loader.spriteSheetMapTexture, eceCity->carte.spriteSheet[HOOVER].rectangle,
                                isometricCoordsToScreen(eceCity), WHITE);
             } else {
-                DrawTextureRec(eceCity->carte.spritesheetTexture, eceCity->carte.spriteSheet[HOOVER].rectangle,
+                DrawTextureRec(eceCity->loader.spriteSheetMapTexture, eceCity->carte.spriteSheet[HOOVER].rectangle,
                                isometricCoordsToScreen(eceCity), RED);
             }
 
@@ -449,14 +430,14 @@ void affichageHover(ECECity *eceCity) {
     }
 }
 
-void texteDebug(ECECity *eceCity) {
+void texteDebug(SimWorld_t *eceCity) {
     char buffer[100];
-    sprintf(buffer, "x: %d, y: %d", eceCity->interactionExterieure.celluleIso.x,
-            eceCity->interactionExterieure.celluleIso.y);
+    sprintf(buffer, "x: %d, y: %d", eceCity->informationsSouris.celluleIso.x,
+            eceCity->informationsSouris.celluleIso.y);
     DrawText(buffer, 10, 10, 20, BLACK);
 }
 
-void transfertMatriceEnTypeBloc(ECECity *eceCity) {
+void transfertMatriceEnTypeBloc(SimWorld_t *eceCity) {
 
     for (int y = 0; y < NBCELLULEY; y++) {
         for (int x = 0; x < NBCELLULEX; x++) {
@@ -714,7 +695,7 @@ void transfertMatriceEnTypeBloc(ECECity *eceCity) {
 
 }
 
-void typeBlocRoute(ECECity *eceCity) {
+void typeBlocRoute(SimWorld_t *eceCity) {
     for (int y = 0; y < NBCELLULEY; y++) {
         for (int x = 0; x < NBCELLULEX; x++) {
             if (eceCity->matrice[y][x] == 'R') {
@@ -771,7 +752,7 @@ void typeBlocRoute(ECECity *eceCity) {
     }
 }
 
-void affichageTypeBloc(ECECity *eceCity) {
+void affichageTypeBloc(SimWorld_t *eceCity) {
     for (int y = 0; y < NBCELLULEY; y++) {
         for (int x = 0; x < NBCELLULEX; x++) {
 

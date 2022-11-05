@@ -1,10 +1,10 @@
 #include "tuile.h"
 
-void actualiserPositionSourisJoueur(ECECity *eceCity) {
+void actualiserPositionSourisJoueur(SimWorld_t*eceCity) {
     int beforeX, beforeY, afterX, afterY;
 
-    beforeX = (int) eceCity->interactionExterieure.celluleIso.x; //detecte le chmgt de cellule de la souris
-    beforeY = (int) eceCity->interactionExterieure.celluleIso.y;
+    beforeX = (int) eceCity->informationsSouris.celluleIso.x; //detecte le chmgt de cellule de la souris
+    beforeY = (int) eceCity->informationsSouris.celluleIso.y;
 
     calculPositionSourisEnCelluleXY(eceCity);
 
@@ -16,101 +16,101 @@ void actualiserPositionSourisJoueur(ECECity *eceCity) {
 
     razOutOfMapBorders(eceCity);
 
-    afterX = eceCity->interactionExterieure.celluleIso.x; //detecte le chmgt de cellule de la souris
-    afterY = eceCity->interactionExterieure.celluleIso.y;
+    afterX = eceCity->informationsSouris.celluleIso.x; //detecte le chmgt de cellule de la souris
+    afterY = eceCity->informationsSouris.celluleIso.y;
 
     if (beforeX != afterX || beforeY != afterY) { //detecte le chmgt de cellule de la souris
-        eceCity->interactionExterieure.boolChangementDeCelluleIso = true;
+        eceCity->informationsSouris.boolChangementDeCelluleIso = true;
     } else {
-        eceCity->interactionExterieure.boolChangementDeCelluleIso = false;
+        eceCity->informationsSouris.boolChangementDeCelluleIso = false;
     }
 }
 
-void calculPositionSourisEnCelluleXY(ECECity *eceCity) {
-    eceCity->interactionExterieure.celluleXY.x =
+void calculPositionSourisEnCelluleXY(SimWorld_t*eceCity) {
+    eceCity->informationsSouris.celluleXY.x =
             GetMouseX() / eceCity->carte.mapTile[0][0].spriteLargeur;
-    eceCity->interactionExterieure.celluleXY.y =
+    eceCity->informationsSouris.celluleXY.y =
             GetMouseY() / eceCity->carte.mapTile[0][0].spriteHauteur;
 
 }
 
-void razOutOfMapBorders(ECECity *eceCity) {
-    if (eceCity->interactionExterieure.celluleIso.x<0 ||
-                                                    eceCity->interactionExterieure.celluleIso.x>(
+void razOutOfMapBorders(SimWorld_t*eceCity) {
+    if (eceCity->informationsSouris.celluleIso.x<0 ||
+                                                    eceCity->informationsSouris.celluleIso.x>(
             NBCELLULEX - 1)
-        || eceCity->interactionExterieure.celluleIso.y<0
+        || eceCity->informationsSouris.celluleIso.y<0
                                                        ||
-                                                       eceCity->interactionExterieure.celluleIso.y>(
+                                                       eceCity->informationsSouris.celluleIso.y>(
             NBCELLULEY - 1)) {
-        eceCity->interactionExterieure.celluleIso.x = 0;
-        eceCity->interactionExterieure.celluleIso.y = 0;
-        eceCity->interactionExterieure.outOfMapBorders = true;
+        eceCity->informationsSouris.celluleIso.x = 0;
+        eceCity->informationsSouris.celluleIso.y = 0;
+        eceCity->informationsSouris.outOfMapBorders = true;
 
     } else {
-        eceCity->interactionExterieure.outOfMapBorders = false;
+        eceCity->informationsSouris.outOfMapBorders = false;
     }
 }
 
-void calculPositionSourisEnCelluleIso(ECECity *eceCity) {
-    eceCity->interactionExterieure.celluleIso.x =
-            (eceCity->interactionExterieure.celluleXY.y - eceCity->carte.Origine.celluleY)
-            + (eceCity->interactionExterieure.celluleXY.x -
+void calculPositionSourisEnCelluleIso(SimWorld_t*eceCity) {
+    eceCity->informationsSouris.celluleIso.x =
+            (eceCity->informationsSouris.celluleXY.y - eceCity->carte.Origine.celluleY)
+            + (eceCity->informationsSouris.celluleXY.x -
                eceCity->carte.Origine.celluleX);//celluleX sélectionée iso
-    eceCity->interactionExterieure.celluleIso.y =
-            (eceCity->interactionExterieure.celluleXY.y - eceCity->carte.Origine.celluleY)
-            - (eceCity->interactionExterieure.celluleXY.x -
+    eceCity->informationsSouris.celluleIso.y =
+            (eceCity->informationsSouris.celluleXY.y - eceCity->carte.Origine.celluleY)
+            - (eceCity->informationsSouris.celluleXY.x -
                eceCity->carte.Origine.celluleX);//celluleY sélectionée iso
 }
 
-void calculPositionSoursiEnOffsetDansUneCelluleXY(ECECity *eceCity) {
-    eceCity->interactionExterieure.offsetCellule.x =
+void calculPositionSoursiEnOffsetDansUneCelluleXY(SimWorld_t*eceCity) {
+    eceCity->informationsSouris.offsetCellule.x =
             GetMouseX() % eceCity->carte.mapTile[0][0].spriteLargeur;
-    eceCity->interactionExterieure.offsetCellule.y =
+    eceCity->informationsSouris.offsetCellule.y =
             GetMouseY() % eceCity->carte.mapTile[0][0].spriteHauteur;
 }
 
-void calculPositionSourisEnCelluleIsoReactualiseeGraceSpriteCheat(ECECity *eceCity) {
-    Color color = GetImageColor(eceCity->carte.spriteCheat, eceCity->interactionExterieure.offsetCellule.x,
-                                eceCity->interactionExterieure.offsetCellule.y);
+void calculPositionSourisEnCelluleIsoReactualiseeGraceSpriteCheat(SimWorld_t*eceCity) {
+    Color color = GetImageColor(eceCity->loader.spriteCheat, eceCity->informationsSouris.offsetCellule.x,
+                                eceCity->informationsSouris.offsetCellule.y);
 
     if (color.r && !color.g && !color.b) {
         //... celule en -1 des X
-        eceCity->interactionExterieure.celluleIso.x -= 1;
+        eceCity->informationsSouris.celluleIso.x -= 1;
     } else if (!color.r && color.g && !color.b) {
         //.. cellule en +y
-        eceCity->interactionExterieure.celluleIso.y += 1;
+        eceCity->informationsSouris.celluleIso.y += 1;
     } else if (color.r && color.g && !color.b) {
         //cellule en +x
-        eceCity->interactionExterieure.celluleIso.x += 1;
+        eceCity->informationsSouris.celluleIso.x += 1;
     } else if (!color.r && !color.g && color.b) {
         //cellule  en -y
-        eceCity->interactionExterieure.celluleIso.y -= 1;
+        eceCity->informationsSouris.celluleIso.y -= 1;
     }
 }
 
-int isometricCoordsToScreenX(ECECity *eceCity) {
+int isometricCoordsToScreenX(SimWorld_t*eceCity) {
     for (int y = 0; y < NBCELLULEY; y++) {
         for (int x = 0; x < NBCELLULEX; x++) {
-            if (eceCity->interactionExterieure.celluleIso.x == x &&
-                eceCity->interactionExterieure.celluleIso.y == y) {
+            if (eceCity->informationsSouris.celluleIso.x == x &&
+                eceCity->informationsSouris.celluleIso.y == y) {
                 return eceCity->carte.mapTile[y][x].position.x;
             }
         }
     }
 }
 
-int isometricCoordsToScreenY(ECECity *eceCity) {
+int isometricCoordsToScreenY(SimWorld_t*eceCity) {
     for (int y = 0; y < NBCELLULEY; y++) {
         for (int x = 0; x < NBCELLULEX; x++) {
-            if (eceCity->interactionExterieure.celluleIso.x == x &&
-                eceCity->interactionExterieure.celluleIso.y == y) {
+            if (eceCity->informationsSouris.celluleIso.x == x &&
+                eceCity->informationsSouris.celluleIso.y == y) {
                 return eceCity->carte.mapTile[y][x].position.y;
             }
         }
     }
 }
 
-Vector2 isometricCoordsToScreen(ECECity *eceCity) {
+Vector2 isometricCoordsToScreen(SimWorld_t*eceCity) {
     Vector2 position;
 
     position.x = isometricCoordsToScreenX(eceCity);

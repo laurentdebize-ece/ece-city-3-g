@@ -3,19 +3,19 @@
 
 #include "tuile.h"
 
-void initMap(ECECity* eceCity);
+void initMap(SimWorld_t* eceCity);
 
-void afficherFondMap(ECECity* eceCity);
+void afficherFondMap(SimWorld_t* eceCity);
 
-void affichageHover(ECECity* eceCity);
+void affichageHover(SimWorld_t* eceCity);
 
-void texteDebug(ECECity* eceCity);
+void texteDebug(SimWorld_t* eceCity);
 
-void affichageTypeBloc(ECECity* eceCity);
+void affichageTypeBloc(SimWorld_t* eceCity);
 
-void transfertMatriceEnTypeBloc(ECECity* eceCity);
+void transfertMatriceEnTypeBloc(SimWorld_t* eceCity);
 
-void typeBlocRoute(ECECity* eceCity);
+void typeBlocRoute(SimWorld_t* eceCity);
 
 
 #endif //ECECITY_CARTE_H
