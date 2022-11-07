@@ -6,13 +6,17 @@
 #include <stdlib.h>
 #include "sim/sim.h"
 #include "ui.h"
+#include "spritesheet.h"
+#include "utils/grille.h"
 
 typedef struct GameplayScreen_t {
     ScreenInfo_t screen_info;
     /// La simulation
     SimWorld_t* world;
-    /// Les textures
+    /// Les textures pour le dessin de l'IU.
     UITextures_t textures;
+    /// Les textures pour le dessin de la carte.
+    SpriteSheet_t spriteSheet;
 } GameplayScreen_t;
 
 // callbacks de l'écran.

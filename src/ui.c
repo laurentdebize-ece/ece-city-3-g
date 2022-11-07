@@ -16,16 +16,16 @@ void ui_charger_textures(UITextures_t* textures) {
     textures->toolbarIcons[ICON_CHATEAU] = LoadTexture("../assets/textures/icones/valve.png");
 }
 
-void ui_draw_toolbar(UITextures_t* textures) {
+void ui_draw_toolbar(UITextures_t* textures, SimWorld_t* sim) {
     DrawRectangle(0, 924, FENETRE_JEU_LARGEUR, 100, (Color) { 0, 194, 255, 191 });
 
     DrawRectangle(271, 954, 125, 40, (Color) { 238,238,238,200});
     DrawRectangle(493, 954, 125, 40, (Color) { 238,238,238,200});
     DrawRectangle(717, 954, 125, 40, (Color) { 238,238,238,200});
 
-//    DrawText(TextFormat("%d", eceCity->rules), 271, 954, 20, (Color) { 0, 0, 0, 255 });
-//    DrawText(TextFormat("%d", eceCity->monnaie), 493, 954, 20, (Color) { 0, 0, 0, 255 });
-//    DrawText(TextFormat("%d", eceCity->n_ticks), 717, 954, 20, (Color) { 0, 0, 0, 255 });
+    DrawText(TextFormat("%d", sim->rules), 271, 954, 20, (Color) { 0, 0, 0, 255 });
+    DrawText(TextFormat("%d", sim->monnaie), 493, 954, 20, (Color) { 0, 0, 0, 255 });
+    DrawText(TextFormat("%d", sim->n_ticks), 717, 954, 20, (Color) { 0, 0, 0, 255 });
 
     DrawTexture(textures->toolbarIcons[ICON_HAMBURGER], 26, 954, WHITE);
     DrawTexture(textures->toolbarIcons[ICON_SAVE], 109, 954, WHITE);

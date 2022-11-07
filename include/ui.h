@@ -3,6 +3,7 @@
 #define ECECITY_UI_H
 
 #include <raylib.h>
+#include "sim/sim.h"
 
 enum TOOLBAR_ICON {
     ICON_HAMBURGER,
@@ -27,6 +28,6 @@ typedef struct UITextures_t {
 
 void ui_charger_textures(UITextures_t* textures);
 
-void ui_draw_toolbar(UITextures_t* textures);
+void ui_draw_toolbar(UITextures_t* textures, SimWorld_t* sim);
 
 #endif //ECECITY_UI_H
