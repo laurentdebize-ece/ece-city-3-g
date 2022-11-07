@@ -30,14 +30,7 @@ void gameplay_update(Jeu_t* jeu, GameplayScreen_t *gameplay) {
 
 void gameplay_draw(Jeu_t* jeu, GameplayScreen_t *gameplay) {
 
-
-    // dessin du terrain vide
-    for (int i = 0; i < 45; ++i)
-        for (int j = 0; j < 35; ++j)
-            sprite_sheet_draw_sprite(&gameplay->spriteSheet, TERRAIN_0, WHITE, i, j);
-
-
-    sprite_sheet_draw_sprite(&gameplay->spriteSheet, EAU_6X4, WHITE, 0, 0);
+    affichage_draw_terrain_background(&gameplay->spriteSheet);
 
     int x = GetMouseX() / LARGUEUR_TUILE_ISO;
     int y = GetMouseY() / HAUTEUR_TUILE_ISO;

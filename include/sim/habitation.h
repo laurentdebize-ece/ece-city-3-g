@@ -5,6 +5,8 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+#include "utils/grille.h"
+
 typedef enum SimRules_t {
     Capitaliste_t,
     Communiste_t,
@@ -36,6 +38,8 @@ typedef struct Habitation_t {
     int ticks_evolution;
     /// Compteur de ticks avant prochaine régression.
     int ticks_regression;
+    /// La position du bâtiment.
+    Vector2I position;
 } Habitation_t;
 
 /// Crée une habitation.
