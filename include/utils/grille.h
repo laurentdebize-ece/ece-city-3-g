@@ -7,12 +7,10 @@
 #define ISO_ORIGINE_X 17
 #define ISO_ORIGINE_Y 3
 
-
 typedef struct Vector2I {
     int x;
     int y;
 } Vector2I;
-
 
 /// Convertit les coordonnées de la souris en coordonnées isométriques.
 Vector2I mouse_to_iso(Vector2I mouse);

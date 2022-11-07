@@ -57,3 +57,32 @@ void sim_reset_flow_distribution(SimWorld_t* world) {
         chateau_eau = chateau_eau->data;
     }
 }
+
+/// Place une entité dans la carte de la simulation.
+void sim_place_entity(SimWorld_t* world, void* entity, CaseKind_t type, int x, int y) {
+    switch (type) {
+        case Habitation:
+            liste_ajouter_fin(world->habitations, entity);
+            break;
+
+        case CentraleE:
+            liste_ajouter_fin(world->centrales, entity);
+            break;
+
+        case ChateauE:
+            liste_ajouter_fin(world->chateaux, entity);
+            break;
+
+        case Route:
+            liste_ajouter_fin(world->routes, entity);
+            break;
+
+        default:
+            break;
+    }
+}
+
+/// Vérifie si l'entitée spécifiée peut être placée à la position spécifiée.
+bool sim_check_can_place_entity(SimWorld_t* world, CaseKind_t type, int x, int y) {
+    return true;
+}
