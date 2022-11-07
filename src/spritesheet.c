@@ -3,7 +3,7 @@
 void sprite_sheet_load(SpriteSheet_t* spriteSheet) {
 
     spriteSheet->spriteSheetTexture = LoadTexture("../assets/textures/carte/spriteSheet.png");
-    spriteSheet->spriteCheatImage = LoadImage("../assets/textures/carte/tileCheat.png");
+    spriteSheet->spriteDetectionTuile = LoadImage("../assets/textures/carte/tileCheat.png");
 
     spriteSheet->sprites[CHEAT].rectangle.height = SPRITEHAUTEUR;
     spriteSheet->sprites[CHEAT].rectangle.width = SPRITELARGEUR;
