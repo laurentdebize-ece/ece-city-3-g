@@ -17,5 +17,7 @@ void transfertMatriceEnTypeBloc(SimWorld_t* eceCity);
 
 void typeBlocRoute(SimWorld_t* eceCity);
 
+void actionReloadMatrice(SimWorld_t* eceCity);
+
 
 #endif //ECECITY_CARTE_H

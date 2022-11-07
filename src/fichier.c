@@ -2,7 +2,10 @@
 
 void ouvrirFichier(SimWorld_t * eceCity) {
     eceCity->loader.fichierTxt = fopen("../resources/file/txt/carte.txt", "r+");
+}
 
+void ouvrirFichierEcriture(SimWorld_t* eceCity) {
+    eceCity->loader.fichierTxt = fopen("../resources/file/txt/carte.txt", "w+");
 }
 
 void lireFichier(SimWorld_t * eceCity){
@@ -27,6 +30,8 @@ void lireFichier(SimWorld_t * eceCity){
 
 void ecrireFichier(SimWorld_t* eceCity){
 
+    ouvrirFichierEcriture(eceCity);
+
     if (eceCity->loader.fichierTxt != NULL) {
 
         for (int y = 0; y < NBCELLULEY; y++) {
@@ -43,6 +48,8 @@ void ecrireFichier(SimWorld_t* eceCity){
         fprintf(eceCity->loader.fichierTxt, "%d\n", eceCity->n_ticks);
 
     }
+
+    fclose(eceCity->loader.fichierTxt);
 
 }
 

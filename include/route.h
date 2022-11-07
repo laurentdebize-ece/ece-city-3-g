@@ -17,5 +17,7 @@ void printChemin(SimWorld_t* eceCity);
 
 void checkChangementCelluleSurPlacementRoute(SimWorld_t* eceCity);
 
+void actualiserMatriceConstructionRoute(SimWorld_t* eceCity);
+
 
 #endif

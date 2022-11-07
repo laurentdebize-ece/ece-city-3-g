@@ -35,6 +35,7 @@ typedef struct {
     int spriteLargeur, spriteHauteur;
     int spriteHalfLargeur, spriteHalfHauteur;
     int typeBloc;
+    Color tinte;
 } Tile;
 
 typedef struct {
@@ -61,6 +62,7 @@ typedef struct {
     Tile mapTile[SIM_MAP_HAUTEUR][SIM_MAP_LARGEUR];//Tableau à 2 dimensions de Tuiles qui permet de générer la map
     Cellules2D Origine;//La map n'est pas forcément dessinée en 0,0
     Sprite_t spriteSheet[NB_SPRITES];//Tableau de sprites pour permettre l'affichage
+    bool reloadMatrice; //Si reload de la matrice --> reload de la map car changement de l'affichage de la map (bat ajouté, route ajoutée, ...)
 } Carte_t;
 
 typedef struct Texture_t {
@@ -68,6 +70,7 @@ typedef struct Texture_t {
     Texture2D logoToolBar[NB_LOGOS_TOOLBAR];
     Image spriteCheat;
     FILE* fichierTxt;
+    FILE* fichierTxtWrite;
 } Loader_t;
 
 typedef struct {

@@ -1,6 +1,7 @@
 #include "carte.h"
 #include "sim/sim.h"
 #include "stdio.h"
+#include "fichier.h"
 
 
 void initMap(SimWorld_t *eceCity) {
@@ -19,6 +20,7 @@ void initMap(SimWorld_t *eceCity) {
 
             //Permet de définir le type de bloc
             eceCity->carte.mapTile[y][x].typeBloc = TERRAIN_0;
+            eceCity->carte.mapTile[y][x].tinte = WHITE;
 
             eceCity->carte.mapTile[y][x].cellulesIso.celluleX = x;
             eceCity->carte.mapTile[y][x].cellulesIso.celluleY = y;
@@ -151,6 +153,13 @@ void initMap(SimWorld_t *eceCity) {
     eceCity->carte.spriteSheet[ROUTE_5].rectangle.y = 0;
     eceCity->carte.spriteSheet[ROUTE_5].decalageXDecor = 0;
     eceCity->carte.spriteSheet[ROUTE_5].decalageYDecor = 0;
+
+    eceCity->carte.spriteSheet[ROUTE_6].rectangle.height = 26;
+    eceCity->carte.spriteSheet[ROUTE_6].rectangle.width = SPRITELARGEUR;
+    eceCity->carte.spriteSheet[ROUTE_6].rectangle.x = SPRITELARGEUR * ROUTE_6;
+    eceCity->carte.spriteSheet[ROUTE_6].rectangle.y = 0;
+    eceCity->carte.spriteSheet[ROUTE_6].decalageXDecor = 0;
+    eceCity->carte.spriteSheet[ROUTE_6].decalageYDecor = 0;
 
     eceCity->carte.spriteSheet[ROUTE_7].rectangle.height = 26;
     eceCity->carte.spriteSheet[ROUTE_7].rectangle.width = SPRITELARGEUR;
@@ -395,7 +404,7 @@ void afficherFondMap(SimWorld_t *eceCity) {
                                        (float) eceCity->carte.mapTile[y][x].position.x,
                                        (float) eceCity->carte.mapTile[y][x].position.y +
                                        (float) eceCity->carte.spriteSheet[eceCity->carte.mapTile[y][x].typeBloc].decalageYDecor},
-                               WHITE);
+                               eceCity->carte.mapTile[y][x].tinte);
             }
         }
     }
@@ -760,5 +769,12 @@ void affichageTypeBloc(SimWorld_t *eceCity) {
 
         }
         printf("\n");
+    }
+}
+
+void actionReloadMatrice(SimWorld_t* eceCity){
+    if(eceCity->carte.reloadMatrice){
+        transfertMatriceEnTypeBloc(eceCity);
+        ecrireFichier(eceCity);
     }
 }
