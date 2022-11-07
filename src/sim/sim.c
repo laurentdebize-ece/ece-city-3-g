@@ -58,31 +58,69 @@ void sim_reset_flow_distribution(SimWorld_t* world) {
     }
 }
 
-/// Place une entité dans la carte de la simulation.
-void sim_place_entity(SimWorld_t* world, void* entity, CaseKind_t type, int x, int y) {
+/// Place une entité dans la carte de la simulation aux coordonnées données.
+void sim_place_entity(SimWorld_t* world, CaseKind_t type, int x, int y) {
     switch (type) {
         case Habitation:
-            liste_ajouter_fin(world->habitations, entity);
-            break;
+        {
+            Habitation_t* habitation = habitation_alloc(TERRAIN_VAGUE);
+            habitation->position = (Vector2I) {x, y};
+
+            for (int i = 0; i < 3; ++i) {
+                for (int j = 0; j < 3; ++j) {
+                    world->map[x + i][y + j].type = Habitation;
+                    world->map[x + i][y + j].donnees = habitation;
+                }
+            }
+
+            liste_ajouter_fin(world->habitations, habitation);
+        }
+        break;
 
         case CentraleE:
-            liste_ajouter_fin(world->centrales, entity);
-            break;
+        {
 
-        case ChateauE:
-            liste_ajouter_fin(world->chateaux, entity);
-            break;
+        }
+        break;
 
-        case Route:
-            liste_ajouter_fin(world->routes, entity);
-            break;
+        case ChateauE: {
+
+        }
+        break;
+
+        case Route: {
+
+        }
+        break;
 
         default:
             break;
     }
 }
 
-/// Vérifie si l'entitée spécifiée peut être placée à la position spécifiée.
-bool sim_check_can_place_entity(SimWorld_t* world, CaseKind_t type, int x, int y) {
+bool sim_check_can_place(SimWorld_t* world, int x, int y, int w, int h) {
+    // Si le bâtiment dépasse du terrain, on ne peut pas le placer.
+    if (x < 0 || y < 0 || x + w > SIM_MAP_LARGEUR || y + h > SIM_MAP_HAUTEUR)
+        return false;
+
+    // on vérifie d'abord que la surface de la grille ou l'on veut placer le bâtiment est vide.
+    for (int i = 0; i < w; i++) {
+        for (int j = 0; j < h; j++) {
+            if (world->map[x + i][y + j].type != Vide)
+                return false;
+        }
+    }
+
+//    // on vérifie ensuite que les cases adjacentes sont vides.
+//    for (int i = 0; i < w; ++i) {
+//        if (world->map[x + i][y - 1].type == Route || world->map[x + i][y + h].type == Route)
+//            return true;
+//    }
+//
+//    for (int i = 0; i < h; ++i) {
+//        if (world->map[x - 1][y + i].type == Route || world->map[x + w][y + i].type == Route)
+//            return true;
+//    }
+
     return true;
 }

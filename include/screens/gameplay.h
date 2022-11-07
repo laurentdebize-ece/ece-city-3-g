@@ -18,6 +18,8 @@ typedef struct GameplayScreen_t {
     UITextures_t textures;
     /// Les textures pour le dessin de la carte.
     SpriteSheet_t spriteSheet;
+
+    int curr_build_mode;
 } GameplayScreen_t;
 
 // callbacks de l'écran.

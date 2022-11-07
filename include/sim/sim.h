@@ -62,10 +62,10 @@ void sim_world_step(SimWorld_t* world);
 /// Détruit un monde de simulation.
 void sim_world_destroy(SimWorld_t* world);
 
-/// Place une entité dans la carte de la simulation.
-void sim_place_entity(SimWorld_t* world, void* entity, CaseKind_t type, int x, int y);
+/// Place une entité dans la carte de la simulation aux coordonnées données.
+void sim_place_entity(SimWorld_t* world, CaseKind_t type, int x, int y);
 
-/// Vérifie si l'entitée spécifiée peut être placée à la position spécifiée.
-bool sim_check_can_place_entity(SimWorld_t* world, CaseKind_t type, int x, int y);
+/// Vérifie si un bâtiment de dimensions précisés peut être placé à une position donnée.
+bool sim_check_can_place(SimWorld_t* world, int x, int y, int w, int h);
 
 #endif //ECECITY_SIM_H
