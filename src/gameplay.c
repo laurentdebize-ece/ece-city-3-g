@@ -36,7 +36,7 @@ void gameplay_update(Jeu_t* jeu, GameplayScreen_t *gameplay) {
 
 void gameplay_draw(Jeu_t* jeu, GameplayScreen_t *gameplay) {
 
-    affichage_draw_terrain_background(&gameplay->spriteSheet);
+    affichage_draw_terrain_background(&gameplay->spriteSheet, gameplay->world);
     affichage_draw_entities(&gameplay->spriteSheet, gameplay->world);
 
     int x = GetMouseX() / LARGUEUR_TUILE_ISO;
@@ -67,7 +67,24 @@ void gameplay_draw(Jeu_t* jeu, GameplayScreen_t *gameplay) {
             break;
     }
 
-    bool is_valid = sim_check_can_place(gameplay->world, v.x, v.y, w, h);
+    bool is_valid = sim_check_can_place(gameplay->world, w > 1, v.x, v.y, w, h);
     sprite_sheet_draw_sprite(&gameplay->spriteSheet, bat, is_valid ? GREEN : RED, v.x, v.y);
+
+    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && is_valid) {
+        switch (gameplay->curr_build_mode) {
+            case 0:
+                sim_place_entity(gameplay->world, Route, v.x, v.y);
+                break;
+
+            case 1:
+                sim_place_entity(gameplay->world, Habitation, v.x, v.y);
+                break;
+
+            case 2:
+                sim_place_entity(gameplay->world, CentraleE, v.x, v.y);
+                break;
+        }
+    }
+
     ui_draw_toolbar(&gameplay->textures, gameplay->world);
 }

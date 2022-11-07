@@ -7,7 +7,7 @@
 #include "spritesheet.h"
 
 /// Dessine le fond de la carte.
-void affichage_draw_terrain_background(SpriteSheet_t* sheet);
+void affichage_draw_terrain_background(SpriteSheet_t* sheet, SimWorld_t* world);
 
 /// Dessine les tuiles de la carte.
 void affichage_draw_entities(SpriteSheet_t* sheet, SimWorld_t* world);
