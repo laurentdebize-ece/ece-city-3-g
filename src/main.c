@@ -2,6 +2,7 @@
 #include "raylib.h"
 #include "jeu.h"
 #include "screens/sim_test.h"
+#include "affichage.h"
 #include "route.h"
 
 /*int main() {
@@ -52,6 +53,7 @@ int main(void) {
         actualiserPositionSourisJoueur(&eceCity);
         selectionNewRoad(&eceCity);
         actionReloadMatrice(&eceCity);
+        checkHoverToolbar(&eceCity);
 
         BeginDrawing();
 
@@ -68,7 +70,6 @@ int main(void) {
         afficherFondMap(&eceCity);
 
         affichageHover(&eceCity);
-
 
         texteDebug(&eceCity);
 

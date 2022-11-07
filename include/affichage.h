@@ -7,9 +7,7 @@ void afficherToolBar(SimWorld_t* eceCity);
 
 void loadTextureLogoToolbar(SimWorld_t* eceCity);
 
-void modeNewRoad(SimWorld_t* eceCity);
-
-void selectionNewRoad(SimWorld_t* eceCity);
+void checkHoverToolbar(SimWorld_t* eceCity);
 
 #endif
 

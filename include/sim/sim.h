@@ -45,13 +45,21 @@ typedef struct {
 
 typedef struct ActionsMap {
     bool modeNewRoad;
-    bool constructionRoute;
-    bool actualiserCheminRoute;
     RoadTest depart[2];
     int nbDepart;
     Cellules2D cheminRoute[100];
     int nbChemins;
 } ActionsMap;
+
+typedef struct effetsGraphiques {
+    bool hoverMenu;
+    bool hoverSave;
+    bool hoverRoute;
+    bool hoverHabitation;
+    bool hoverCentrale;
+    bool hoverChateau;
+    bool hoverDestruction;
+} effetsGraphiques;
 
 typedef struct {
     Rectangle rectangle;//Position de l'image dans le sprite
@@ -80,6 +88,7 @@ typedef struct {
     bool outOfMapBorders;
     bool boolChangementDeCelluleIso;
     ActionsMap actionsMap;
+    effetsGraphiques effetsGraphiques;
 } informationsSouris_t;
 
 /// Le type de case

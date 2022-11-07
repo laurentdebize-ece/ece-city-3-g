@@ -5,13 +5,15 @@ void selectionNewRoad(SimWorld_t *eceCity) {
 
     if (CheckCollisionPointRec(GetMousePosition(), (Rectangle) {1012, 954, 40, 40})) {
         //Actions Hoover New Road
-
+        eceCity->informationsSouris.effetsGraphiques.hoverRoute = true;
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
             //Actions Click New Road
             eceCity->informationsSouris.actionsMap.modeNewRoad = !eceCity->informationsSouris.actionsMap.modeNewRoad;
             eceCity->informationsSouris.actionsMap.depart[0].position.x = 0;
             eceCity->informationsSouris.actionsMap.depart[0].position.y = 0;
         }
+    } else {
+        eceCity->informationsSouris.effetsGraphiques.hoverRoute = false;
     }
 
 }
