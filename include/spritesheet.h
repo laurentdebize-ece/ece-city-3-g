@@ -58,7 +58,7 @@ typedef struct Sprite_t {
 
 typedef struct SpriteSheet_t {
     Texture2D spriteSheetTexture;
-    Image spriteCheatImage;
+    Image spriteDetectionTuile;
     Sprite_t sprites[NB_SPRITES];
 } SpriteSheet_t;
 

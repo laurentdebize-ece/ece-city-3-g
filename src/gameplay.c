@@ -39,10 +39,7 @@ void gameplay_draw(Jeu_t* jeu, GameplayScreen_t *gameplay) {
 
     sprite_sheet_draw_sprite(&gameplay->spriteSheet, EAU_6X4, WHITE, 0, 0);
 
-    int x = GetMouseX() / LARGUEUR_TUILE_ISO;
-    int y = GetMouseY() / HAUTEUR_TUILE_ISO;
-
-    Vector2I v = cartesien_to_iso((Vector2I){x, y});
+    Vector2I v = mouse_to_iso((Vector2I) { GetMouseX(), GetMouseY()}, gameplay->spriteSheet.spriteDetectionTuile);
     sprite_sheet_draw_sprite(&gameplay->spriteSheet, EAU_4X6, RED, v.x, v.y);
 
     ui_draw_toolbar(&gameplay->textures, gameplay->world);
