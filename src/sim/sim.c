@@ -2,7 +2,6 @@
 #include "sim/sim.h"
 #include "sim/chateau.h"
 
-
 void sim_reset_flow_distribution(SimWorld_t* world);
 
 /// Crée un monde de simulation vide.
@@ -89,7 +88,12 @@ void sim_place_entity(SimWorld_t* world, CaseKind_t type, int x, int y) {
         break;
 
         case Route: {
+            Route_t* route = route_alloc();
+            route->position = (Vector2I) {x, y};
+            liste_ajouter_fin(world->routes, route);
 
+            world->map[x][y].type = Route;
+            world->map[x][y].donnees = route;
         }
         break;
 
@@ -98,7 +102,7 @@ void sim_place_entity(SimWorld_t* world, CaseKind_t type, int x, int y) {
     }
 }
 
-bool sim_check_can_place(SimWorld_t* world, int x, int y, int w, int h) {
+bool sim_check_can_place(SimWorld_t* world, bool isBat, int x, int y, int w, int h) {
     // Si le bâtiment dépasse du terrain, on ne peut pas le placer.
     if (x < 0 || y < 0 || x + w > SIM_MAP_LARGEUR || y + h > SIM_MAP_HAUTEUR)
         return false;
@@ -111,16 +115,19 @@ bool sim_check_can_place(SimWorld_t* world, int x, int y, int w, int h) {
         }
     }
 
-//    // on vérifie ensuite que les cases adjacentes sont vides.
-//    for (int i = 0; i < w; ++i) {
-//        if (world->map[x + i][y - 1].type == Route || world->map[x + i][y + h].type == Route)
-//            return true;
-//    }
-//
-//    for (int i = 0; i < h; ++i) {
-//        if (world->map[x - 1][y + i].type == Route || world->map[x + w][y + i].type == Route)
-//            return true;
-//    }
+    if (isBat) {
+        // on vérifie ensuite que les cases adjacentes sont vides.
+        for (int i = 0; i < w; ++i) {
+            if (world->map[x + i][y - 1].type == Route || world->map[x + i][y + h].type == Route)
+                return true;
+        }
 
-    return true;
+        for (int i = 0; i < h; ++i) {
+            if (world->map[x - 1][y + i].type == Route || world->map[x + w][y + i].type == Route)
+                return true;
+        }
+    } else
+        return true;
+
+    return false;
 }

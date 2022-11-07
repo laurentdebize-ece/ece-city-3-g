@@ -5,6 +5,7 @@
 #include <utils/liste.h>
 #include <sim/habitation.h>
 #include <sim/centrale.h>
+#include <sim/route.h>
 
 #define SIM_MAP_LARGEUR 45
 #define SIM_MAP_HAUTEUR 35
@@ -66,6 +67,6 @@ void sim_world_destroy(SimWorld_t* world);
 void sim_place_entity(SimWorld_t* world, CaseKind_t type, int x, int y);
 
 /// Vérifie si un bâtiment de dimensions précisés peut être placé à une position donnée.
-bool sim_check_can_place(SimWorld_t* world, int x, int y, int w, int h);
+bool sim_check_can_place(SimWorld_t* world, bool isBat, int x, int y, int w, int h);
 
 #endif //ECECITY_SIM_H
