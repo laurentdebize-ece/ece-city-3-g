@@ -6,8 +6,8 @@
 #include <stdlib.h>
 #include <raylib.h>
 
-#define FENETRE_JEU_LARGEUR 900
-#define FENETRE_JEU_HAUTEUR 700
+#define FENETRE_JEU_LARGEUR 1600
+#define FENETRE_JEU_HAUTEUR 1024
 
 #ifndef NDEBUG
 #define DBG_LOG(text, ...) TraceLog(LOG_INFO, text, ##__VA_ARGS__)
