@@ -6,6 +6,7 @@
 #include <sim/habitation.h>
 #include <sim/centrale.h>
 #include <sim/route.h>
+#include <sim/chateau.h>
 
 #define SIM_MAP_LARGEUR 45
 #define SIM_MAP_HAUTEUR 35
@@ -21,7 +22,8 @@ typedef enum CaseKind_t {
     /// Château d'eau
     ChateauE,
     /// Route
-    Route
+    Route,
+    NB_CASE_KIND,
 } CaseKind_t;
 
 /// Une case dans la carte de la simulation.

@@ -1,6 +1,5 @@
 
 #include "sim/sim.h"
-#include "sim/chateau.h"
 
 void sim_reset_flow_distribution(SimWorld_t* world);
 
@@ -44,16 +43,16 @@ void sim_world_step(SimWorld_t* world) {
 
 /// Remet à zéro la répartition de l'eau et de l'électricité pour les bâtiments.
 void sim_reset_flow_distribution(SimWorld_t* world) {
-    struct Maillon_t* centrale_elec = world->centrales->premier;
-    while (centrale_elec) {
-        centrale_step((CentraleElectrique_t *) centrale_elec->data);
-        centrale_elec = centrale_elec->data;
+    struct Maillon_t* centrales = world->centrales->premier;
+    while (centrales) {
+        centrale_step((CentraleElectrique_t *) centrales->data);
+        centrales = centrales->next;
     }
 
     struct Maillon_t* chateau_eau = world->chateaux->premier;
     while (chateau_eau) {
         chateau_step((ChateauEau_t *) chateau_eau->data);
-        chateau_eau = chateau_eau->data;
+        chateau_eau = chateau_eau->next;
     }
 }
 
@@ -78,12 +77,30 @@ void sim_place_entity(SimWorld_t* world, CaseKind_t type, int x, int y) {
 
         case CentraleE:
         {
+            CentraleElectrique_t* centrale = centrale_alloc();
+            centrale->position = (Vector2I) {x, y};
+            for (int i = 0; i < 6; ++i) {
+                for (int j = 0; j < 4; ++j) {
+                    world->map[x + i][y + j].type = CentraleE;
+                    world->map[x + i][y + j].donnees = centrale;
+                }
+            }
 
+            liste_ajouter_fin(world->centrales, centrale);
         }
         break;
 
         case ChateauE: {
+            ChateauEau_t* chateau = chateau_alloc();
+            chateau->position = (Vector2I) {x, y};
+            for (int i = 0; i < 4; ++i) {
+                for (int j = 0; j < 6; ++j) {
+                    world->map[x + i][y + j].type = ChateauE;
+                    world->map[x + i][y + j].donnees = chateau;
+                }
+            }
 
+            liste_ajouter_fin(world->chateaux, chateau);
         }
         break;
 

@@ -3,12 +3,15 @@
 #define ECECITY_CHATEAU_H
 
 #include <stdlib.h>
+#include <utils/grille.h>
 
 #define CAPACITE_CHATEAU_EAU 5000
 
 /// Représente un château d'eau simulé.
 typedef struct ChateauEau_t {
     int capacite;
+
+    Vector2I position;
 } ChateauEau_t;
 
 /// Crée un château d'eau.

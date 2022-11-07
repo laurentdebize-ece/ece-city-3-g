@@ -29,7 +29,7 @@ void gameplay_on_exit(Jeu_t* jeu, GameplayScreen_t *gameplay) {
 void gameplay_update(Jeu_t* jeu, GameplayScreen_t *gameplay) {
     sim_world_step(gameplay->world);
     if (IsKeyPressed(KEY_SPACE)) {
-        gameplay->curr_build_mode = (gameplay->curr_build_mode + 1) % 3;
+        gameplay->curr_build_mode = (gameplay->curr_build_mode + 1) % NB_CASE_KIND;
         printf("Mode de construction: %d \n\r", gameplay->curr_build_mode);
     }
 }
@@ -39,31 +39,37 @@ void gameplay_draw(Jeu_t* jeu, GameplayScreen_t *gameplay) {
     affichage_draw_terrain_background(&gameplay->spriteSheet, gameplay->world);
     affichage_draw_entities(&gameplay->spriteSheet, gameplay->world);
 
-    int x = GetMouseX() / LARGUEUR_TUILE_ISO;
-    int y = GetMouseY() / HAUTEUR_TUILE_ISO;
-
-    Vector2I v = cartesien_to_iso((Vector2I){x, y});
+    Vector2I v = mouse_to_iso((Vector2I){GetMouseX(), GetMouseY()}, gameplay->spriteSheet.spriteDetectionTuile);
 
     int w = 0;
     int h = 0;
     enum SPRITE_MAP bat = ROUTE_1;
     switch (gameplay->curr_build_mode) {
-        case 0:
+        case Route:
             w = 1;
             h = 1;
             bat = ROUTE_0;
             break;
 
-        case 1:
+        case Habitation:
             w = 3;
             h = 3;
             bat = MAISON_3X3;
             break;
 
-        case 2:
+        case CentraleE:
             w = 6;
             h = 4;
             bat = ENERGY_6X4;
+            break;
+
+        case ChateauE:
+            w = 4;
+            h = 6;
+            bat = EAU_4X6;
+            break;
+
+        default:
             break;
     }
 
@@ -72,16 +78,20 @@ void gameplay_draw(Jeu_t* jeu, GameplayScreen_t *gameplay) {
 
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && is_valid) {
         switch (gameplay->curr_build_mode) {
-            case 0:
+            case Route:
                 sim_place_entity(gameplay->world, Route, v.x, v.y);
                 break;
 
-            case 1:
+            case Habitation:
                 sim_place_entity(gameplay->world, Habitation, v.x, v.y);
                 break;
 
-            case 2:
+            case CentraleE:
                 sim_place_entity(gameplay->world, CentraleE, v.x, v.y);
+                break;
+
+            case ChateauE:
+                sim_place_entity(gameplay->world, ChateauE, v.x, v.y);
                 break;
         }
     }
