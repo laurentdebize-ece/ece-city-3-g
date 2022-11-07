@@ -34,7 +34,13 @@ void affichageRouteSelection(SimWorld_t *eceCity) {
 
     if (eceCity->informationsSouris.actionsMap.modeNewRoad) {
         for (int i = 0; i < eceCity->informationsSouris.actionsMap.nbChemins; i++) {
-            eceCity->carte.mapTile[eceCity->informationsSouris.actionsMap.cheminRoute[i].celluleY][eceCity->informationsSouris.actionsMap.cheminRoute[i].celluleX].tinte = BLUE;
+
+            if (!checkCollisionBatiment(eceCity)) {
+                eceCity->carte.mapTile[eceCity->informationsSouris.actionsMap.cheminRoute[i].celluleY][eceCity->informationsSouris.actionsMap.cheminRoute[i].celluleX].tinte = BLUE;
+            } else {
+                eceCity->carte.mapTile[eceCity->informationsSouris.actionsMap.cheminRoute[i].celluleY][eceCity->informationsSouris.actionsMap.cheminRoute[i].celluleX].tinte = RED;
+
+            }
         }
     }
 }
@@ -105,16 +111,6 @@ void actualiserCheminRoute(SimWorld_t *eceCity) {
 
 }
 
-void actualiserMatriceConstructionRoute(SimWorld_t *eceCity) {
-    if (eceCity->informationsSouris.actionsMap.modeNewRoad &&
-        (bool) eceCity->informationsSouris.actionsMap.depart[0].typeBloc &&
-        !eceCity->informationsSouris.outOfMapBorders) {
-        for (int i = 0; i < eceCity->informationsSouris.actionsMap.nbChemins; i++) {
-            eceCity->matrice[eceCity->informationsSouris.actionsMap.cheminRoute[i].celluleY][eceCity->informationsSouris.actionsMap.cheminRoute[i].celluleX] = 'R';
-        }
-    }
-}
-
 void razCheminRoute(SimWorld_t* eceCity){
     eceCity->informationsSouris.actionsMap.nbChemins = 0;
 
@@ -126,7 +122,6 @@ void razCheminRoute(SimWorld_t* eceCity){
 
 
 }
-
 
 void modeNewRoad(SimWorld_t *eceCity) {
 
@@ -141,6 +136,7 @@ void modeNewRoad(SimWorld_t *eceCity) {
                 if (eceCity->informationsSouris.actionsMap.nbDepart < 1) {
                     eceCity->informationsSouris.actionsMap.nbDepart++;
                 } else {
+
                     if(!checkCollisionBatiment(eceCity)){
                         /// Actions pour placer la route
 
@@ -158,7 +154,6 @@ void modeNewRoad(SimWorld_t *eceCity) {
                     eceCity->informationsSouris.actionsMap.depart[1].typeBloc = 0;
                     eceCity->informationsSouris.actionsMap.depart[1].position.x = 0;
                     eceCity->informationsSouris.actionsMap.depart[1].position.y = 0;
-                    eceCity->informationsSouris.actionsMap.modeNewRoad = false;
 
                     razCheminRoute(eceCity);
                     

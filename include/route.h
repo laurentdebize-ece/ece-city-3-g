@@ -19,5 +19,7 @@ void checkChangementCelluleSurPlacementRoute(SimWorld_t* eceCity);
 
 void actualiserMatriceConstructionRoute(SimWorld_t* eceCity);
 
+bool checkCollisionBatiment(SimWorld_t *eceCity);
+
 
 #endif
