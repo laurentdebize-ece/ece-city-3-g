@@ -38,6 +38,21 @@ typedef struct {
 } Tile;
 
 typedef struct {
+    Vector2D position;
+    char typeBloc;
+} RoadTest;
+
+typedef struct ActionsMap {
+    bool modeNewRoad;
+    bool constructionRoute;
+    bool actualiserCheminRoute;
+    RoadTest depart[2];
+    int nbDepart;
+    Cellules2D cheminRoute[100];
+    int nbChemins;
+} ActionsMap;
+
+typedef struct {
     Rectangle rectangle;//Position de l'image dans le sprite
     int decalageXDecor, decalageYDecor; //Utile que pour les décors
 } Sprite_t;
@@ -61,6 +76,7 @@ typedef struct {
     Vector2D celluleIso;
     bool outOfMapBorders;
     bool boolChangementDeCelluleIso;
+    ActionsMap actionsMap;
 } informationsSouris_t;
 
 /// Le type de case

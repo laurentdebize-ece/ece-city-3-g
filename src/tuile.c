@@ -110,6 +110,16 @@ int isometricCoordsToScreenY(SimWorld_t*eceCity) {
     }
 }
 
+Vector2 celluleIsoToScreen(SimWorld_t* eceCity, Vector2 vector2D){
+    for (int y = 0; y < NBCELLULEY; y++) {
+        for (int x = 0; x < NBCELLULEX; x++) {
+            if(vector2D.x == x && vector2D.y == y){
+                return (Vector2){eceCity->carte.mapTile[y][x].position.x, eceCity->carte.mapTile[y][x].position.y};
+            }
+        }
+    }
+}
+
 Vector2 isometricCoordsToScreen(SimWorld_t*eceCity) {
     Vector2 position;
 

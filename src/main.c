@@ -2,6 +2,7 @@
 #include "raylib.h"
 #include "jeu.h"
 #include "screens/sim_test.h"
+#include "route.h"
 
 /*int main() {
     Jeu_t jeu = {
@@ -49,10 +50,17 @@ int main(void) {
 
     while (!WindowShouldClose()) {
         actualiserPositionSourisJoueur(&eceCity);
+        selectionNewRoad(&eceCity);
 
         BeginDrawing();
 
         ClearBackground(RAYWHITE);
+
+        modeNewRoad(&eceCity);
+
+        checkChangementCelluleSurPlacementRoute(&eceCity);
+
+        printChemin(&eceCity);
 
         //Test dessin blocs3x3 ou 4x6/6x4
         //DrawTextureRec(eceCity.carte.spritesheetTexture, eceCity.carte.spriteSheet[TERRAIN_1].rectangle,(Vector2) {(float) eceCity.carte.spriteSheet[TERRAIN_1].decalageXDecor + (float) eceCity.carte.mapTile[0][0].position.x, (float) eceCity.carte.mapTile[0][0].position.y + (float) eceCity.carte.spriteSheet[TERRAIN_1].decalageYDecor}, WHITE);
@@ -61,6 +69,7 @@ int main(void) {
 
         affichageHover(&eceCity);
 
+        affichageRouteSelection(&eceCity);
 
         texteDebug(&eceCity);
 

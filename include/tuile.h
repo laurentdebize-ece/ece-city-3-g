@@ -25,9 +25,7 @@ typedef struct {
     char typeBloc;
 } Paire;
 
-typedef struct ActionsMap {
-    bool modeNewRoad;
-} ActionsMap;
+
 
 typedef struct {
     //Toolbar temporaire risque de changer avec les prochaines versions de l'interface
@@ -54,6 +52,8 @@ void razOutOfMapBorders(SimWorld_t* eceCity);
 void calculClicSurPersoPourTousChemin(SimWorld_t* eceCity);
 
 Vector2 isometricCoordsToScreen(SimWorld_t *eceCity);
+
+Vector2 celluleIsoToScreen(SimWorld_t* eceCity, Vector2 vector2D);
 
 
 
