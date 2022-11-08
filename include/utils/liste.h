@@ -34,6 +34,9 @@ bool liste_estVide(Liste_t *liste);
 /// Ajoute un élément à la fin de la liste.
 void liste_ajouter_fin(Liste_t *liste, void *data);
 
+/// Ajoute un élément à la liste en respectant l'ordre d'insertion.
+void liste_ajout_tri(Liste_t *liste, void *data, int (*comparateur)(void *, void *));
+
 /// Supprime un élément en fin de liste et le retourne.
 void* liste_supprimer_fin(Liste_t *liste);
 
