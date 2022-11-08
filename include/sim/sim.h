@@ -5,7 +5,6 @@
 #include <utils/liste.h>
 #include <sim/habitation.h>
 #include <sim/centrale.h>
-#include <sim/route.h>
 #include <sim/chateau.h>
 
 #define SIM_MAP_LARGEUR 45
