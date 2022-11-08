@@ -3,6 +3,13 @@
 #include "stdio.h"
 #include "fichier.h"
 
+void resetMatrice(SimWorld_t* eceCity){
+    for(int i = 0; i < SIM_MAP_HAUTEUR; i++){
+        for(int j = 0; j < SIM_MAP_LARGEUR; j++){
+            eceCity->matrice[i][j] = '0';
+        }
+    }
+}
 
 void initMap(SimWorld_t *eceCity) {
 

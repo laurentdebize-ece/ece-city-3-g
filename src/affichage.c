@@ -29,12 +29,16 @@ void afficherToolBar(SimWorld_t* eceCity){
 
     if (eceCity->informationsSouris.effetsGraphiques.hoverMenu) {
         DrawCircle(53, 980, 35 , (Color) { 0, 0, 0, 20 });
+    } else if (eceCity->informationsSouris.effetsGraphiques.onClickRoute) {
+        DrawCircle(53, 970, 30 , (Color) { 0, 0, 0, 45 });
     }
     DrawTexture(eceCity->loader.logoToolBar[HAMBURGER], 26, 954, WHITE);
 
 
     if (eceCity->informationsSouris.effetsGraphiques.hoverSave) {
         DrawCircle(120, 980, 35 , (Color) { 0, 0, 0, 20 });
+    }  else if (eceCity->informationsSouris.effetsGraphiques.onClickRoute) {
+        DrawCircle(120, 970, 30 , (Color) { 0, 0, 0, 45 });
     }
     DrawTexture(eceCity->loader.logoToolBar[SAVE], 109, 954, WHITE);
 
@@ -47,6 +51,8 @@ void afficherToolBar(SimWorld_t* eceCity){
 
     if (eceCity->informationsSouris.effetsGraphiques.hoverDestruction) {
         DrawCircle(1394, 980, 30 , (Color) { 0, 0, 0, 20 });
+    }  else if (eceCity->informationsSouris.effetsGraphiques.onClickDestruction) {
+        DrawCircle(1394, 970, 30 , (Color) { 0, 0, 0, 45 });
     }
     DrawTexture(eceCity->loader.logoToolBar[DESTROY], 1376, 954, WHITE);
 
@@ -55,7 +61,7 @@ void afficherToolBar(SimWorld_t* eceCity){
 
     if (eceCity->informationsSouris.effetsGraphiques.hoverRoute) {
         DrawCircle(1030, 970, 30 , (Color) { 0, 0, 0, 20 });
-    } else if (eceCity->informationsSouris.actionsMap.modeNewRoad) {
+    } else if (eceCity->informationsSouris.effetsGraphiques.onClickRoute) {
         DrawCircle(1030, 970, 30 , (Color) { 0, 0, 0, 45 });
     }
     DrawTexture(eceCity->loader.logoToolBar[ROAD], 1012, 954, WHITE);
@@ -63,18 +69,79 @@ void afficherToolBar(SimWorld_t* eceCity){
 
     if (eceCity->informationsSouris.effetsGraphiques.hoverHabitation) {
         DrawCircle(1100, 980, 30 , (Color) { 0, 0, 0, 20 });
+    } else if (eceCity->informationsSouris.effetsGraphiques.onClickRoute) {
+        DrawCircle(1100, 970, 30 , (Color) { 0, 0, 0, 45 });
     }
     DrawTexture(eceCity->loader.logoToolBar[HABITATION], 1082, 954, WHITE);
     if (eceCity->informationsSouris.effetsGraphiques.hoverCentrale) {
         DrawCircle(1177, 980, 30 , (Color) { 0, 0, 0, 20 });
+    } else if (eceCity->informationsSouris.effetsGraphiques.onClickRoute) {
+        DrawCircle(1177, 970, 30 , (Color) { 0, 0, 0, 45 });
     }
     DrawTexture(eceCity->loader.logoToolBar[CENTRALE], 1159, 954, WHITE);
     if (eceCity->informationsSouris.effetsGraphiques.hoverChateau) {
         DrawCircle(1247, 980, 30 , (Color) { 0, 0, 0, 20 });
+    } else if (eceCity->informationsSouris.effetsGraphiques.onClickRoute) {
+        DrawCircle(1247, 970, 30 , (Color) { 0, 0, 0, 45 });
     }
     DrawTexture(eceCity->loader.logoToolBar[CHATEAU], 1229, 954, WHITE);
 }
 
+
+
+void checkOnClickToolbar(SimWorld_t* eceCity){
+    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+        if (CheckCollisionPointRec(GetMousePosition(), (Rectangle) {26, 954, 40, 40})) {
+            //Actions Hoover New Road
+            eceCity->informationsSouris.effetsGraphiques.onClickMenu = true;
+        } else {
+            eceCity->informationsSouris.effetsGraphiques.onClickMenu = false;
+        }
+
+        if (CheckCollisionPointRec(GetMousePosition(), (Rectangle) {109, 954, 40, 40})) {
+            //Actions Hoover New Road
+            eceCity->informationsSouris.effetsGraphiques.onClickSave = true;
+        } else {
+            eceCity->informationsSouris.effetsGraphiques.onClickSave= false;
+        }
+
+
+        if (CheckCollisionPointRec(GetMousePosition(), (Rectangle) {1012, 954, 40, 40})) {
+            //Actions Hoover New Road
+            eceCity->informationsSouris.effetsGraphiques.onClickRoute = true;
+        } else {
+            eceCity->informationsSouris.effetsGraphiques.onClickRoute = false;
+        }
+
+        if (CheckCollisionPointRec(GetMousePosition(), (Rectangle) {1082, 954, 40, 40})) {
+            //Actions Hoover New Road
+            eceCity->informationsSouris.effetsGraphiques.onClickHabitation = true;
+        } else {
+            eceCity->informationsSouris.effetsGraphiques.onClickHabitation = false;
+        }
+
+        if (CheckCollisionPointRec(GetMousePosition(), (Rectangle) {1159, 954, 40, 40})) {
+            //Actions Hoover New Road
+            eceCity->informationsSouris.effetsGraphiques.onClickCentrale = true;
+        } else {
+            eceCity->informationsSouris.effetsGraphiques.onClickCentrale = false;
+        }
+
+        if (CheckCollisionPointRec(GetMousePosition(), (Rectangle) {1229, 954, 40, 40})) {
+            //Actions Hoover New Road
+            eceCity->informationsSouris.effetsGraphiques.onClickChateau = true;
+        } else {
+            eceCity->informationsSouris.effetsGraphiques.onClickChateau = false;
+        }
+
+        if (CheckCollisionPointRec(GetMousePosition(), (Rectangle) {1376, 954, 40, 40})) {
+            //Actions Hoover New Road
+            eceCity->informationsSouris.effetsGraphiques.onClickDestruction = true;
+        } else {
+            eceCity->informationsSouris.effetsGraphiques.onClickDestruction = false;
+        }
+    }
+}
 
 
 void checkHoverToolbar(SimWorld_t* eceCity){

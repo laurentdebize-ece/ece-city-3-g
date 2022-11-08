@@ -53,17 +53,24 @@ typedef struct ActionsMap {
 
 typedef struct effetsGraphiques {
     bool hoverMenu;
+    bool onClickMenu;
     bool hoverSave;
+    bool onClickSave;
     bool hoverRoute;
+    bool onClickRoute;
     bool hoverHabitation;
+    bool onClickHabitation;
     bool modePlacementHabitation;
     bool hoverCentrale;
+    bool onClickCentrale;
     bool modePlacementCentrale;
     bool rotationCentraleElec;
     bool hoverChateau;
+    bool onClickChateau;
     bool modePlacementChateau;
     bool rotationChateau;
     bool hoverDestruction;
+    bool onClickDestruction;
 } effetsGraphiques;
 
 typedef struct {

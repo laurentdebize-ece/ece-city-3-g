@@ -41,6 +41,10 @@ int main(void) {
     lireFichier(&eceCity);
     //afficherLectureFichier(&eceCity);
 
+    resetMatrice(&eceCity);
+
+    eceCity.carte.reloadMatrice = true;
+
     transfertMatriceEnTypeBloc(&eceCity);
 
     //affichageTypeBloc(&eceCity);

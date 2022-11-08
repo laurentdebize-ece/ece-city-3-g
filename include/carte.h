@@ -5,6 +5,8 @@
 
 void initMap(SimWorld_t* eceCity);
 
+void resetMatrice(SimWorld_t* eceCity);
+
 void afficherFondMap(SimWorld_t* eceCity);
 
 void affichageHover(SimWorld_t* eceCity);
