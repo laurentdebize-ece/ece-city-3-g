@@ -60,4 +60,6 @@ int habitation_get_nb_habitants(Habitation_t* habitation);
 /// Compare deux habitations.
 int habitation_cmp(Habitation_t* habitation1, Habitation_t* habitation2);
 
+int habitation_tri_par_distance(Habitation_t* a, Habitation_t* b);
+
 #endif //ECECITY_HABITATION_H

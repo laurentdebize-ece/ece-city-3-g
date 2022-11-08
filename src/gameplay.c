@@ -43,30 +43,30 @@ void gameplay_draw(Jeu_t* jeu, GameplayScreen_t *gameplay) {
 
     int w = 0;
     int h = 0;
-    enum SPRITE_MAP bat = ROUTE_1;
+    enum SPRITE_MAP bat = SPRITE_ROUTE_1;
     switch (gameplay->curr_build_mode) {
-        case Route:
+        case KIND_ROUTE:
             w = 1;
             h = 1;
-            bat = ROUTE_0;
+            bat = SPRITE_ROUTE_0;
             break;
 
-        case Habitation:
+        case KIND_HABITATION:
             w = 3;
             h = 3;
-            bat = MAISON_3X3;
+            bat = SPRITE_MAISON_3X3;
             break;
 
-        case CentraleE:
+        case KIND_CENTRALE:
             w = 6;
             h = 4;
-            bat = ENERGY_6X4;
+            bat = SPRITE_ENERGY_6X4;
             break;
 
-        case ChateauE:
+        case KIND_CHATEAU:
             w = 4;
             h = 6;
-            bat = EAU_4X6;
+            bat = SPRITE_EAU_4X6;
             break;
 
         default:
@@ -78,20 +78,20 @@ void gameplay_draw(Jeu_t* jeu, GameplayScreen_t *gameplay) {
 
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && is_valid) {
         switch (gameplay->curr_build_mode) {
-            case Route:
-                sim_place_entity(gameplay->world, Route, v.x, v.y);
+            case KIND_ROUTE:
+                sim_place_entity(gameplay->world, KIND_ROUTE, v.x, v.y);
                 break;
 
-            case Habitation:
-                sim_place_entity(gameplay->world, Habitation, v.x, v.y);
+            case KIND_HABITATION:
+                sim_place_entity(gameplay->world, KIND_HABITATION, v.x, v.y);
                 break;
 
-            case CentraleE:
-                sim_place_entity(gameplay->world, CentraleE, v.x, v.y);
+            case KIND_CENTRALE:
+                sim_place_entity(gameplay->world, KIND_CENTRALE, v.x, v.y);
                 break;
 
-            case ChateauE:
-                sim_place_entity(gameplay->world, ChateauE, v.x, v.y);
+            case KIND_CHATEAU:
+                sim_place_entity(gameplay->world, KIND_CHATEAU, v.x, v.y);
                 break;
         }
     }

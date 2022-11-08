@@ -14,15 +14,15 @@
 /// Le type de case
 typedef enum CaseKind_t {
     /// case vide
-    Vide = 0,
-    /// Habitation
-    Habitation,
+    KIND_VIDE = 0,
+    /// KIND_HABITATION
+    KIND_HABITATION,
     /// Centrale électrique
-    CentraleE,
+    KIND_CENTRALE,
     /// Château d'eau
-    ChateauE,
-    /// Route
-    Route,
+    KIND_CHATEAU,
+    /// KIND_ROUTE
+    KIND_ROUTE,
     NB_CASE_KIND,
 } CaseKind_t;
 
