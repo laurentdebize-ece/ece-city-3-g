@@ -4,6 +4,7 @@
 #include "screens/sim_test.h"
 #include "affichage.h"
 #include "route.h"
+#include "batiment.h"
 
 /*int main() {
     Jeu_t jeu = {
@@ -27,6 +28,8 @@ int main(void) {
     const int screenHeight = HAUTEUR_FENETRE;
 
     InitWindow(screenWidth, screenHeight, "ECECity");
+
+    SetWindowPosition(20, 50);
 
     // NOTE: Textures MUST be loaded after Window initialization (OpenGL context is required)
 
@@ -52,6 +55,9 @@ int main(void) {
     while (!WindowShouldClose()) {
         actualiserPositionSourisJoueur(&eceCity);
         selectionNewRoad(&eceCity);
+        selectionModePlacementBatiment(&eceCity);
+        selectionModePlacementCentraleElec(&eceCity);
+        selectionModePlacementChateauEau(&eceCity);
         actionReloadMatrice(&eceCity);
         checkHoverToolbar(&eceCity);
 
@@ -60,6 +66,9 @@ int main(void) {
         ClearBackground(RAYWHITE);
 
         modeNewRoad(&eceCity);
+        modePlacementBatiment(&eceCity);
+        modePlacementCentraleElec(&eceCity);
+        modePlacementChateauEau(&eceCity);
 
         checkChangementCelluleSurPlacementRoute(&eceCity);
 
@@ -72,6 +81,12 @@ int main(void) {
         affichageHover(&eceCity);
 
         texteDebug(&eceCity);
+
+        affichagePlacementTemporaireTerrainVague(&eceCity);
+
+        affichagePlacementTemporaireCentraleElec(&eceCity);
+
+        affichagePlacementTemporaireChateauEau(&eceCity);
 
         afficherToolBar(&eceCity);
 

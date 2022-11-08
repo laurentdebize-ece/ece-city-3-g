@@ -56,8 +56,13 @@ typedef struct effetsGraphiques {
     bool hoverSave;
     bool hoverRoute;
     bool hoverHabitation;
+    bool modePlacementHabitation;
     bool hoverCentrale;
+    bool modePlacementCentrale;
+    bool rotationCentraleElec;
     bool hoverChateau;
+    bool modePlacementChateau;
+    bool rotationChateau;
     bool hoverDestruction;
 } effetsGraphiques;
 
