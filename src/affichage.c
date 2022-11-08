@@ -5,8 +5,17 @@
 void affichage_draw_terrain_background(SpriteSheet_t* sheet, SimWorld_t* world) {
     for (int i = 0; i < 45; ++i) {
         for (int j = 0; j < 35; ++j) {
-            if (world->map[i][j].type == KIND_VIDE) {
-                sprite_sheet_draw_sprite(sheet, SPRITE_TERRAIN_0, WHITE, i, j);
+            switch (world->map[i][j].type) {
+                case KIND_VIDE:
+                    sprite_sheet_draw_sprite(sheet, SPRITE_TERRAIN_0, WHITE, i, j);
+                    break;
+
+                    case KIND_ROUTE:
+                    sprite_sheet_draw_sprite(sheet, SPRITE_ROUTE_0, WHITE, i, j);
+                    break;
+
+                default:
+                    break;
             }
         }
     }
@@ -14,13 +23,6 @@ void affichage_draw_terrain_background(SpriteSheet_t* sheet, SimWorld_t* world) 
 
 /// Dessine les tuiles de la carte.
 void affichage_draw_entities(SpriteSheet_t* sheet, SimWorld_t* world) {
-    struct Maillon_t* route = world->routes->premier;
-    while (route) {
-        Route_t* r = (Route_t*) route->data;
-        sprite_sheet_draw_sprite(sheet, SPRITE_ROUTE_0, WHITE, r->position.x, r->position.y);
-        route = route->next;
-    }
-
     struct Maillon_t* centrales = world->centrales->premier;
     while (centrales) {
         CentraleElectrique_t* centrale = (CentraleElectrique_t*)centrales->data;

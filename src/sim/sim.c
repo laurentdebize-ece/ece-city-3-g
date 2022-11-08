@@ -105,12 +105,8 @@ void sim_place_entity(SimWorld_t* world, CaseKind_t type, int x, int y) {
         break;
 
         case KIND_ROUTE: {
-            Route_t* route = route_alloc();
-            route->position = (Vector2I) {x, y};
-            liste_ajouter_fin(world->routes, route);
-
             world->map[x][y].type = KIND_ROUTE;
-            world->map[x][y].donnees = route;
+            world->map[x][y].donnees = NULL;
         }
         break;
 
