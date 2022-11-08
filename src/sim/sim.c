@@ -61,7 +61,7 @@ void sim_place_entity(SimWorld_t* world, CaseKind_t type, int x, int y) {
     switch (type) {
         case KIND_HABITATION:
         {
-            Habitation_t* habitation = habitation_alloc(TERRAIN_VAGUE);
+            Habitation_t* habitation = habitation_alloc(NIVEAU_TERRAIN_VAGUE);
             habitation->position = (Vector2I) {x, y};
 
             for (int i = 0; i < 3; ++i) {

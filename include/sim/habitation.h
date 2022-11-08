@@ -17,12 +17,12 @@ typedef enum SimRules_t {
 #define IMPOT_PAR_HABITANT 10
 
 typedef enum NiveauHabitation_t {
-    TERRAIN_VAGUE = 0,
-    RUINE = TERRAIN_VAGUE,
-    CABANE = 10,
-    MAISON = 50,
-    IMMEUBLE = 100,
-    GRATTE_CIEL = 1000
+    NIVEAU_TERRAIN_VAGUE = 0,
+    NIVEAU_RUINE = NIVEAU_TERRAIN_VAGUE,
+    NIVEAU_CABANE = 10,
+    NIVEAU_MAISON = 50,
+    NIVEAU_IMMEUBLE = 100,
+    NIVEAU_GRATTE_CIEL = 1000
 } NiveauHabitation_t;
 
 
