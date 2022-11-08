@@ -10,7 +10,7 @@ void affichage_draw_terrain_background(SpriteSheet_t* sheet, SimWorld_t* world) 
                     sprite_sheet_draw_sprite(sheet, SPRITE_TERRAIN_0, WHITE, i, j);
                     break;
 
-                    case KIND_ROUTE:
+                case KIND_ROUTE:
                     sprite_sheet_draw_sprite(sheet, SPRITE_ROUTE_0, WHITE, i, j);
                     break;
 

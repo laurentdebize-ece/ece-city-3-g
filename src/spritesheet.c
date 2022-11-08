@@ -117,6 +117,13 @@ void sprite_sheet_load(SpriteSheet_t* spriteSheet) {
     spriteSheet->sprites[SPRITE_ROUTE_5].decalageXDecor = 0;
     spriteSheet->sprites[SPRITE_ROUTE_5].decalageYDecor = 0;
 
+    spriteSheet->sprites[SPRITE_ROUTE_6].rectangle.height = 26;
+    spriteSheet->sprites[SPRITE_ROUTE_6].rectangle.width = SPRITELARGEUR;
+    spriteSheet->sprites[SPRITE_ROUTE_6].rectangle.x = SPRITELARGEUR * SPRITE_ROUTE_6;
+    spriteSheet->sprites[SPRITE_ROUTE_6].rectangle.y = 0;
+    spriteSheet->sprites[SPRITE_ROUTE_6].decalageXDecor = 0;
+    spriteSheet->sprites[SPRITE_ROUTE_6].decalageYDecor = 0;
+
     spriteSheet->sprites[SPRITE_ROUTE_7].rectangle.height = 26;
     spriteSheet->sprites[SPRITE_ROUTE_7].rectangle.width = SPRITELARGEUR;
     spriteSheet->sprites[SPRITE_ROUTE_7].rectangle.x = SPRITELARGEUR * SPRITE_ROUTE_7;
