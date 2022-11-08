@@ -15,11 +15,9 @@ typedef struct GameplayScreen_t {
     /// La simulation
     SimWorld_t* world;
     /// Les textures pour le dessin de l'IU.
-    UITextures_t textures;
+    UIState state;
     /// Les textures pour le dessin de la carte.
     SpriteSheet_t spriteSheet;
-
-    int curr_build_mode;
 } GameplayScreen_t;
 
 // callbacks de l'écran.
