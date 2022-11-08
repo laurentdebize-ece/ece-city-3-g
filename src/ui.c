@@ -1,7 +1,8 @@
+#include <stdio.h>
 #include "ui.h"
 #include "jeu.h"
 
-void ui_charger_textures(UITextures_t* textures) {
+void ui_charger_textures(UIState* textures) {
     textures->toolbarIcons[ICON_HAMBURGER] = LoadTexture("../assets/textures/icones/hamburger.png");
     textures->toolbarIcons[ICON_SAVE] = LoadTexture("../assets/textures/icones/save.png");
     textures->toolbarIcons[ICON_PEOPLE] = LoadTexture("../assets/textures/icones/people.png");
@@ -16,7 +17,7 @@ void ui_charger_textures(UITextures_t* textures) {
     textures->toolbarIcons[ICON_CHATEAU] = LoadTexture("../assets/textures/icones/valve.png");
 }
 
-void ui_draw_toolbar(UITextures_t* textures, SimWorld_t* sim) {
+void ui_draw_toolbar(UIState* textures, SimWorld_t* sim) {
     DrawRectangle(0, 924, FENETRE_JEU_LARGEUR, 100, (Color) { 0, 194, 255, 191 });
 
     DrawRectangle(271, 954, 125, 40, (Color) { 238,238,238,200});
@@ -39,4 +40,71 @@ void ui_draw_toolbar(UITextures_t* textures, SimWorld_t* sim) {
     DrawTexture(textures->toolbarIcons[ICON_HABITATION], 1082, 954, WHITE);
     DrawTexture(textures->toolbarIcons[ICON_CENTRALE], 1159, 954, WHITE);
     DrawTexture(textures->toolbarIcons[ICON_CHATEAU], 1229, 954, WHITE);
+}
+
+void ui_update_toolbar(UIState* textures, SimWorld_t* sim) {
+    Vector2 mousePos = GetMousePosition();
+
+    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+
+        if (CheckCollisionPointRec(mousePos, (Rectangle) {26, 954, textures->toolbarIcons[ICON_HAMBURGER].width,
+                                                          textures->toolbarIcons[ICON_HAMBURGER].height})) {
+            printf("Hamburger\n");
+        }
+
+        if (CheckCollisionPointRec(mousePos, (Rectangle) {109, 954, textures->toolbarIcons[ICON_SAVE].width,
+                                                          textures->toolbarIcons[ICON_SAVE].height})) {
+            printf("Save\n");
+        }
+
+        if (CheckCollisionPointRec(mousePos, (Rectangle) {211, 954, textures->toolbarIcons[ICON_PEOPLE].width,
+                                                          textures->toolbarIcons[ICON_PEOPLE].height})) {
+            printf("People\n");
+        }
+
+        if (CheckCollisionPointRec(mousePos, (Rectangle) {446, 954, textures->toolbarIcons[ICON_ENERGY].width,
+                                                          textures->toolbarIcons[ICON_ENERGY].height})) {
+            printf("Energy\n");
+        }
+
+        if (CheckCollisionPointRec(mousePos, (Rectangle) {668, 954, textures->toolbarIcons[ICON_WATER].width,
+                                                          textures->toolbarIcons[ICON_WATER].height})) {
+            printf("Water\n");
+        }
+
+        if (CheckCollisionPointRec(mousePos, (Rectangle) {892, 954, textures->toolbarIcons[ICON_BUILD].width,
+                                                          textures->toolbarIcons[ICON_BUILD].height})) {
+            printf("Build\n");
+        }
+
+        if (CheckCollisionPointRec(mousePos, (Rectangle) {1376, 954, textures->toolbarIcons[ICON_DESTROY].width,
+                                                          textures->toolbarIcons[ICON_DESTROY].height})) {
+            printf("Destroy\n");
+        }
+
+        if (CheckCollisionPointRec(mousePos, (Rectangle) {1466, 954, textures->toolbarIcons[ICON_TIME].width,
+                                                          textures->toolbarIcons[ICON_TIME].height})) {
+            printf("Time\n");
+        }
+
+        if (CheckCollisionPointRec(mousePos, (Rectangle) {1012, 954, textures->toolbarIcons[ICON_ROAD].width,
+                                                          textures->toolbarIcons[ICON_ROAD].height})) {
+            textures->currentBuildMode = BUILD_MODE_ROUTE;
+        }
+
+        if (CheckCollisionPointRec(mousePos, (Rectangle) {1082, 954, textures->toolbarIcons[ICON_HABITATION].width,
+                                                          textures->toolbarIcons[ICON_HABITATION].height})) {
+            textures->currentBuildMode = BUILD_MODE_HABITATION;
+        }
+
+        if (CheckCollisionPointRec(mousePos, (Rectangle) {1159, 954, textures->toolbarIcons[ICON_CENTRALE].width,
+                                                          textures->toolbarIcons[ICON_CENTRALE].height})) {
+            textures->currentBuildMode = BUILD_MODE_CENTRALE;
+        }
+
+        if (CheckCollisionPointRec(mousePos, (Rectangle) {1229, 954, textures->toolbarIcons[ICON_CHATEAU].width,
+                                                          textures->toolbarIcons[ICON_CHATEAU].height})) {
+            textures->currentBuildMode =  BUILD_MODE_CHATEAU;
+        }
+    }
 }

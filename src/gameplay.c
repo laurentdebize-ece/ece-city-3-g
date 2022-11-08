@@ -17,9 +17,9 @@ GameplayScreen_t* gameplay_create_screen() {
 
 void gameplay_on_enter(Jeu_t* jeu, GameplayScreen_t *gameplay) {
     gameplay->world = sim_world_create(Capitaliste_t, 10000);
-    ui_charger_textures(&gameplay->textures);
+    ui_charger_textures(&gameplay->state);
     sprite_sheet_load(&gameplay->spriteSheet);
-    gameplay->curr_build_mode = 0;
+    gameplay->state.currentBuildMode = BUILD_MODE_NONE;
 }
 
 void gameplay_on_exit(Jeu_t* jeu, GameplayScreen_t *gameplay) {
@@ -28,10 +28,7 @@ void gameplay_on_exit(Jeu_t* jeu, GameplayScreen_t *gameplay) {
 
 void gameplay_update(Jeu_t* jeu, GameplayScreen_t *gameplay) {
     sim_world_step(gameplay->world);
-    if (IsKeyPressed(KEY_SPACE)) {
-        gameplay->curr_build_mode = (gameplay->curr_build_mode + 1) % NB_CASE_KIND;
-        printf("Mode de construction: %d \n\r", gameplay->curr_build_mode);
-    }
+    ui_update_toolbar(&gameplay->state, gameplay->world);
 }
 
 void gameplay_draw(Jeu_t* jeu, GameplayScreen_t *gameplay) {
@@ -43,27 +40,27 @@ void gameplay_draw(Jeu_t* jeu, GameplayScreen_t *gameplay) {
 
     int w = 0;
     int h = 0;
-    enum SPRITE_MAP bat = SPRITE_ROUTE_1;
-    switch (gameplay->curr_build_mode) {
-        case KIND_ROUTE:
+    enum SPRITE_MAP bat = SPRITE_HOOVER;
+    switch (gameplay->state.currentBuildMode) {
+        case BUILD_MODE_ROUTE:
             w = 1;
             h = 1;
             bat = SPRITE_ROUTE_0;
             break;
 
-        case KIND_HABITATION:
+        case BUILD_MODE_HABITATION:
             w = 3;
             h = 3;
             bat = SPRITE_MAISON_3X3;
             break;
 
-        case KIND_CENTRALE:
+        case BUILD_MODE_CENTRALE:
             w = 6;
             h = 4;
             bat = SPRITE_ENERGY_6X4;
             break;
 
-        case KIND_CHATEAU:
+        case BUILD_MODE_CHATEAU:
             w = 4;
             h = 6;
             bat = SPRITE_EAU_4X6;
@@ -77,24 +74,27 @@ void gameplay_draw(Jeu_t* jeu, GameplayScreen_t *gameplay) {
     sprite_sheet_draw_sprite(&gameplay->spriteSheet, bat, is_valid ? GREEN : RED, v.x, v.y);
 
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && is_valid) {
-        switch (gameplay->curr_build_mode) {
-            case KIND_ROUTE:
+        switch (gameplay->state.currentBuildMode) {
+            case BUILD_MODE_ROUTE:
                 sim_place_entity(gameplay->world, KIND_ROUTE, v.x, v.y);
                 break;
 
-            case KIND_HABITATION:
+            case BUILD_MODE_HABITATION:
                 sim_place_entity(gameplay->world, KIND_HABITATION, v.x, v.y);
                 break;
 
-            case KIND_CENTRALE:
+            case BUILD_MODE_CENTRALE:
                 sim_place_entity(gameplay->world, KIND_CENTRALE, v.x, v.y);
                 break;
 
-            case KIND_CHATEAU:
+            case BUILD_MODE_CHATEAU:
                 sim_place_entity(gameplay->world, KIND_CHATEAU, v.x, v.y);
+                break;
+
+            default:
                 break;
         }
     }
 
-    ui_draw_toolbar(&gameplay->textures, gameplay->world);
+    ui_draw_toolbar(&gameplay->state, gameplay->world);
 }

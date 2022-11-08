@@ -23,6 +23,8 @@ void affichage_draw_terrain_background(SpriteSheet_t* sheet, SimWorld_t* world) 
 
 /// Dessine les tuiles de la carte.
 void affichage_draw_entities(SpriteSheet_t* sheet, SimWorld_t* world) {
+
+    //todo: trier les entités a dessiner par ordre croissant de distance à l'origine dans un tableau dynamique.
     struct Maillon_t* centrales = world->centrales->premier;
     while (centrales) {
         CentraleElectrique_t* centrale = (CentraleElectrique_t*)centrales->data;
