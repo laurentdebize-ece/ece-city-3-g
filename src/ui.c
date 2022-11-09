@@ -89,22 +89,35 @@ void ui_update_toolbar(UIState* textures, SimWorld_t* sim) {
 
         if (CheckCollisionPointRec(mousePos, (Rectangle) {1012, 954, textures->toolbarIcons[ICON_ROAD].width,
                                                           textures->toolbarIcons[ICON_ROAD].height})) {
-            textures->currentBuildMode = BUILD_MODE_ROUTE;
+            if (textures->currentBuildMode == BUILD_MODE_ROUTE)
+                textures->currentBuildMode = BUILD_MODE_NONE;
+            else
+                textures->currentBuildMode = BUILD_MODE_ROUTE;
         }
 
         if (CheckCollisionPointRec(mousePos, (Rectangle) {1082, 954, textures->toolbarIcons[ICON_HABITATION].width,
                                                           textures->toolbarIcons[ICON_HABITATION].height})) {
-            textures->currentBuildMode = BUILD_MODE_HABITATION;
+
+            if (textures->currentBuildMode == BUILD_MODE_HABITATION)
+                textures->currentBuildMode = BUILD_MODE_NONE;
+            else
+                textures->currentBuildMode = BUILD_MODE_HABITATION;
         }
 
         if (CheckCollisionPointRec(mousePos, (Rectangle) {1159, 954, textures->toolbarIcons[ICON_CENTRALE].width,
                                                           textures->toolbarIcons[ICON_CENTRALE].height})) {
-            textures->currentBuildMode = BUILD_MODE_CENTRALE;
+            if (textures->currentBuildMode == BUILD_MODE_CENTRALE)
+                textures->currentBuildMode = BUILD_MODE_NONE;
+            else
+                textures->currentBuildMode = BUILD_MODE_CENTRALE;
         }
 
         if (CheckCollisionPointRec(mousePos, (Rectangle) {1229, 954, textures->toolbarIcons[ICON_CHATEAU].width,
                                                           textures->toolbarIcons[ICON_CHATEAU].height})) {
-            textures->currentBuildMode =  BUILD_MODE_CHATEAU;
+            if (textures->currentBuildMode == BUILD_MODE_CHATEAU)
+                textures->currentBuildMode = BUILD_MODE_NONE;
+            else
+                textures->currentBuildMode = BUILD_MODE_CHATEAU;
         }
     }
 }
