@@ -268,14 +268,14 @@ void update_type_bloc_general(GameplayScreen_t *gameplay) {
             }
 
             if (gameplay->world->map[y][x].type == KIND_TERRAIN_VAGUE) {
-                if ((gameplay->world->map[y][x - 1].type == KIND_TERRAIN_VAGUE) ||
-                    (gameplay->world->map[y][x - 2].type == KIND_TERRAIN_VAGUE) ||
-                    (gameplay->world->map[y - 1][x].type == KIND_TERRAIN_VAGUE) ||
-                    (gameplay->world->map[y - 2][x].type == KIND_TERRAIN_VAGUE) ||
-                    (gameplay->world->map[y - 1][x - 1].type == KIND_TERRAIN_VAGUE) ||
-                    (gameplay->world->map[y - 1][x - 2].type == KIND_TERRAIN_VAGUE) ||
-                    (gameplay->world->map[y - 2][x - 1].type == KIND_TERRAIN_VAGUE) ||
-                    (gameplay->world->map[y - 2][x - 2].type == KIND_TERRAIN_VAGUE)) {
+                if ((gameplay->world->map[y][x - 1].sprite == SPRITE_TERRAIN_VAGUE_3X3) ||
+                    (gameplay->world->map[y][x - 2].sprite == SPRITE_TERRAIN_VAGUE_3X3) ||
+                    (gameplay->world->map[y - 1][x].sprite == SPRITE_TERRAIN_VAGUE_3X3) ||
+                    (gameplay->world->map[y - 2][x].sprite == SPRITE_TERRAIN_VAGUE_3X3) ||
+                    (gameplay->world->map[y - 1][x - 1].sprite == SPRITE_TERRAIN_VAGUE_3X3) ||
+                    (gameplay->world->map[y - 1][x - 2].sprite == SPRITE_TERRAIN_VAGUE_3X3) ||
+                    (gameplay->world->map[y - 2][x - 1].sprite == SPRITE_TERRAIN_VAGUE_3X3) ||
+                    (gameplay->world->map[y - 2][x - 2].sprite == SPRITE_TERRAIN_VAGUE_3X3)) {
                     gameplay->world->map[y][x].sprite = SPRITE_VIDE;
                 } else {
                     gameplay->world->map[y][x].sprite = SPRITE_TERRAIN_VAGUE_3X3;
@@ -283,14 +283,14 @@ void update_type_bloc_general(GameplayScreen_t *gameplay) {
             }
 
             if (gameplay->world->map[y][x].type == KIND_RUINE) {
-                if ((gameplay->world->map[y][x - 1].type == KIND_RUINE) ||
-                    (gameplay->world->map[y][x - 2].type == KIND_RUINE) ||
-                    (gameplay->world->map[y - 1][x].type == KIND_RUINE) ||
-                    (gameplay->world->map[y - 2][x].type == KIND_RUINE) ||
-                    (gameplay->world->map[y - 1][x - 1].type == KIND_RUINE) ||
-                    (gameplay->world->map[y - 1][x - 2].type == KIND_RUINE) ||
-                    (gameplay->world->map[y - 2][x - 1].type == KIND_RUINE) ||
-                    (gameplay->world->map[y - 2][x - 2].type == KIND_RUINE)) {
+                if ((gameplay->world->map[y][x - 1].sprite == SPRITE_RUINE_3X3) ||
+                    (gameplay->world->map[y][x - 2].sprite == SPRITE_RUINE_3X3) ||
+                    (gameplay->world->map[y - 1][x].sprite == SPRITE_RUINE_3X3) ||
+                    (gameplay->world->map[y - 2][x].sprite == SPRITE_RUINE_3X3) ||
+                    (gameplay->world->map[y - 1][x - 1].sprite == SPRITE_RUINE_3X3) ||
+                    (gameplay->world->map[y - 1][x - 2].sprite == SPRITE_RUINE_3X3) ||
+                    (gameplay->world->map[y - 2][x - 1].sprite == SPRITE_RUINE_3X3) ||
+                    (gameplay->world->map[y - 2][x - 2].sprite == SPRITE_RUINE_3X3)) {
                     gameplay->world->map[y][x].sprite = SPRITE_VIDE;
                 } else {
                     gameplay->world->map[y][x].sprite = SPRITE_RUINE_3X3;
@@ -298,14 +298,14 @@ void update_type_bloc_general(GameplayScreen_t *gameplay) {
             }
 
             if (gameplay->world->map[y][x].type == KIND_CABANE) {
-                if ((gameplay->world->map[y][x - 1].type == KIND_CABANE) ||
-                    (gameplay->world->map[y][x - 2].type == KIND_CABANE) ||
-                    (gameplay->world->map[y - 1][x].type == KIND_CABANE) ||
-                    (gameplay->world->map[y - 2][x].type == KIND_CABANE) ||
-                    (gameplay->world->map[y - 1][x - 1].type == KIND_CABANE) ||
-                    (gameplay->world->map[y - 1][x - 2].type == KIND_CABANE) ||
-                    (gameplay->world->map[y - 2][x - 1].type == KIND_CABANE) ||
-                    (gameplay->world->map[y - 2][x - 2].type == KIND_CABANE)) {
+                if ((gameplay->world->map[y][x - 1].sprite == SPRITE_CABANE_3X3) ||
+                    (gameplay->world->map[y][x - 2].sprite == SPRITE_CABANE_3X3) ||
+                    (gameplay->world->map[y - 1][x].sprite == SPRITE_CABANE_3X3) ||
+                    (gameplay->world->map[y - 2][x].sprite == SPRITE_CABANE_3X3) ||
+                    (gameplay->world->map[y - 1][x - 1].sprite == SPRITE_CABANE_3X3) ||
+                    (gameplay->world->map[y - 1][x - 2].sprite == SPRITE_CABANE_3X3) ||
+                    (gameplay->world->map[y - 2][x - 1].sprite == SPRITE_CABANE_3X3) ||
+                    (gameplay->world->map[y - 2][x - 2].sprite == SPRITE_CABANE_3X3)) {
                     gameplay->world->map[y][x].sprite = SPRITE_VIDE;
                 } else {
                     gameplay->world->map[y][x].sprite = SPRITE_CABANE_3X3;
@@ -313,14 +313,14 @@ void update_type_bloc_general(GameplayScreen_t *gameplay) {
             }
 
             if (gameplay->world->map[y][x].type == KIND_MAISON) {
-                if ((gameplay->world->map[y][x - 1].type == KIND_MAISON) ||
-                    (gameplay->world->map[y][x - 2].type == KIND_MAISON) ||
-                    (gameplay->world->map[y - 1][x].type == KIND_MAISON) ||
-                    (gameplay->world->map[y - 2][x].type == KIND_MAISON) ||
-                    (gameplay->world->map[y - 1][x - 1].type == KIND_MAISON) ||
-                    (gameplay->world->map[y - 1][x - 2].type == KIND_MAISON) ||
-                    (gameplay->world->map[y - 2][x - 1].type == KIND_MAISON) ||
-                    (gameplay->world->map[y - 2][x - 2].type == KIND_MAISON)) {
+                if ((gameplay->world->map[y][x - 1].sprite == SPRITE_MAISON_3X3) ||
+                    (gameplay->world->map[y][x - 2].sprite == SPRITE_MAISON_3X3) ||
+                    (gameplay->world->map[y - 1][x].sprite == SPRITE_MAISON_3X3) ||
+                    (gameplay->world->map[y - 2][x].sprite == SPRITE_MAISON_3X3) ||
+                    (gameplay->world->map[y - 1][x - 1].sprite == SPRITE_MAISON_3X3) ||
+                    (gameplay->world->map[y - 1][x - 2].sprite == SPRITE_MAISON_3X3) ||
+                    (gameplay->world->map[y - 2][x - 1].sprite == SPRITE_MAISON_3X3) ||
+                    (gameplay->world->map[y - 2][x - 2].sprite == SPRITE_MAISON_3X3)) {
                     gameplay->world->map[y][x].sprite = SPRITE_VIDE;
                 } else {
                     gameplay->world->map[y][x].sprite = SPRITE_MAISON_3X3;
@@ -328,14 +328,14 @@ void update_type_bloc_general(GameplayScreen_t *gameplay) {
             }
 
             if (gameplay->world->map[y][x].type == KIND_IMMEUBLE) {
-                if ((gameplay->world->map[y][x - 1].type == KIND_IMMEUBLE) ||
-                    (gameplay->world->map[y][x - 2].type == KIND_IMMEUBLE) ||
-                    (gameplay->world->map[y - 1][x].type == KIND_IMMEUBLE) ||
-                    (gameplay->world->map[y - 2][x].type == KIND_IMMEUBLE) ||
-                    (gameplay->world->map[y - 1][x - 1].type == KIND_IMMEUBLE) ||
-                    (gameplay->world->map[y - 1][x - 2].type == KIND_IMMEUBLE) ||
-                    (gameplay->world->map[y - 2][x - 1].type == KIND_IMMEUBLE) ||
-                    (gameplay->world->map[y - 2][x - 2].type == KIND_IMMEUBLE)) {
+                if ((gameplay->world->map[y][x - 1].sprite == SPRITE_IMMEUBLE_3X3) ||
+                    (gameplay->world->map[y][x - 2].sprite == SPRITE_IMMEUBLE_3X3) ||
+                    (gameplay->world->map[y - 1][x].sprite == SPRITE_IMMEUBLE_3X3) ||
+                    (gameplay->world->map[y - 2][x].sprite == SPRITE_IMMEUBLE_3X3) ||
+                    (gameplay->world->map[y - 1][x - 1].sprite == SPRITE_IMMEUBLE_3X3) ||
+                    (gameplay->world->map[y - 1][x - 2].sprite == SPRITE_IMMEUBLE_3X3) ||
+                    (gameplay->world->map[y - 2][x - 1].sprite == SPRITE_IMMEUBLE_3X3) ||
+                    (gameplay->world->map[y - 2][x - 2].sprite == SPRITE_IMMEUBLE_3X3)) {
                     gameplay->world->map[y][x].sprite = SPRITE_VIDE;
                 } else {
                     gameplay->world->map[y][x].sprite = SPRITE_IMMEUBLE_3X3;
@@ -343,14 +343,14 @@ void update_type_bloc_general(GameplayScreen_t *gameplay) {
             }
 
             if (gameplay->world->map[y][x].type == KIND_GRATTES_CIEL) {
-                if ((gameplay->world->map[y][x - 1].type == KIND_GRATTES_CIEL) ||
-                    (gameplay->world->map[y][x - 2].type == KIND_GRATTES_CIEL) ||
-                    (gameplay->world->map[y - 1][x].type == KIND_GRATTES_CIEL) ||
-                    (gameplay->world->map[y - 2][x].type == KIND_GRATTES_CIEL) ||
-                    (gameplay->world->map[y - 1][x - 1].type == KIND_GRATTES_CIEL) ||
-                    (gameplay->world->map[y - 1][x - 2].type == KIND_GRATTES_CIEL) ||
-                    (gameplay->world->map[y - 2][x - 1].type == KIND_GRATTES_CIEL) ||
-                    (gameplay->world->map[y - 2][x - 2].type == KIND_GRATTES_CIEL)) {
+                if ((gameplay->world->map[y][x - 1].sprite == SPRITE_GRATTE_CIEL_3X3) ||
+                    (gameplay->world->map[y][x - 2].sprite == SPRITE_GRATTE_CIEL_3X3) ||
+                    (gameplay->world->map[y - 1][x].sprite == SPRITE_GRATTE_CIEL_3X3) ||
+                    (gameplay->world->map[y - 2][x].sprite == SPRITE_GRATTE_CIEL_3X3) ||
+                    (gameplay->world->map[y - 1][x - 1].sprite == SPRITE_GRATTE_CIEL_3X3) ||
+                    (gameplay->world->map[y - 1][x - 2].sprite == SPRITE_GRATTE_CIEL_3X3) ||
+                    (gameplay->world->map[y - 2][x - 1].sprite == SPRITE_GRATTE_CIEL_3X3) ||
+                    (gameplay->world->map[y - 2][x - 2].sprite == SPRITE_GRATTE_CIEL_3X3)) {
                     gameplay->world->map[y][x].sprite = SPRITE_VIDE;
                 } else {
                     gameplay->world->map[y][x].sprite = SPRITE_GRATTE_CIEL_3X3;
@@ -359,29 +359,29 @@ void update_type_bloc_general(GameplayScreen_t *gameplay) {
 
             if (gameplay->world->map[y][x].type == KIND_CENTRALE) {
 
-                if ((gameplay->world->map[y][x - 1].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y][x - 2].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y][x - 3].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y - 1][x].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y - 2][x].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y - 3][x].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y - 4][x].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y - 5][x].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y - 1][x - 1].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y - 1][x - 2].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y - 1][x - 3].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y - 2][x - 1].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y - 2][x - 2].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y - 2][x - 3].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y - 3][x - 1].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y - 3][x - 2].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y - 3][x - 3].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y - 4][x - 1].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y - 4][x - 2].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y - 4][x - 3].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y - 5][x - 1].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y - 5][x - 2].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y - 5][x - 3].type == KIND_CENTRALE)) {
+                if ((gameplay->world->map[y][x - 1].sprite == SPRITE_ENERGY_4X6) ||
+                    (gameplay->world->map[y][x - 2].sprite == SPRITE_ENERGY_4X6) ||
+                    (gameplay->world->map[y][x - 3].sprite == SPRITE_ENERGY_4X6) ||
+                    (gameplay->world->map[y - 1][x].sprite == SPRITE_ENERGY_4X6) ||
+                    (gameplay->world->map[y - 2][x].sprite == SPRITE_ENERGY_4X6) ||
+                    (gameplay->world->map[y - 3][x].sprite == SPRITE_ENERGY_4X6) ||
+                    (gameplay->world->map[y - 4][x].sprite == SPRITE_ENERGY_4X6) ||
+                    (gameplay->world->map[y - 5][x].sprite == SPRITE_ENERGY_4X6) ||
+                    (gameplay->world->map[y - 1][x - 1].sprite == SPRITE_ENERGY_4X6) ||
+                    (gameplay->world->map[y - 1][x - 2].sprite == SPRITE_ENERGY_4X6) ||
+                    (gameplay->world->map[y - 1][x - 3].sprite == SPRITE_ENERGY_4X6) ||
+                    (gameplay->world->map[y - 2][x - 1].sprite == SPRITE_ENERGY_4X6) ||
+                    (gameplay->world->map[y - 2][x - 2].sprite == SPRITE_ENERGY_4X6) ||
+                    (gameplay->world->map[y - 2][x - 3].sprite == SPRITE_ENERGY_4X6) ||
+                    (gameplay->world->map[y - 3][x - 1].sprite == SPRITE_ENERGY_4X6) ||
+                    (gameplay->world->map[y - 3][x - 2].sprite == SPRITE_ENERGY_4X6) ||
+                    (gameplay->world->map[y - 3][x - 3].sprite == SPRITE_ENERGY_4X6) ||
+                    (gameplay->world->map[y - 4][x - 1].sprite == SPRITE_ENERGY_4X6) ||
+                    (gameplay->world->map[y - 4][x - 2].sprite == SPRITE_ENERGY_4X6) ||
+                    (gameplay->world->map[y - 4][x - 3].sprite == SPRITE_ENERGY_4X6) ||
+                    (gameplay->world->map[y - 5][x - 1].sprite == SPRITE_ENERGY_4X6) ||
+                    (gameplay->world->map[y - 5][x - 2].sprite == SPRITE_ENERGY_4X6) ||
+                    (gameplay->world->map[y - 5][x - 3].sprite == SPRITE_ENERGY_4X6)) {
 
                     gameplay->world->map[y][x].sprite = SPRITE_VIDE;
 
@@ -394,34 +394,35 @@ void update_type_bloc_general(GameplayScreen_t *gameplay) {
                         gameplay->world->map[y][x + 1].type == KIND_CENTRALE
                         && gameplay->world->map[y][x + 2].type == KIND_CENTRALE &&
                         gameplay->world->map[y][x + 3].type == KIND_CENTRALE) {
+
                         gameplay->world->map[y][x].sprite = SPRITE_ENERGY_4X6;
                     }
                 }
 
 
-                if ((gameplay->world->map[y][x - 1].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y][x - 2].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y][x - 3].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y][x - 4].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y][x - 5].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y - 1][x].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y - 2][x].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y - 3][x].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y - 1][x - 1].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y - 1][x - 2].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y - 1][x - 3].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y - 1][x - 4].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y - 1][x - 5].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y - 2][x - 1].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y - 2][x - 2].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y - 2][x - 3].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y - 2][x - 4].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y - 2][x - 5].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y - 3][x - 1].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y - 3][x - 2].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y - 3][x - 3].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y - 3][x - 4].type == KIND_CENTRALE) ||
-                    (gameplay->world->map[y - 3][x - 5].type == KIND_CENTRALE)) {
+                if ((gameplay->world->map[y][x - 1].sprite == SPRITE_ENERGY_6X4) ||
+                    (gameplay->world->map[y][x - 2].sprite == SPRITE_ENERGY_6X4) ||
+                    (gameplay->world->map[y][x - 3].sprite == SPRITE_ENERGY_6X4) ||
+                    (gameplay->world->map[y][x - 4].sprite == SPRITE_ENERGY_6X4) ||
+                    (gameplay->world->map[y][x - 5].sprite == SPRITE_ENERGY_6X4) ||
+                    (gameplay->world->map[y - 1][x].sprite == SPRITE_ENERGY_6X4) ||
+                    (gameplay->world->map[y - 2][x].sprite == SPRITE_ENERGY_6X4) ||
+                    (gameplay->world->map[y - 3][x].sprite == SPRITE_ENERGY_6X4) ||
+                    (gameplay->world->map[y - 1][x - 1].sprite == SPRITE_ENERGY_6X4) ||
+                    (gameplay->world->map[y - 1][x - 2].sprite == SPRITE_ENERGY_6X4) ||
+                    (gameplay->world->map[y - 1][x - 3].sprite == SPRITE_ENERGY_6X4) ||
+                    (gameplay->world->map[y - 1][x - 4].sprite == SPRITE_ENERGY_6X4) ||
+                    (gameplay->world->map[y - 1][x - 5].sprite == SPRITE_ENERGY_6X4) ||
+                    (gameplay->world->map[y - 2][x - 1].sprite == SPRITE_ENERGY_6X4) ||
+                    (gameplay->world->map[y - 2][x - 2].sprite == SPRITE_ENERGY_6X4) ||
+                    (gameplay->world->map[y - 2][x - 3].sprite == SPRITE_ENERGY_6X4) ||
+                    (gameplay->world->map[y - 2][x - 4].sprite == SPRITE_ENERGY_6X4) ||
+                    (gameplay->world->map[y - 2][x - 5].sprite == SPRITE_ENERGY_6X4) ||
+                    (gameplay->world->map[y - 3][x - 1].sprite == SPRITE_ENERGY_6X4) ||
+                    (gameplay->world->map[y - 3][x - 2].sprite == SPRITE_ENERGY_6X4) ||
+                    (gameplay->world->map[y - 3][x - 3].sprite == SPRITE_ENERGY_6X4) ||
+                    (gameplay->world->map[y - 3][x - 4].sprite == SPRITE_ENERGY_6X4) ||
+                    (gameplay->world->map[y - 3][x - 5].sprite == SPRITE_ENERGY_6X4)) {
 
                     gameplay->world->map[y][x].sprite = SPRITE_VIDE;
 
@@ -434,6 +435,7 @@ void update_type_bloc_general(GameplayScreen_t *gameplay) {
                         gameplay->world->map[y][x + 3].type == KIND_CENTRALE
                         && gameplay->world->map[y][x + 4].type == KIND_CENTRALE &&
                         gameplay->world->map[y][x + 5].type == KIND_CENTRALE) {
+
                         gameplay->world->map[y][x].sprite = SPRITE_ENERGY_6X4;
                     }
                 }
@@ -442,29 +444,29 @@ void update_type_bloc_general(GameplayScreen_t *gameplay) {
 
             if (gameplay->world->map[y][x].type == KIND_CHATEAU) {
 
-                if ((gameplay->world->map[y][x - 1].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y][x - 2].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y][x - 3].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y - 1][x].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y - 2][x].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y - 3][x].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y - 4][x].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y - 5][x].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y - 1][x - 1].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y - 1][x - 2].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y - 1][x - 3].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y - 2][x - 1].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y - 2][x - 2].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y - 2][x - 3].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y - 3][x - 1].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y - 3][x - 2].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y - 3][x - 3].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y - 4][x - 1].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y - 4][x - 2].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y - 4][x - 3].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y - 5][x - 1].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y - 5][x - 2].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y - 5][x - 3].type == KIND_CHATEAU)) {
+                if ((gameplay->world->map[y][x - 1].sprite == SPRITE_EAU_4X6) ||
+                    (gameplay->world->map[y][x - 2].sprite == SPRITE_EAU_4X6) ||
+                    (gameplay->world->map[y][x - 3].sprite == SPRITE_EAU_4X6) ||
+                    (gameplay->world->map[y - 1][x].sprite == SPRITE_EAU_4X6) ||
+                    (gameplay->world->map[y - 2][x].sprite == SPRITE_EAU_4X6) ||
+                    (gameplay->world->map[y - 3][x].sprite == SPRITE_EAU_4X6) ||
+                    (gameplay->world->map[y - 4][x].sprite == SPRITE_EAU_4X6) ||
+                    (gameplay->world->map[y - 5][x].sprite == SPRITE_EAU_4X6) ||
+                    (gameplay->world->map[y - 1][x - 1].sprite == SPRITE_EAU_4X6) ||
+                    (gameplay->world->map[y - 1][x - 2].sprite == SPRITE_EAU_4X6) ||
+                    (gameplay->world->map[y - 1][x - 3].sprite == SPRITE_EAU_4X6) ||
+                    (gameplay->world->map[y - 2][x - 1].sprite == SPRITE_EAU_4X6) ||
+                    (gameplay->world->map[y - 2][x - 2].sprite == SPRITE_EAU_4X6) ||
+                    (gameplay->world->map[y - 2][x - 3].sprite == SPRITE_EAU_4X6) ||
+                    (gameplay->world->map[y - 3][x - 1].sprite == SPRITE_EAU_4X6) ||
+                    (gameplay->world->map[y - 3][x - 2].sprite == SPRITE_EAU_4X6) ||
+                    (gameplay->world->map[y - 3][x - 3].sprite == SPRITE_EAU_4X6) ||
+                    (gameplay->world->map[y - 4][x - 1].sprite == SPRITE_EAU_4X6) ||
+                    (gameplay->world->map[y - 4][x - 2].sprite == SPRITE_EAU_4X6) ||
+                    (gameplay->world->map[y - 4][x - 3].sprite == SPRITE_EAU_4X6) ||
+                    (gameplay->world->map[y - 5][x - 1].sprite == SPRITE_EAU_4X6) ||
+                    (gameplay->world->map[y - 5][x - 2].sprite == SPRITE_EAU_4X6) ||
+                    (gameplay->world->map[y - 5][x - 3].sprite == SPRITE_EAU_4X6)) {
 
                     gameplay->world->map[y][x].sprite = SPRITE_VIDE;
 
@@ -483,29 +485,29 @@ void update_type_bloc_general(GameplayScreen_t *gameplay) {
                 }
 
 
-                if ((gameplay->world->map[y][x - 1].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y][x - 2].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y][x - 3].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y][x - 4].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y][x - 5].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y - 1][x].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y - 2][x].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y - 3][x].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y - 1][x - 1].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y - 1][x - 2].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y - 1][x - 3].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y - 1][x - 4].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y - 1][x - 5].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y - 2][x - 1].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y - 2][x - 2].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y - 2][x - 3].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y - 2][x - 4].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y - 2][x - 5].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y - 3][x - 1].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y - 3][x - 2].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y - 3][x - 3].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y - 3][x - 4].type == KIND_CHATEAU) ||
-                    (gameplay->world->map[y - 3][x - 5].type == KIND_CHATEAU)) {
+                if ((gameplay->world->map[y][x - 1].sprite == SPRITE_EAU_6X4) ||
+                    (gameplay->world->map[y][x - 2].sprite == SPRITE_EAU_6X4) ||
+                    (gameplay->world->map[y][x - 3].sprite == SPRITE_EAU_6X4) ||
+                    (gameplay->world->map[y][x - 4].sprite == SPRITE_EAU_6X4) ||
+                    (gameplay->world->map[y][x - 5].sprite == SPRITE_EAU_6X4) ||
+                    (gameplay->world->map[y - 1][x].sprite == SPRITE_EAU_6X4) ||
+                    (gameplay->world->map[y - 2][x].sprite == SPRITE_EAU_6X4) ||
+                    (gameplay->world->map[y - 3][x].sprite == SPRITE_EAU_6X4) ||
+                    (gameplay->world->map[y - 1][x - 1].sprite == SPRITE_EAU_6X4) ||
+                    (gameplay->world->map[y - 1][x - 2].sprite == SPRITE_EAU_6X4) ||
+                    (gameplay->world->map[y - 1][x - 3].sprite == SPRITE_EAU_6X4) ||
+                    (gameplay->world->map[y - 1][x - 4].sprite == SPRITE_EAU_6X4) ||
+                    (gameplay->world->map[y - 1][x - 5].sprite == SPRITE_EAU_6X4) ||
+                    (gameplay->world->map[y - 2][x - 1].sprite == SPRITE_EAU_6X4) ||
+                    (gameplay->world->map[y - 2][x - 2].sprite == SPRITE_EAU_6X4) ||
+                    (gameplay->world->map[y - 2][x - 3].sprite == SPRITE_EAU_6X4) ||
+                    (gameplay->world->map[y - 2][x - 4].sprite == SPRITE_EAU_6X4) ||
+                    (gameplay->world->map[y - 2][x - 5].sprite == SPRITE_EAU_6X4) ||
+                    (gameplay->world->map[y - 3][x - 1].sprite == SPRITE_EAU_6X4) ||
+                    (gameplay->world->map[y - 3][x - 2].sprite == SPRITE_EAU_6X4) ||
+                    (gameplay->world->map[y - 3][x - 3].sprite == SPRITE_EAU_6X4) ||
+                    (gameplay->world->map[y - 3][x - 4].sprite == SPRITE_EAU_6X4) ||
+                    (gameplay->world->map[y - 3][x - 5].sprite == SPRITE_EAU_6X4)) {
                     gameplay->world->map[y][x].sprite = SPRITE_VIDE;
                 } else {
                     if (gameplay->world->map[y + 1][x].type == KIND_CHATEAU &&
