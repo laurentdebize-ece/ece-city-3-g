@@ -73,24 +73,34 @@ void gameplay_draw(Jeu_t* jeu, GameplayScreen_t *gameplay) {
     bool is_valid = sim_check_can_place(gameplay->world, w > 1, v.x, v.y, w, h);
     sprite_sheet_draw_sprite(&gameplay->spriteSheet, bat, is_valid ? GREEN : RED, v.x, v.y);
 
-    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && is_valid) {
+    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
         switch (gameplay->state.currentBuildMode) {
             case BUILD_MODE_ROUTE:
-                sim_place_entity(gameplay->world, KIND_ROUTE, v.x, v.y);
+                if (is_valid)
+                    sim_place_entity(gameplay->world, KIND_ROUTE, v.x, v.y);
                 break;
 
             case BUILD_MODE_HABITATION:
-                sim_place_entity(gameplay->world, KIND_HABITATION, v.x, v.y);
+                if (is_valid)
+                    sim_place_entity(gameplay->world, KIND_HABITATION, v.x, v.y);
                 break;
 
             case BUILD_MODE_CENTRALE:
-                sim_place_entity(gameplay->world, KIND_CENTRALE, v.x, v.y);
+                if (is_valid)
+                    sim_place_entity(gameplay->world, KIND_CENTRALE, v.x, v.y);
                 break;
 
             case BUILD_MODE_CHATEAU:
-                sim_place_entity(gameplay->world, KIND_CHATEAU, v.x, v.y);
+                if (is_valid)
+                    sim_place_entity(gameplay->world, KIND_CHATEAU, v.x, v.y);
                 break;
 
+
+            case BUILD_MODE_DESTROY:
+                sim_destroy_entity(gameplay->world, v.x, v.y);
+                break;
+
+                
             default:
                 break;
         }

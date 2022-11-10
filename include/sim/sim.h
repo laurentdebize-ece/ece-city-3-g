@@ -64,6 +64,9 @@ void sim_world_step(SimWorld_t* world);
 /// Détruit un monde de simulation.
 void sim_world_destroy(SimWorld_t* world);
 
+/// Détruit l'entitée séléctionnée.
+void sim_destroy_entity(SimWorld_t* world, int x, int y);
+
 /// Place une entité dans la carte de la simulation aux coordonnées données.
 void sim_place_entity(SimWorld_t* world, CaseKind_t type, int x, int y);
 
