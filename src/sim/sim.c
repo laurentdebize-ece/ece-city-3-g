@@ -1,5 +1,5 @@
-
 #include "sim/sim.h"
+#include "screens/gameplay.h"
 
 void sim_reset_flow_distribution(SimWorld_t* world);
 
@@ -12,8 +12,8 @@ SimWorld_t* sim_world_create(SimRules_t rules, int monnaie) {
     world->routes = liste_alloc();
 
     // mise à zéro de la carte.
-    for (int i = 0; i < SIM_MAP_LARGEUR; i++) {
-        for (int j = 0; j < SIM_MAP_HAUTEUR; j++) {
+    for (int i = 0; i < SIM_MAP_HAUTEUR; i++) {
+        for (int j = 0; j < SIM_MAP_LARGEUR; j++) {
             world->map[i][j].donnees = NULL;
             world->map[i][j].type = KIND_VIDE;
             world->map[i][j].discriminant = 0;
@@ -23,6 +23,8 @@ SimWorld_t* sim_world_create(SimRules_t rules, int monnaie) {
     world->monnaie = monnaie;
     world->rules = rules;
     world->n_ticks = 0;
+
+    return world;
 }
 
 /// Détruit un monde de simulation.
@@ -59,14 +61,14 @@ void sim_reset_flow_distribution(SimWorld_t* world) {
 /// Place une entité dans la carte de la simulation aux coordonnées données.
 void sim_place_entity(SimWorld_t* world, CaseKind_t type, int x, int y) {
     switch (type) {
-        case KIND_HABITATION:
+        case KIND_TERRAIN_VAGUE:
         {
             Habitation_t* habitation = habitation_alloc(NIVEAU_TERRAIN_VAGUE);
-            habitation->position = (Vector2I) {x, y};
+            habitation->position = (Vector2) {x, y};
 
             for (int i = 0; i < 3; ++i) {
                 for (int j = 0; j < 3; ++j) {
-                    world->map[x + i][y + j].type = KIND_HABITATION;
+                    world->map[x + i][y + j].type = KIND_TERRAIN_VAGUE;
                     world->map[x + i][y + j].donnees = habitation;
                 }
             }
@@ -78,7 +80,7 @@ void sim_place_entity(SimWorld_t* world, CaseKind_t type, int x, int y) {
         case KIND_CENTRALE:
         {
             CentraleElectrique_t* centrale = centrale_alloc();
-            centrale->position = (Vector2I) {x, y};
+            centrale->position = (Vector2) {x, y};
             for (int i = 0; i < 6; ++i) {
                 for (int j = 0; j < 4; ++j) {
                     world->map[x + i][y + j].type = KIND_CENTRALE;
@@ -92,7 +94,7 @@ void sim_place_entity(SimWorld_t* world, CaseKind_t type, int x, int y) {
 
         case KIND_CHATEAU: {
             ChateauEau_t* chateau = chateau_alloc();
-            chateau->position = (Vector2I) {x, y};
+            chateau->position = (Vector2) {x, y};
             for (int i = 0; i < 4; ++i) {
                 for (int j = 0; j < 6; ++j) {
                     world->map[x + i][y + j].type = KIND_CHATEAU;
@@ -123,7 +125,7 @@ bool sim_check_can_place(SimWorld_t* world, bool isBat, int x, int y, int w, int
     // on vérifie d'abord que la surface de la grille ou l'on veut placer le bâtiment est vide.
     for (int i = 0; i < w; i++) {
         for (int j = 0; j < h; j++) {
-            if (world->map[x + i][y + j].type != KIND_VIDE)
+            if (world->map[y + i][x + j].type != KIND_VIDE)
                 return false;
         }
     }
@@ -131,12 +133,12 @@ bool sim_check_can_place(SimWorld_t* world, bool isBat, int x, int y, int w, int
     if (isBat) {
         // on vérifie ensuite que les cases adjacentes sont vides.
         for (int i = 0; i < w; ++i) {
-            if (world->map[x + i][y - 1].type == KIND_ROUTE || world->map[x + i][y + h].type == KIND_ROUTE)
+            if (world->map[y + i][x - 1].type == KIND_ROUTE || world->map[y + i][x + h].type == KIND_ROUTE)
                 return true;
         }
 
         for (int i = 0; i < h; ++i) {
-            if (world->map[x - 1][y + i].type == KIND_ROUTE || world->map[x + w][y + i].type == KIND_ROUTE)
+            if (world->map[y - 1][x + i].type == KIND_ROUTE || world->map[y + w][x + i].type == KIND_ROUTE)
                 return true;
         }
     } else

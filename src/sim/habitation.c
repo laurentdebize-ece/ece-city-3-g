@@ -1,4 +1,3 @@
-
 #include "sim/habitation.h"
 
 /// Crée une habitation.
@@ -7,6 +6,8 @@ Habitation_t* habitation_alloc(NiveauHabitation_t niveau) {
     habitation->niveau = niveau;
     habitation->ticks_evolution = 0;
     habitation->ticks_regression = 0;
+
+    return habitation;
 }
 
 /// Détruit une habitation.

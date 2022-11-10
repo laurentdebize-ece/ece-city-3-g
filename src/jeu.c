@@ -21,7 +21,7 @@ void jeu_run(Jeu_t* jeu, ScreenInfo_t* ecran_depart)
             jeu->screen->update_callback(jeu, jeu->screen);
 
         BeginDrawing();
-        ClearBackground(BLACK);
+        ClearBackground(WHITE);
 
         if (jeu->screen->draw_callback != NULL)
             jeu->screen->draw_callback(jeu, jeu->screen);

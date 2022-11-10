@@ -1,4 +1,3 @@
-
 #include "sim/centrale.h"
 
 /// Crée une centrale électrique.

@@ -8,11 +8,11 @@
 #define ISO_ORIGINE_Y 3
 
 #include <raylib.h>
+#include "screens/gameplay.h"
 
-typedef struct Vector2I {
-    int x;
-    int y;
-} Vector2I;
+Vector2 iso_to_screen(GameplayScreen_t *gameplay, Vector2I position);
+
+void update_state_mouse(GameplayScreen_t *gameplay);
 
 
 /// Convertit les coordonnées de la souris en coordonnées isométriques à l'aide d'une image de référence.

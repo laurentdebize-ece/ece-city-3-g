@@ -1,16 +1,10 @@
-
 #ifndef ECECITY_SPRITESHEET_H
 #define ECECITY_SPRITESHEET_H
 
 #include <raylib.h>
 
-#define SPRITELARGEUR 40
-#define SPRITEHAUTEUR 20
 
-#define ORIGINEX 17
-#define ORIGINEY 3
-
-enum SPRITE_MAP {
+typedef enum SPRITE_MAP {
     SPRITE_CHEAT,
     SPRITE_HOOVER,
     SPRITE_CONTOUR,
@@ -48,7 +42,7 @@ enum SPRITE_MAP {
     SPRITE_EAU_6X4,
     SPRITE_VIDE,
     NB_SPRITES
-};
+} CaseSprite_t;
 
 typedef struct Sprite_t {
     Rectangle rectangle;

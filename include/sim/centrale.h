@@ -4,7 +4,7 @@
 
 #include <stdlib.h>
 #include <stdbool.h>
-#include <utils/grille.h>
+#include "raylib.h"
 
 #define CAPACITE_CENTRALE_ELECTRIQUE 5000
 
@@ -21,7 +21,7 @@ typedef struct CentraleE_t {
     /// Réinitialisé à chaque début de tick de simulation.
     int capacite;
 
-    Vector2I position;
+    Vector2 position;
 } CentraleElectrique_t;
 
 /// Crée une centrale électrique.

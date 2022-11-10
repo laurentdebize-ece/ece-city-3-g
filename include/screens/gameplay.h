@@ -1,14 +1,29 @@
-
 #ifndef ECECITY_GAMEPLAY_H
 #define ECECITY_GAMEPLAY_H
 
 #include "jeu.h"
-#include <stdlib.h>
 #include "sim/sim.h"
 #include "ui.h"
 #include "spritesheet.h"
-#include "utils/grille.h"
-#include "affichage.h"
+#include "stdio.h"
+
+#define SPRITELARGEUR 40
+#define SPRITEHAUTEUR 20
+
+#define ORIGINEX 17
+#define ORIGINEY 3
+
+#define SIM_MAP_LARGEUR 45
+#define SIM_MAP_HAUTEUR 35
+
+typedef struct {
+
+    FILE* fichierTxt;
+    FILE* fichierTxtWrite;
+    FILE* autoTxt;
+    FILE* autoTxtWrite;
+
+} Loader_t;
 
 typedef struct GameplayScreen_t {
     ScreenInfo_t screen_info;
@@ -18,6 +33,10 @@ typedef struct GameplayScreen_t {
     UIState state;
     /// Les textures pour le dessin de la carte.
     SpriteSheet_t spriteSheet;
+    /// Permet de savoir s'il y a eu un changement sur l'affichage de la carte (placement, destruction)
+    bool reloadCarte;
+    /// Les fichiers pour le chargement de la carte.
+    Loader_t loader;
 } GameplayScreen_t;
 
 // callbacks de l'écran.
@@ -32,6 +51,5 @@ void gameplay_on_exit(Jeu_t* jeu, GameplayScreen_t *gameplay);
 void gameplay_update(Jeu_t* jeu, GameplayScreen_t *gameplay);
 
 void gameplay_draw(Jeu_t* jeu, GameplayScreen_t *gameplay);
-
 
 #endif //ECECITY_GAMEPLAY_H

@@ -1,5 +1,5 @@
 #include "spritesheet.h"
-
+#include "screens/gameplay.h"
 void sprite_sheet_load(SpriteSheet_t* spriteSheet) {
 
     spriteSheet->spriteSheetTexture = LoadTexture("../assets/textures/carte/spriteSheet.png");
