@@ -34,12 +34,12 @@ void ui_draw_toolbar(UIState* textures, SimWorld_t* sim) {
     DrawTexture(textures->toolbarIcons[ICON_ENERGY], 446, 954, WHITE);
     DrawTexture(textures->toolbarIcons[ICON_WATER], 668, 954, WHITE);
     DrawTexture(textures->toolbarIcons[ICON_BUILD], 892, 954, WHITE);
-    DrawTexture(textures->toolbarIcons[ICON_DESTROY], 1376, 954, WHITE);
+    DrawTexture(textures->toolbarIcons[ICON_DESTROY], 1376, 954, textures->currentBuildMode == BUILD_MODE_DESTROY ? YELLOW : WHITE);
     DrawTexture(textures->toolbarIcons[ICON_TIME], 1466, 954, WHITE);
-    DrawTexture(textures->toolbarIcons[ICON_ROAD], 1012, 954, WHITE);
-    DrawTexture(textures->toolbarIcons[ICON_HABITATION], 1082, 954, WHITE);
-    DrawTexture(textures->toolbarIcons[ICON_CENTRALE], 1159, 954, WHITE);
-    DrawTexture(textures->toolbarIcons[ICON_CHATEAU], 1229, 954, WHITE);
+    DrawTexture(textures->toolbarIcons[ICON_ROAD], 1012, 954, textures->currentBuildMode == BUILD_MODE_ROUTE ? YELLOW : WHITE);
+    DrawTexture(textures->toolbarIcons[ICON_HABITATION], 1082, 954, textures->currentBuildMode == BUILD_MODE_HABITATION ? YELLOW : WHITE);
+    DrawTexture(textures->toolbarIcons[ICON_CENTRALE], 1159, 954, textures->currentBuildMode == BUILD_MODE_CENTRALE ? YELLOW : WHITE);
+    DrawTexture(textures->toolbarIcons[ICON_CHATEAU], 1229, 954, textures->currentBuildMode == BUILD_MODE_CHATEAU ? YELLOW : WHITE);
 }
 
 void ui_update_toolbar(UIState* textures, SimWorld_t* sim) {
@@ -74,15 +74,14 @@ void ui_update_toolbar(UIState* textures, SimWorld_t* sim) {
 
         if (CheckCollisionPointRec(mousePos, (Rectangle) {892, 954, textures->toolbarIcons[ICON_BUILD].width,
                                                           textures->toolbarIcons[ICON_BUILD].height})) {
-            if (textures->currentBuildMode == BUILD_MODE_DESTROY)
-                textures->currentBuildMode = BUILD_MODE_NONE;
-            else
-               textures->currentBuildMode = BUILD_MODE_DESTROY;
         }
 
         if (CheckCollisionPointRec(mousePos, (Rectangle) {1376, 954, textures->toolbarIcons[ICON_DESTROY].width,
                                                           textures->toolbarIcons[ICON_DESTROY].height})) {
-            printf("Destroy\n");
+            if (textures->currentBuildMode == BUILD_MODE_DESTROY)
+                textures->currentBuildMode = BUILD_MODE_NONE;
+            else
+                textures->currentBuildMode = BUILD_MODE_DESTROY;
         }
 
         if (CheckCollisionPointRec(mousePos, (Rectangle) {1466, 954, textures->toolbarIcons[ICON_TIME].width,
