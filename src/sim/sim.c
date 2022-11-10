@@ -144,3 +144,64 @@ bool sim_check_can_place(SimWorld_t* world, bool isBat, int x, int y, int w, int
 
     return false;
 }
+
+/// Détruit l'entitée séléctionnée.
+void sim_destroy_entity(SimWorld_t* world, int x, int y) {
+    if (x >= SIM_MAP_LARGEUR || y >= SIM_MAP_HAUTEUR || x < 0 || y < 0)
+        return;
+
+    if (world->map[x][y].type != KIND_VIDE) {
+        switch (world->map[x][y].type) {
+            case KIND_HABITATION:
+            {
+                Habitation_t* habitation = (Habitation_t *) world->map[x][y].donnees;
+                liste_supprimer(world->habitations, habitation);
+                for (int i = 0; i < 3; ++i) {
+                    for (int j = 0; j < 3; ++j) {
+                        world->map[habitation->position.x + i][habitation->position.y + j].type = KIND_VIDE;
+                        world->map[habitation->position.x + i][habitation->position.y + j].donnees = NULL;
+                    }
+                }
+                habitation_free(habitation);
+            }
+            break;
+
+            case KIND_CENTRALE:
+            {
+                CentraleElectrique_t* centrale = (CentraleElectrique_t *) world->map[x][y].donnees;
+                liste_supprimer(world->centrales, centrale);
+                for (int i = 0; i < 6; ++i) {
+                    for (int j = 0; j < 4; ++j) {
+                        world->map[centrale->position.x + i][centrale->position.y + j].type = KIND_VIDE;
+                        world->map[centrale->position.x + i][centrale->position.y + j].donnees = NULL;
+                    }
+                }
+                centrale_free(centrale);
+            }
+            break;
+
+            case KIND_CHATEAU:
+            {
+                ChateauEau_t* chateau = (ChateauEau_t *) world->map[x][y].donnees;
+                liste_supprimer(world->chateaux, chateau);
+                for (int i = 0; i < 4; ++i) {
+                    for (int j = 0; j < 6; ++j) {
+                        world->map[chateau->position.x + i][chateau->position.y + j].type = KIND_VIDE;
+                        world->map[chateau->position.x + i][chateau->position.y + j].donnees = NULL;
+                    }
+                }
+                chateau_free(chateau);
+            }
+            break;
+
+            case KIND_ROUTE: {
+                world->map[x][y].type = KIND_VIDE;
+                world->map[x][y].donnees = NULL;
+            }
+            break;
+
+            default:
+                break;
+        }
+    }
+}

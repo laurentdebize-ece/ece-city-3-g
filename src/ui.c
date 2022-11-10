@@ -74,7 +74,10 @@ void ui_update_toolbar(UIState* textures, SimWorld_t* sim) {
 
         if (CheckCollisionPointRec(mousePos, (Rectangle) {892, 954, textures->toolbarIcons[ICON_BUILD].width,
                                                           textures->toolbarIcons[ICON_BUILD].height})) {
-            printf("Build\n");
+            if (textures->currentBuildMode == BUILD_MODE_DESTROY)
+                textures->currentBuildMode = BUILD_MODE_NONE;
+            else
+               textures->currentBuildMode = BUILD_MODE_DESTROY;
         }
 
         if (CheckCollisionPointRec(mousePos, (Rectangle) {1376, 954, textures->toolbarIcons[ICON_DESTROY].width,

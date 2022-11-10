@@ -11,7 +11,8 @@ typedef enum BuildMode {
     BUILD_MODE_ROUTE,
     BUILD_MODE_CENTRALE,
     BUILD_MODE_CHATEAU,
-    BUILD_MODE_HABITATION
+    BUILD_MODE_HABITATION,
+    BUILD_MODE_DESTROY,
 } BuildMode;
 
 /// Le mode de construction actuel.
