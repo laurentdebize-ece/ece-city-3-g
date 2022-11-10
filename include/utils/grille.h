@@ -7,7 +7,7 @@
 #define ISO_ORIGINE_X 17
 #define ISO_ORIGINE_Y 3
 
-#include <raylib.h>
+#include "raylib.h"
 #include "screens/gameplay.h"
 
 Vector2 iso_to_screen(GameplayScreen_t *gameplay, Vector2I position);

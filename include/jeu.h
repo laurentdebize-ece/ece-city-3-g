@@ -4,7 +4,7 @@
 
 #include <stdbool.h>
 #include <stdlib.h>
-#include <raylib.h>
+#include "raylib.h"
 
 #define FENETRE_JEU_LARGEUR 1600
 #define FENETRE_JEU_HAUTEUR 1024

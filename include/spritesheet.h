@@ -1,7 +1,7 @@
 #ifndef ECECITY_SPRITESHEET_H
 #define ECECITY_SPRITESHEET_H
 
-#include <raylib.h>
+#include "raylib.h"
 
 
 typedef enum SPRITE_MAP {
