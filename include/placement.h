@@ -6,7 +6,7 @@
 
 bool check_collision_batiment(GameplayScreen_t *gameplay);
 
-CaseSprite_t update_type_route(Vector2I *chemin, int cheminActuel);
+CaseSprite_t update_type_route(Vector2I *chemin, int cheminActuel, int nbChemins, bool modeRotation);
 
 void draw_route_selectionee(GameplayScreen_t *gameplay);
 

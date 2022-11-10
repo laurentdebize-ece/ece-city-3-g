@@ -17,25 +17,56 @@ bool check_collision_batiment(GameplayScreen_t *gameplay) {
     return false; //Pas de collision
 }
 
-CaseSprite_t update_type_route(Vector2I *chemin, int cheminActuel) {
-    if (cheminActuel != 0) {
+CaseSprite_t update_type_route(Vector2I *chemin, int cheminActuel, int nbChemins, bool modeRotation) {
+
+    ///TODO: update le dernier chemin pour qu'il soit en fonction de la rotation (tjrs vers le haut pour le moment ?)
+
+    if (cheminActuel == nbChemins) {
+        if (chemin[cheminActuel - 1].x + 1 == chemin[cheminActuel].x) {
+            return SPRITE_ROUTE_1;
+        } else if (chemin[cheminActuel - 1].x - 1 == chemin[cheminActuel].x) {
+            return SPRITE_ROUTE_3;
+        } else if (chemin[cheminActuel - 1].y + 1 == chemin[cheminActuel].y) {
+            return SPRITE_ROUTE_2;
+        } else if (chemin[cheminActuel - 1].y - 1 == chemin[cheminActuel].y) {
+            return SPRITE_ROUTE_0;
+        }
+    } else if (cheminActuel != 0) {
         int diffX = chemin[cheminActuel - 1].x - chemin[cheminActuel + 1].x;
         int diffY = chemin[cheminActuel - 1].y - chemin[cheminActuel + 1].y;
 
-        if ((diffX == 2 || diffX == -2) && diffY == 0) {
-            return SPRITE_ROUTE_4;
-        } else if ((diffY == 2 || diffY == -2) && diffX == 0) {
-            return SPRITE_ROUTE_5;
-        } else if ((diffX == -1) && (diffY == -1)) {
-            return SPRITE_ROUTE_7;
-        } else if ((diffX == 1) && (diffY == -1)) {
-            return SPRITE_ROUTE_8;
-        } else if ((diffX == 1) && (diffY == 1)) {
-            return SPRITE_ROUTE_6;
-        } else if ((diffX == -1) && (diffY == 1)) {
-            return SPRITE_ROUTE_9;
+        if (!modeRotation) {
+            if ((diffX == 2 || diffX == -2) && diffY == 0) {
+                return SPRITE_ROUTE_4;
+            } else if ((diffY == 2 || diffY == -2) && diffX == 0) {
+                return SPRITE_ROUTE_5;
+            } else if ((diffX == -1) && (diffY == -1)) {
+                return SPRITE_ROUTE_6;
+            } else if ((diffX == 1) && (diffY == -1)) {
+                return SPRITE_ROUTE_9;
+            } else if ((diffX == 1) && (diffY == 1)) {
+                return SPRITE_ROUTE_7;
+            } else if ((diffX == -1) && (diffY == 1)) {
+                return SPRITE_ROUTE_8;
+            } else {
+                return SPRITE_ROUTE_0;
+            }
         } else {
-            return SPRITE_ROUTE_0;
+            if ((diffX == 2 || diffX == -2) && diffY == 0) {
+                return SPRITE_ROUTE_4;
+            } else if ((diffY == 2 || diffY == -2) && diffX == 0) {
+                return SPRITE_ROUTE_5;
+            } else if ((diffX == -1) && (diffY == -1)) {
+                return SPRITE_ROUTE_7;
+            } else if ((diffX == 1) && (diffY == -1)) {
+                return SPRITE_ROUTE_8;
+            } else if ((diffX == 1) && (diffY == 1)) {
+                return SPRITE_ROUTE_6;
+            } else if ((diffX == -1) && (diffY == 1)) {
+                return SPRITE_ROUTE_9;
+            } else {
+                return SPRITE_ROUTE_0;
+            }
         }
     } else {
         if (chemin[cheminActuel + 1].x == chemin[cheminActuel].x + 1) {
@@ -48,18 +79,20 @@ CaseSprite_t update_type_route(Vector2I *chemin, int cheminActuel) {
             return SPRITE_ROUTE_0;
         }
     }
-
 }
+
 
 void draw_route_selectionee(GameplayScreen_t *gameplay) {
     if (gameplay->state.stateToolbar.stateBuildRoad.nbChemins > 0 &&
         gameplay->state.stateToolbar.stateBuildRoad.depart[0].x != -1) {
         for (int i = 0; i < gameplay->state.stateToolbar.stateBuildRoad.nbChemins; i++) {
             DrawTextureRec(gameplay->spriteSheet.spriteSheetTexture, gameplay->spriteSheet.sprites[update_type_route(
-                    gameplay->state.stateToolbar.stateBuildRoad.cheminRoute, i)].rectangle,
+                                   gameplay->state.stateToolbar.stateBuildRoad.cheminRoute, i,
+                                   gameplay->state.stateToolbar.stateBuildRoad.nbChemins,
+                                   gameplay->state.stateToolbar.rotationRoute)].rectangle,
                            iso_to_screen(gameplay,
                                          (Vector2I) {gameplay->state.stateToolbar.stateBuildRoad.cheminRoute[i].x,
-                                                    gameplay->state.stateToolbar.stateBuildRoad.cheminRoute[i].y}),
+                                                     gameplay->state.stateToolbar.stateBuildRoad.cheminRoute[i].y}),
                            check_collision_batiment(gameplay) ? RED : GREEN);
         }
     }
@@ -114,27 +147,26 @@ void update_chemin_route(GameplayScreen_t *gameplay) {
             if (diffY > 0) {
                 for (int i = 1; i <= diffY; i++) {
                     gameplay->state.stateToolbar.stateBuildRoad.cheminRoute[gameplay->state.stateToolbar.stateBuildRoad.nbChemins] = (Vector2I) {
-                            arrivee.x, depart.y + i};
+                            depart.x, depart.y + i};
                     gameplay->state.stateToolbar.stateBuildRoad.nbChemins++;
                 }
             } else {
                 for (int i = 1; i <= -diffY; i++) {
                     gameplay->state.stateToolbar.stateBuildRoad.cheminRoute[gameplay->state.stateToolbar.stateBuildRoad.nbChemins] = (Vector2I) {
-                            arrivee.x, depart.y - i};
+                            depart.x, depart.y - i};
                     gameplay->state.stateToolbar.stateBuildRoad.nbChemins++;
                 }
             }
-
             if (diffX > 0) {
                 for (int i = 1; i <= diffX; i++) {
                     gameplay->state.stateToolbar.stateBuildRoad.cheminRoute[gameplay->state.stateToolbar.stateBuildRoad.nbChemins] = (Vector2I) {
-                            depart.x + i, depart.y};
+                            depart.x + i, arrivee.y};
                     gameplay->state.stateToolbar.stateBuildRoad.nbChemins++;
                 }
             } else {
                 for (int i = 1; i <= -diffX; i++) {
                     gameplay->state.stateToolbar.stateBuildRoad.cheminRoute[gameplay->state.stateToolbar.stateBuildRoad.nbChemins] = (Vector2I) {
-                            depart.x - i, depart.y};
+                            depart.x - i, arrivee.y};
                     gameplay->state.stateToolbar.stateBuildRoad.nbChemins++;
                 }
             }
@@ -564,10 +596,10 @@ void draw_placement_batiment(GameplayScreen_t *gameplay) {
         DrawTextureRec(gameplay->spriteSheet.spriteSheetTexture,
                        gameplay->spriteSheet.sprites[SPRITE_TERRAIN_VAGUE_3X3].rectangle,
                        (Vector2) {iso_to_screen(gameplay, (Vector2I) {gameplay->state.stateMouse.celluleIso.x,
-                                                                     gameplay->state.stateMouse.celluleIso.y}).x +
+                                                                      gameplay->state.stateMouse.celluleIso.y}).x +
                                   gameplay->spriteSheet.sprites[SPRITE_TERRAIN_VAGUE_3X3].decalageXDecor,
                                   iso_to_screen(gameplay, (Vector2I) {gameplay->state.stateMouse.celluleIso.x,
-                                                                     gameplay->state.stateMouse.celluleIso.y}).y +
+                                                                      gameplay->state.stateMouse.celluleIso.y}).y +
                                   gameplay->spriteSheet.sprites[SPRITE_TERRAIN_VAGUE_3X3].decalageYDecor},
                        !check_collision_placement(gameplay, gameplay->state.stateMouse.celluleIso.x,
                                                   gameplay->state.stateMouse.celluleIso.y, 3, 3) &&
@@ -580,10 +612,10 @@ void draw_placement_batiment(GameplayScreen_t *gameplay) {
             DrawTextureRec(gameplay->spriteSheet.spriteSheetTexture,
                            gameplay->spriteSheet.sprites[SPRITE_EAU_4X6].rectangle,
                            (Vector2) {iso_to_screen(gameplay, (Vector2I) {gameplay->state.stateMouse.celluleIso.x,
-                                                                         gameplay->state.stateMouse.celluleIso.y}).x +
+                                                                          gameplay->state.stateMouse.celluleIso.y}).x +
                                       gameplay->spriteSheet.sprites[SPRITE_EAU_4X6].decalageXDecor,
                                       iso_to_screen(gameplay, (Vector2I) {gameplay->state.stateMouse.celluleIso.x,
-                                                                         gameplay->state.stateMouse.celluleIso.y}).y +
+                                                                          gameplay->state.stateMouse.celluleIso.y}).y +
                                       gameplay->spriteSheet.sprites[SPRITE_EAU_4X6].decalageYDecor},
                            !check_collision_placement(gameplay, gameplay->state.stateMouse.celluleIso.x,
                                                       gameplay->state.stateMouse.celluleIso.y, 4, 6) &&
@@ -595,10 +627,10 @@ void draw_placement_batiment(GameplayScreen_t *gameplay) {
             DrawTextureRec(gameplay->spriteSheet.spriteSheetTexture,
                            gameplay->spriteSheet.sprites[SPRITE_EAU_6X4].rectangle,
                            (Vector2) {iso_to_screen(gameplay, (Vector2I) {gameplay->state.stateMouse.celluleIso.x,
-                                                                         gameplay->state.stateMouse.celluleIso.y}).x +
+                                                                          gameplay->state.stateMouse.celluleIso.y}).x +
                                       gameplay->spriteSheet.sprites[SPRITE_EAU_6X4].decalageXDecor,
                                       iso_to_screen(gameplay, (Vector2I) {gameplay->state.stateMouse.celluleIso.x,
-                                                                         gameplay->state.stateMouse.celluleIso.y}).y +
+                                                                          gameplay->state.stateMouse.celluleIso.y}).y +
                                       gameplay->spriteSheet.sprites[SPRITE_EAU_6X4].decalageYDecor},
                            !check_collision_placement(gameplay, gameplay->state.stateMouse.celluleIso.x,
                                                       gameplay->state.stateMouse.celluleIso.y, 6, 4) &&
@@ -612,10 +644,10 @@ void draw_placement_batiment(GameplayScreen_t *gameplay) {
             DrawTextureRec(gameplay->spriteSheet.spriteSheetTexture,
                            gameplay->spriteSheet.sprites[SPRITE_ENERGY_4X6].rectangle,
                            (Vector2) {iso_to_screen(gameplay, (Vector2I) {gameplay->state.stateMouse.celluleIso.x,
-                                                                         gameplay->state.stateMouse.celluleIso.y}).x +
+                                                                          gameplay->state.stateMouse.celluleIso.y}).x +
                                       gameplay->spriteSheet.sprites[SPRITE_ENERGY_4X6].decalageXDecor,
                                       iso_to_screen(gameplay, (Vector2I) {gameplay->state.stateMouse.celluleIso.x,
-                                                                         gameplay->state.stateMouse.celluleIso.y}).y +
+                                                                          gameplay->state.stateMouse.celluleIso.y}).y +
                                       gameplay->spriteSheet.sprites[SPRITE_ENERGY_4X6].decalageYDecor},
                            !check_collision_placement(gameplay, gameplay->state.stateMouse.celluleIso.x,
                                                       gameplay->state.stateMouse.celluleIso.y, 4, 6) &&
@@ -627,10 +659,10 @@ void draw_placement_batiment(GameplayScreen_t *gameplay) {
             DrawTextureRec(gameplay->spriteSheet.spriteSheetTexture,
                            gameplay->spriteSheet.sprites[SPRITE_ENERGY_6X4].rectangle,
                            (Vector2) {iso_to_screen(gameplay, (Vector2I) {gameplay->state.stateMouse.celluleIso.x,
-                                                                         gameplay->state.stateMouse.celluleIso.y}).x +
+                                                                          gameplay->state.stateMouse.celluleIso.y}).x +
                                       gameplay->spriteSheet.sprites[SPRITE_ENERGY_6X4].decalageXDecor,
                                       iso_to_screen(gameplay, (Vector2I) {gameplay->state.stateMouse.celluleIso.x,
-                                                                         gameplay->state.stateMouse.celluleIso.y}).y +
+                                                                          gameplay->state.stateMouse.celluleIso.y}).y +
                                       gameplay->spriteSheet.sprites[SPRITE_ENERGY_6X4].decalageYDecor},
                            !check_collision_placement(gameplay, gameplay->state.stateMouse.celluleIso.x,
                                                       gameplay->state.stateMouse.celluleIso.y, 6, 4) &&
@@ -658,7 +690,7 @@ void update_placement_batiment(GameplayScreen_t *gameplay) {
 
             update_word_placement_batiment(gameplay, gameplay->state.stateMouse.celluleIso.x,
                                            gameplay->state.stateMouse.celluleIso.y, 3, 3, KIND_TERRAIN_VAGUE);
-            Habitation_t* habitation = habitation_alloc(NIVEAU_TERRAIN_VAGUE);
+            Habitation_t *habitation = habitation_alloc(NIVEAU_TERRAIN_VAGUE);
             habitation->position.x = gameplay->state.stateMouse.celluleIso.x;
             habitation->position.y = gameplay->state.stateMouse.celluleIso.y;
             liste_ajout_tri(gameplay->world->habitations, habitation, habitation_tri_par_distance);
@@ -683,7 +715,7 @@ void update_placement_batiment(GameplayScreen_t *gameplay) {
                 update_word_placement_batiment(gameplay, gameplay->state.stateMouse.celluleIso.x,
                                                gameplay->state.stateMouse.celluleIso.y, 4, 6, KIND_CENTRALE);
 
-                CentraleElectrique_t* centraleElectrique = centrale_alloc();
+                CentraleElectrique_t *centraleElectrique = centrale_alloc();
                 centraleElectrique->position.x = gameplay->state.stateMouse.celluleIso.x;
                 centraleElectrique->position.y = gameplay->state.stateMouse.celluleIso.y;
                 liste_ajouter_fin(gameplay->world->centrales, centraleElectrique);
@@ -700,7 +732,7 @@ void update_placement_batiment(GameplayScreen_t *gameplay) {
                 update_word_placement_batiment(gameplay, gameplay->state.stateMouse.celluleIso.x,
                                                gameplay->state.stateMouse.celluleIso.y, 6, 4, KIND_CENTRALE);
 
-                CentraleElectrique_t* centraleElectrique = centrale_alloc();
+                CentraleElectrique_t *centraleElectrique = centrale_alloc();
                 centraleElectrique->position.x = gameplay->state.stateMouse.celluleIso.x;
                 centraleElectrique->position.y = gameplay->state.stateMouse.celluleIso.y;
                 liste_ajouter_fin(gameplay->world->centrales, centraleElectrique);
@@ -725,7 +757,7 @@ void update_placement_batiment(GameplayScreen_t *gameplay) {
                 update_word_placement_batiment(gameplay, gameplay->state.stateMouse.celluleIso.x,
                                                gameplay->state.stateMouse.celluleIso.y, 4, 6, KIND_CHATEAU);
 
-                ChateauEau_t* chateauEau = chateau_alloc();
+                ChateauEau_t *chateauEau = chateau_alloc();
                 chateauEau->position.x = gameplay->state.stateMouse.celluleIso.x;
                 chateauEau->position.y = gameplay->state.stateMouse.celluleIso.y;
                 liste_ajouter_fin(gameplay->world->chateaux, chateauEau);
@@ -741,7 +773,7 @@ void update_placement_batiment(GameplayScreen_t *gameplay) {
                                            gameplay->state.stateMouse.celluleIso.y, 6, 4)) {
                 update_word_placement_batiment(gameplay, gameplay->state.stateMouse.celluleIso.x,
                                                gameplay->state.stateMouse.celluleIso.y, 6, 4, KIND_CHATEAU);
-                ChateauEau_t* chateauEau = chateau_alloc();
+                ChateauEau_t *chateauEau = chateau_alloc();
                 chateauEau->position.x = gameplay->state.stateMouse.celluleIso.x;
                 chateauEau->position.y = gameplay->state.stateMouse.celluleIso.y;
                 liste_ajouter_fin(gameplay->world->chateaux, chateauEau);
@@ -763,7 +795,7 @@ void check_upadate_carte(GameplayScreen_t *gameplay) {
     }
 }
 
-void printMatrice(GameplayScreen_t* gameplay){
+void printMatrice(GameplayScreen_t *gameplay) {
     for (int i = 0; i < 35; i++) {
         for (int j = 0; j < 45; j++) {
             printf("%d ", gameplay->world->map[i][j].type);

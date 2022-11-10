@@ -51,6 +51,7 @@ void gameplay_update(Jeu_t *jeu, GameplayScreen_t *gameplay) {
     }
     if(IsKeyPressed(KEY_O)){
         printf("%d, %d", gameplay->state.stateMouse.celluleIso.x, gameplay->state.stateMouse.celluleIso.y);
+        printf("Mode rotation %d", gameplay->state.stateToolbar.rotationRoute);
     }
 }
 
