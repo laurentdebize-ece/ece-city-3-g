@@ -44,6 +44,9 @@ void sim_world_step(SimWorld_t* world) {
         habitation_step(hab, Communiste_t);
         maisons = maisons->next;
     }
+
+    world->monnaie += 10000;
+
     /// seconde étape: répartition de la capacité d'eau pour les bâtiments (BFS + tri de l'ordre).
     /// troisième étape: répartition de l'électricité pour les bâtiments. (BFS + tri de l'ordre).
     /// quatrième étape: sim des capacités d'évolution des bâtiments.
