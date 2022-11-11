@@ -4,6 +4,7 @@
 #include "carte.h"
 #include "placement.h"
 #include "utils/grille.h"
+#include "destruction.h"
 
 GameplayScreen_t *gameplay_create_screen() {
     GameplayScreen_t *gameplay = calloc(1, sizeof(GameplayScreen_t));
@@ -39,6 +40,8 @@ void gameplay_update(Jeu_t *jeu, GameplayScreen_t *gameplay) {
     check_changement_cellule_placement_route(gameplay);
     /// Placement de la route et des bâtiments
     update_placement_batiment(gameplay);
+    /// Actualisation lors de la destruction d'un bâtiment
+    check_destruction(gameplay);
     /// Actualisation de la carte après placement si nécessaire
     check_upadate_carte(gameplay);
     /// Actualisation de la carte après évolution si nécessaire

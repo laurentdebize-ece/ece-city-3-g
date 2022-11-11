@@ -43,6 +43,11 @@ void ui_draw_toolbar(UIState* textures, SimWorld_t* sim) {
     DrawTexture(textures->toolbarIcons[ICON_ENERGY], 446, 954, WHITE);
     DrawTexture(textures->toolbarIcons[ICON_WATER], 668, 954, WHITE);
     DrawTexture(textures->toolbarIcons[ICON_BUILD], 892, 954, WHITE);
+    if (textures->stateToolbar.hoverDestruction) {
+        DrawCircle(1400, 970, 30 , (Color) { 0, 0, 0, 20 });
+    } else if (textures->stateToolbar.modeDestruction) {
+        DrawCircle(1400, 970, 30 , (Color) { 0, 0, 0, 45 });
+    }
     DrawTexture(textures->toolbarIcons[ICON_DESTROY], 1376, 954, WHITE);
     DrawTexture(textures->toolbarIcons[ICON_TIME], 1466, 954, WHITE);
 
@@ -121,7 +126,7 @@ void ui_update_toolbar(UIState* textures, SimWorld_t* sim) {
 
         if (CheckCollisionPointRec(mousePos, (Rectangle) {1376, 954, textures->toolbarIcons[ICON_DESTROY].width,
                                                           textures->toolbarIcons[ICON_DESTROY].height})) {
-            printf("Destroy\n");
+            textures->stateToolbar.modeDestruction = !textures->stateToolbar.modeDestruction;
         }
 
         if (CheckCollisionPointRec(mousePos, (Rectangle) {1466, 954, textures->toolbarIcons[ICON_TIME].width,
@@ -187,7 +192,6 @@ void ui_update_toolbar(UIState* textures, SimWorld_t* sim) {
 
         if (CheckCollisionPointRec(mousePos, (Rectangle) {1376, 954, textures->toolbarIcons[ICON_DESTROY].width,
                                                           textures->toolbarIcons[ICON_DESTROY].height})) {
-            printf("Destroy\n");
             textures->stateToolbar.hoverDestruction = true;
         }
 
