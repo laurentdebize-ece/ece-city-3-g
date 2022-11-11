@@ -137,3 +137,40 @@ void affichage_draw_entities(SpriteSheet_t *sheet, SimWorld_t *world)
         maison = maison->next;
     }
 }
+
+void affichage_draw_build_preview(SpriteSheet_t* sheet, SimWorld_t* world, Vector2I v, CaseKind_t type)  {
+    int w = 0;
+    int h = 0;
+    enum SPRITE_MAP bat = SPRITE_HOOVER;
+    switch (type) {
+        case KIND_ROUTE:
+            w = 1;
+            h = 1;
+            bat = SPRITE_ROUTE_0;
+            break;
+
+        case KIND_HABITATION:
+            w = 3;
+            h = 3;
+            bat = SPRITE_MAISON_3X3;
+            break;
+
+        case KIND_CENTRALE:
+            w = 6;
+            h = 4;
+            bat = SPRITE_ENERGY_6X4;
+            break;
+
+        case KIND_CHATEAU:
+            w = 4;
+            h = 6;
+            bat = SPRITE_EAU_4X6;
+            break;
+
+        default:
+            break;
+    }
+
+    bool is_valid = sim_check_can_place(world, w > 1, v.x, v.y, w, h);
+    sprite_sheet_draw_sprite(sheet, bat, is_valid ? GREEN : RED, v.x, v.y);
+}
