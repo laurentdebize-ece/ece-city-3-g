@@ -34,7 +34,7 @@ void ui_draw_toolbar(UIState* textures, SimWorld_t* sim) {
 
     DrawText(TextFormat("%d", sim->rules), 271, 954, 20, (Color) { 0, 0, 0, 255 });
     DrawText(TextFormat("%d", sim->monnaie), 493, 954, 20, (Color) { 0, 0, 0, 255 });
-    DrawText(TextFormat("%d", sim->n_ticks), 717, 954, 20, (Color) { 0, 0, 0, 255 });
+    DrawText(TextFormat("%d", 0), 717, 954, 20, (Color) { 0, 0, 0, 255 });
 
     DrawTexture(textures->toolbarIcons[ICON_HAMBURGER], 26, 954, WHITE);
     DrawTexture(textures->toolbarIcons[ICON_SAVE], 109, 954, WHITE);
