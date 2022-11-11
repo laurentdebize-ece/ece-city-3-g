@@ -1,7 +1,6 @@
-
-#include <stdio.h>
 #include "screens/gameplay.h"
 
+void try_place_building(GameplayScreen_t* gameplay);
 
 GameplayScreen_t* gameplay_create_screen() {
     GameplayScreen_t* gameplay = malloc(sizeof(GameplayScreen_t));
@@ -29,6 +28,8 @@ void gameplay_on_exit(Jeu_t* jeu, GameplayScreen_t *gameplay) {
 void gameplay_update(Jeu_t* jeu, GameplayScreen_t *gameplay) {
     sim_world_step(gameplay->world);
     ui_update_toolbar(&gameplay->state, gameplay->world);
+    gameplay->mousePos = mouse_to_iso((Vector2I){GetMouseX(), GetMouseY()}, gameplay->spriteSheet.spriteDetectionTuile);
+    try_place_building(gameplay);
 }
 
 void gameplay_draw(Jeu_t* jeu, GameplayScreen_t *gameplay) {
@@ -38,73 +39,48 @@ void gameplay_draw(Jeu_t* jeu, GameplayScreen_t *gameplay) {
 
     Vector2I v = mouse_to_iso((Vector2I){GetMouseX(), GetMouseY()}, gameplay->spriteSheet.spriteDetectionTuile);
 
-    int w = 0;
-    int h = 0;
-    enum SPRITE_MAP bat = SPRITE_HOOVER;
-    switch (gameplay->state.currentBuildMode) {
-        case BUILD_MODE_ROUTE:
-            w = 1;
-            h = 1;
-            bat = SPRITE_ROUTE_0;
-            break;
+    if (gameplay->state.currentBuildMode != BUILD_MODE_NONE)
+        affichage_draw_build_preview(&gameplay->spriteSheet, gameplay->world, v, ui_buildmode_to_casekind(gameplay->state.currentBuildMode));
 
-        case BUILD_MODE_HABITATION:
-            w = 3;
-            h = 3;
-            bat = SPRITE_MAISON_3X3;
-            break;
+    ui_draw_toolbar(&gameplay->state, gameplay->world);
+}
 
-        case BUILD_MODE_CENTRALE:
-            w = 6;
-            h = 4;
-            bat = SPRITE_ENERGY_6X4;
-            break;
 
-        case BUILD_MODE_CHATEAU:
-            w = 4;
-            h = 6;
-            bat = SPRITE_EAU_4X6;
-            break;
-
-        default:
-            break;
-    }
-
-    bool is_valid = sim_check_can_place(gameplay->world, w > 1, v.x, v.y, w, h);
-    sprite_sheet_draw_sprite(&gameplay->spriteSheet, bat, is_valid ? GREEN : RED, v.x, v.y);
-
+void try_place_building(GameplayScreen_t* gameplay) {
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
         switch (gameplay->state.currentBuildMode) {
             case BUILD_MODE_ROUTE:
-                if (is_valid)
-                    sim_place_entity(gameplay->world, KIND_ROUTE, v.x, v.y);
-                break;
+                if (sim_check_can_place(gameplay->world, false, gameplay->mousePos.x, gameplay->mousePos.y, 1, 1)) {
+                    sim_place_entity(gameplay->world, KIND_ROUTE, gameplay->mousePos.x, gameplay->mousePos.y);
+                    break;
 
-            case BUILD_MODE_HABITATION:
-                if (is_valid)
-                    sim_place_entity(gameplay->world, KIND_HABITATION, v.x, v.y);
-                break;
+                    case BUILD_MODE_HABITATION:
+                        if (sim_check_can_place(gameplay->world, true, gameplay->mousePos.x, gameplay->mousePos.y, 3,
+                                                3))
+                            sim_place_entity(gameplay->world, KIND_HABITATION, gameplay->mousePos.x,
+                                             gameplay->mousePos.y);
+                    break;
 
-            case BUILD_MODE_CENTRALE:
-                if (is_valid)
-                    sim_place_entity(gameplay->world, KIND_CENTRALE, v.x, v.y);
-                break;
+                    case BUILD_MODE_CENTRALE:
+                        if (sim_check_can_place(gameplay->world, true, gameplay->mousePos.x, gameplay->mousePos.y, 6,
+                                                4))
+                            sim_place_entity(gameplay->world, KIND_CENTRALE, gameplay->mousePos.x,
+                                             gameplay->mousePos.y);
+                    break;
 
-            case BUILD_MODE_CHATEAU:
-                if (is_valid)
-                    sim_place_entity(gameplay->world, KIND_CHATEAU, v.x, v.y);
-                break;
+                    case BUILD_MODE_CHATEAU:
+                        if (sim_check_can_place(gameplay->world, true, gameplay->mousePos.x, gameplay->mousePos.y, 4,
+                                                6))
+                            sim_place_entity(gameplay->world, KIND_CHATEAU, gameplay->mousePos.x, gameplay->mousePos.y);
+                    break;
 
+                    case BUILD_MODE_DESTROY:
+                        sim_destroy_entity(gameplay->world, gameplay->mousePos.x, gameplay->mousePos.y);
+                    break;
 
-            case BUILD_MODE_DESTROY:
-                sim_destroy_entity(gameplay->world, v.x, v.y);
-                break;
-
-                
-            default:
-                break;
+                    default:
+                        break;
+                }
         }
     }
-
-    ui_draw_toolbar(&gameplay->state, gameplay->world);
 }

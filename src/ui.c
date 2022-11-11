@@ -123,3 +123,18 @@ void ui_update_toolbar(UIState* textures, SimWorld_t* sim) {
         }
     }
 }
+
+CaseKind_t ui_buildmode_to_casekind(BuildMode mode) {
+    switch (mode) {
+        case BUILD_MODE_ROUTE:
+            return KIND_ROUTE;
+        case BUILD_MODE_HABITATION:
+            return KIND_HABITATION;
+        case BUILD_MODE_CENTRALE:
+            return KIND_CENTRALE;
+        case BUILD_MODE_CHATEAU:
+            return KIND_CHATEAU;
+        default:
+            return KIND_VIDE;
+    }
+}
