@@ -19,6 +19,8 @@ void gameplay_on_enter(Jeu_t* jeu, GameplayScreen_t *gameplay) {
     ui_charger_textures(&gameplay->state);
     sprite_sheet_load(&gameplay->spriteSheet);
     gameplay->state.currentBuildMode = BUILD_MODE_NONE;
+    gameplay->state.timeScale = 1.0f;
+    gameplay->elapsedTime = 0.f;
 }
 
 void gameplay_on_exit(Jeu_t* jeu, GameplayScreen_t *gameplay) {
@@ -26,10 +28,16 @@ void gameplay_on_exit(Jeu_t* jeu, GameplayScreen_t *gameplay) {
 }
 
 void gameplay_update(Jeu_t* jeu, GameplayScreen_t *gameplay) {
-    sim_world_step(gameplay->world);
     ui_update_toolbar(&gameplay->state, gameplay->world);
     gameplay->mousePos = mouse_to_iso((Vector2I){GetMouseX(), GetMouseY()}, gameplay->spriteSheet.spriteDetectionTuile);
     try_place_building(gameplay);
+
+    gameplay->elapsedTime += GetFrameTime();
+
+    if (gameplay->elapsedTime >= 1.0f / gameplay->state.timeScale) {
+        sim_world_step(gameplay->world);
+        gameplay->elapsedTime = 0.f;
+    }
 }
 
 void gameplay_draw(Jeu_t* jeu, GameplayScreen_t *gameplay) {

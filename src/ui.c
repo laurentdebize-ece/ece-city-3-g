@@ -2,6 +2,14 @@
 #include "ui.h"
 #include "jeu.h"
 
+const char* timeToDate(SimWorld_t* s) {
+    const char* months[] = { "JAN", "FEV", "MAR", "AVR", "MAI", "JUN", "JUL", "AOU", "SEP", "OCT", "NOV", "DEC" };
+
+    int year = (s->n_ticks / N_TICKS_EVOLUTION) / 12;
+    int month = (s->n_ticks / N_TICKS_EVOLUTION) % 12;
+    return TextFormat("%s %d", months[month], 2000 + year);
+}
+
 void ui_charger_textures(UIState* textures) {
     textures->toolbarIcons[ICON_HAMBURGER] = LoadTexture("../assets/textures/icones/hamburger.png");
     textures->toolbarIcons[ICON_SAVE] = LoadTexture("../assets/textures/icones/save.png");
@@ -35,11 +43,35 @@ void ui_draw_toolbar(UIState* textures, SimWorld_t* sim) {
     DrawTexture(textures->toolbarIcons[ICON_WATER], 668, 954, WHITE);
     DrawTexture(textures->toolbarIcons[ICON_BUILD], 892, 954, WHITE);
     DrawTexture(textures->toolbarIcons[ICON_DESTROY], 1376, 954, textures->currentBuildMode == BUILD_MODE_DESTROY ? YELLOW : WHITE);
-    DrawTexture(textures->toolbarIcons[ICON_TIME], 1466, 954, WHITE);
+
+    Color timeColor = WHITE;
+    if (textures->timeScale > 1.0f)
+        timeColor = YELLOW;
+
+    DrawTexture(textures->toolbarIcons[ICON_TIME], 1466, 954, timeColor);
+    DrawText(TextFormat("x%d", (int)textures->timeScale), 1486, 994, 16, timeColor);
     DrawTexture(textures->toolbarIcons[ICON_ROAD], 1012, 954, textures->currentBuildMode == BUILD_MODE_ROUTE ? YELLOW : WHITE);
     DrawTexture(textures->toolbarIcons[ICON_HABITATION], 1082, 954, textures->currentBuildMode == BUILD_MODE_HABITATION ? YELLOW : WHITE);
     DrawTexture(textures->toolbarIcons[ICON_CENTRALE], 1159, 954, textures->currentBuildMode == BUILD_MODE_CENTRALE ? YELLOW : WHITE);
     DrawTexture(textures->toolbarIcons[ICON_CHATEAU], 1229, 954, textures->currentBuildMode == BUILD_MODE_CHATEAU ? YELLOW : WHITE);
+
+    // dessin du temps actuel
+    DrawRectangleRounded((Rectangle) {
+        .x = -5,
+        .y = -5,
+        .width = 200,
+        .height = 50
+    }, 0.2f, 8, (Color) { 0, 194, 255, 191 });
+    DrawText(timeToDate(sim), 10, 10, 24, WHITE);
+
+    // dessin de la monnaie
+    DrawRectangleRounded((Rectangle) {
+            .x = FENETRE_JEU_LARGEUR - 195,
+            .y = -5,
+            .width = 200,
+            .height = 50
+    }, 0.2f, 8, (Color) { 0, 194, 255, 191 });
+    DrawText(TextFormat("%d £", sim->monnaie), FENETRE_JEU_LARGEUR - 190, 10, 24, WHITE);
 }
 
 void ui_update_toolbar(UIState* textures, SimWorld_t* sim) {
@@ -78,49 +110,33 @@ void ui_update_toolbar(UIState* textures, SimWorld_t* sim) {
 
         if (CheckCollisionPointRec(mousePos, (Rectangle) {1376, 954, textures->toolbarIcons[ICON_DESTROY].width,
                                                           textures->toolbarIcons[ICON_DESTROY].height})) {
-            if (textures->currentBuildMode == BUILD_MODE_DESTROY)
-                textures->currentBuildMode = BUILD_MODE_NONE;
-            else
-                textures->currentBuildMode = BUILD_MODE_DESTROY;
+            textures->currentBuildMode = (textures->currentBuildMode == BUILD_MODE_DESTROY ? BUILD_MODE_NONE : BUILD_MODE_DESTROY);
         }
 
         if (CheckCollisionPointRec(mousePos, (Rectangle) {1466, 954, textures->toolbarIcons[ICON_TIME].width,
                                                           textures->toolbarIcons[ICON_TIME].height})) {
-            printf("Time\n");
+
+            textures->timeScale *= 2.0f;
+            if (textures->timeScale >= 256.0f)
+                textures->timeScale = 1.0f;
         }
 
         if (CheckCollisionPointRec(mousePos, (Rectangle) {1012, 954, textures->toolbarIcons[ICON_ROAD].width,
-                                                          textures->toolbarIcons[ICON_ROAD].height})) {
-            if (textures->currentBuildMode == BUILD_MODE_ROUTE)
-                textures->currentBuildMode = BUILD_MODE_NONE;
-            else
-                textures->currentBuildMode = BUILD_MODE_ROUTE;
-        }
+                                                          textures->toolbarIcons[ICON_ROAD].height}))
+            textures->currentBuildMode = (textures->currentBuildMode == BUILD_MODE_ROUTE ? BUILD_MODE_NONE : BUILD_MODE_ROUTE);
 
         if (CheckCollisionPointRec(mousePos, (Rectangle) {1082, 954, textures->toolbarIcons[ICON_HABITATION].width,
-                                                          textures->toolbarIcons[ICON_HABITATION].height})) {
-
-            if (textures->currentBuildMode == BUILD_MODE_HABITATION)
-                textures->currentBuildMode = BUILD_MODE_NONE;
-            else
-                textures->currentBuildMode = BUILD_MODE_HABITATION;
-        }
+                                                          textures->toolbarIcons[ICON_HABITATION].height}))
+           textures->currentBuildMode = (textures->currentBuildMode == BUILD_MODE_HABITATION ? BUILD_MODE_NONE : BUILD_MODE_HABITATION);
 
         if (CheckCollisionPointRec(mousePos, (Rectangle) {1159, 954, textures->toolbarIcons[ICON_CENTRALE].width,
-                                                          textures->toolbarIcons[ICON_CENTRALE].height})) {
-            if (textures->currentBuildMode == BUILD_MODE_CENTRALE)
-                textures->currentBuildMode = BUILD_MODE_NONE;
-            else
-                textures->currentBuildMode = BUILD_MODE_CENTRALE;
-        }
+                                                          textures->toolbarIcons[ICON_CENTRALE].height}))
+            textures->currentBuildMode = (textures->currentBuildMode == BUILD_MODE_CENTRALE ? BUILD_MODE_NONE : BUILD_MODE_CENTRALE);
+
 
         if (CheckCollisionPointRec(mousePos, (Rectangle) {1229, 954, textures->toolbarIcons[ICON_CHATEAU].width,
-                                                          textures->toolbarIcons[ICON_CHATEAU].height})) {
-            if (textures->currentBuildMode == BUILD_MODE_CHATEAU)
-                textures->currentBuildMode = BUILD_MODE_NONE;
-            else
-                textures->currentBuildMode = BUILD_MODE_CHATEAU;
-        }
+                                                          textures->toolbarIcons[ICON_CHATEAU].height}))
+            textures->currentBuildMode = (textures->currentBuildMode == BUILD_MODE_CHATEAU ? BUILD_MODE_NONE : BUILD_MODE_CHATEAU);
     }
 }
 
