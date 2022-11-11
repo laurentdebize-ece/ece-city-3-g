@@ -43,7 +43,7 @@ void gameplay_update(Jeu_t* jeu, GameplayScreen_t *gameplay) {
 void gameplay_draw(Jeu_t* jeu, GameplayScreen_t *gameplay) {
 
     affichage_draw_terrain_background(&gameplay->spriteSheet, gameplay->world);
-    affichage_draw_entities(&gameplay->spriteSheet, gameplay->world);
+    affichage_draw_entities(&gameplay->spriteSheet, gameplay->world, gameplay->state.currentBuildMode == BUILD_MODE_ROUTE ? LAYER_ROUTES : LAYER_ALL);
 
     Vector2I v = mouse_to_iso((Vector2I){GetMouseX(), GetMouseY()}, gameplay->spriteSheet.spriteDetectionTuile);
 

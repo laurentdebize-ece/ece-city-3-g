@@ -73,27 +73,30 @@ void affichage_draw_terrain_background(SpriteSheet_t *sheet, SimWorld_t *world) 
 }
 
 /// Dessine les tuiles de la carte.
-void affichage_draw_entities(SpriteSheet_t *sheet, SimWorld_t *world) {
+void affichage_draw_entities(SpriteSheet_t *sheet, SimWorld_t *world, enum RenderLayer layers) {
 
-    // todo: trier les entités a dessiner par ordre croissant de distance à l'origine dans un tableau dynamique.
+    Color centralesColor = (layers & LAYER_CENTRALES) != 0 ? WHITE : ColorAlpha(WHITE, 0.5f);
     struct Maillon_t *centrales = world->centrales->premier;
     while (centrales) {
         CentraleElectrique_t *centrale = (CentraleElectrique_t *) centrales->data;
-        sprite_sheet_draw_sprite(sheet, SPRITE_ENERGY_6X4, WHITE, centrale->position.x, centrale->position.y);
+        sprite_sheet_draw_sprite(sheet, SPRITE_ENERGY_6X4, centralesColor, centrale->position.x, centrale->position.y);
         centrales = centrales->next;
     }
 
+    Color chateauxColor = (layers & LAYER_CHATEAUX) != 0 ? WHITE : ColorAlpha(WHITE, 0.5f);
     struct Maillon_t *chateaux = world->chateaux->premier;
     while (chateaux) {
         ChateauEau_t *chateau = (ChateauEau_t *) chateaux->data;
-        sprite_sheet_draw_sprite(sheet, SPRITE_EAU_4X6, WHITE, chateau->position.x, chateau->position.y);
+        sprite_sheet_draw_sprite(sheet, SPRITE_EAU_4X6, chateauxColor, chateau->position.x, chateau->position.y);
         chateaux = chateaux->next;
     }
 
+
+    Color routesColor = (layers & LAYER_HABITATIONS) != 0 ? WHITE : ColorAlpha(WHITE, 0.5f);
     struct Maillon_t *maison = world->habitations->premier;
     while (maison) {
         Habitation_t *hab = (Habitation_t *) maison->data;
-        affichage_draw_habitation(sheet, hab);
+        affichage_draw_habitation(sheet, hab, routesColor);
         maison = maison->next;
     }
 }
@@ -135,7 +138,7 @@ void affichage_draw_build_preview(SpriteSheet_t *sheet, SimWorld_t *world, Vecto
     sprite_sheet_draw_sprite(sheet, bat, is_valid ? GREEN : RED, v.x, v.y);
 }
 
-void affichage_draw_habitation(SpriteSheet_t *sheet, Habitation_t *habitation) {
+void affichage_draw_habitation(SpriteSheet_t *sheet, Habitation_t *habitation, Color teinte) {
     enum SPRITE_MAP habitation_sprite = SPRITE_TERRAIN_VAGUE_3X3;
 
     switch (habitation->niveau) {
@@ -167,5 +170,5 @@ void affichage_draw_habitation(SpriteSheet_t *sheet, Habitation_t *habitation) {
             break;
     }
 
-    sprite_sheet_draw_sprite(sheet, habitation_sprite, WHITE, habitation->position.x, habitation->position.y);
+    sprite_sheet_draw_sprite(sheet, habitation_sprite, teinte, habitation->position.x, habitation->position.y);
 }
