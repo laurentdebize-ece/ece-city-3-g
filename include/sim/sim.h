@@ -10,6 +10,8 @@
 #define SIM_MAP_LARGEUR 45
 #define SIM_MAP_HAUTEUR 35
 
+#define ROUTE_PRIX_CONSTRUCTION 10
+
 /// Le type de case
 typedef enum CaseKind_t {
     /// case vide

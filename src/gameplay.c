@@ -15,7 +15,7 @@ GameplayScreen_t *gameplay_create_screen() {
 }
 
 void gameplay_on_enter(Jeu_t *jeu, GameplayScreen_t *gameplay) {
-    gameplay->world = sim_world_create(Capitaliste_t, 10000);
+    gameplay->world = sim_world_create(Capitaliste_t, 500000);
     ui_charger_textures(&gameplay->state);
     sprite_sheet_load(&gameplay->spriteSheet);
     gameplay->state.currentBuildMode = BUILD_MODE_NONE;
@@ -62,35 +62,35 @@ void try_place_building(GameplayScreen_t *gameplay) {
         switch (gameplay->state.currentBuildMode) {
             case BUILD_MODE_ROUTE:
                 if (sim_check_can_place(gameplay->world, false, gameplay->mousePos.x, gameplay->mousePos.y, 1, 1) &&
-                    gameplay->world->monnaie >= 10) {
+                    gameplay->world->monnaie >= ROUTE_PRIX_CONSTRUCTION) {
                     sim_place_entity(gameplay->world, KIND_ROUTE, gameplay->mousePos.x, gameplay->mousePos.y);
-                    gameplay->world->monnaie -= 10;
+                    gameplay->world->monnaie -= ROUTE_PRIX_CONSTRUCTION;
                 }
                 break;
 
             case BUILD_MODE_HABITATION:
                 if (sim_check_can_place(gameplay->world, true, gameplay->mousePos.x, gameplay->mousePos.y, 3,
-                                        3) && gameplay->world->monnaie >= 1000) {
+                                        3) && gameplay->world->monnaie >= HABITATION_PRIX_CONSTRUCTION) {
                     sim_place_entity(gameplay->world, KIND_HABITATION, gameplay->mousePos.x,
                                      gameplay->mousePos.y);
-                    gameplay->world->monnaie -= 1000;
+                    gameplay->world->monnaie -= HABITATION_PRIX_CONSTRUCTION;
                 }
                 break;
 
             case BUILD_MODE_CENTRALE:
                 if (sim_check_can_place(gameplay->world, true, gameplay->mousePos.x, gameplay->mousePos.y, 6,
-                                        4) && gameplay->world->monnaie >= 5000) {
+                                        4) && gameplay->world->monnaie >= CENTRALE_PRIX_CONSTRUCTION) {
                     sim_place_entity(gameplay->world, KIND_CENTRALE, gameplay->mousePos.x,
                                      gameplay->mousePos.y);
-                    gameplay->world->monnaie -= 5000;
+                    gameplay->world->monnaie -= CENTRALE_PRIX_CONSTRUCTION;
                 }
                 break;
 
             case BUILD_MODE_CHATEAU:
                 if (sim_check_can_place(gameplay->world, true, gameplay->mousePos.x, gameplay->mousePos.y, 4,
-                                        6) && gameplay->world->monnaie >= 5000) {
+                                        6) && gameplay->world->monnaie >= CHATEAU_PRIX_CONSTRUCTION) {
                     sim_place_entity(gameplay->world, KIND_CHATEAU, gameplay->mousePos.x, gameplay->mousePos.y);
-                    gameplay->world->monnaie -= 5000;
+                    gameplay->world->monnaie -= CHATEAU_PRIX_CONSTRUCTION;
                 }
                 break;
 
