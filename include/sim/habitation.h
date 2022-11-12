@@ -12,6 +12,8 @@ typedef enum SimRules_t {
     Communiste_t,
 } SimRules_t;
 
+
+#define HABITATION_PRIX_CONSTRUCTION 10000
 #define N_TICKS_EVOLUTION 15
 #define IMPOT_PAR_HABITANT 10
 
