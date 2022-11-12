@@ -4,17 +4,33 @@
 #include <stdbool.h>
 #include "raylib.h"
 #include "sim/sim.h"
+#include "screens/gameplay.h"
 
-typedef struct CentraleElec_t {
+typedef int typage;
+
+struct cellule {
     Vector2 position;
-    bool type4X6;
-    Liste_t habitations;
+    struct cellule *suivant;
+};
 
-} CentraleElec_t;
+typedef struct cellule* Cellule;
 
-typedef struct Test {
-    CentraleElec_t tabCentraleElec[10];
-    int nbCentraleElec;
-} Parcours_BFS_t;
+struct file {
+    int longueur;
+    Cellule tete;
+    Cellule queue;
+};
+
+typedef struct file* File;
+
+
+File fileVide();
+int longueur(File F);
+void enfiler(File F, Vector2 element);
+Vector2 defilement(File F);
+
+void bfs(GameplayScreen_t* gameplay);
+int get_nb_routes_adj_batiment(GameplayScreen_t* gameplay, Vector2 position, Orientation_t orientation);
+void get_routes_adj_batiment(GameplayScreen_t* gameplay, Vector2 position, Orientation_t orientation, Vector2* routes);
 
 #endif

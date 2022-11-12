@@ -693,7 +693,8 @@ void update_placement_batiment(GameplayScreen_t *gameplay) {
             Habitation_t *habitation = habitation_alloc(NIVEAU_TERRAIN_VAGUE);
             habitation->position.x = gameplay->state.stateMouse.celluleIso.x;
             habitation->position.y = gameplay->state.stateMouse.celluleIso.y;
-            liste_ajout_tri(gameplay->world->habitations, habitation, habitation_tri_par_distance);
+            //liste_ajout_tri(gameplay->world->habitations, habitation, habitation_tri_par_distance);
+            liste_ajouter_fin(gameplay->world->habitations, habitation);
 
             gameplay->reloadCarte = true;
             gameplay->state.stateToolbar.modePlacementHabitation = false;

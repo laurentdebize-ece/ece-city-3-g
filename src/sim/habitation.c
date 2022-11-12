@@ -91,6 +91,10 @@ int habitation_get_nb_habitants(Habitation_t* habitation) {
     return (int)habitation->niveau;
 }
 
+Vector2 habitation_get_position_cellule_iso_x_y(Habitation_t* habitation){
+    return habitation->position;
+}
+
 int habitation_cmp(Habitation_t* habitation1, Habitation_t* habitation2) {
     return habitation1->niveau - habitation2->niveau;
 }

@@ -30,6 +30,8 @@ CentraleElectrique_t* centrale_alloc();
 /// Détruit une centrale électrique.
 void centrale_free(CentraleElectrique_t* centrale);
 
+Vector2 get_centrale_position(CentraleElectrique_t* centrale);
+
 /// Réinitialise la capacité de la centrale.
 /// A appeler au début de chaque tick de simulation.
 void centrale_step(CentraleElectrique_t* centrale);

@@ -41,6 +41,10 @@ typedef struct Habitation_t {
     int ticks_regression;
     /// La position du bâtiment.
     Vector2 position;
+    /// La distance vers le chateau d'eau le plus proche
+    int distance_chateau_eau;
+    /// La position du chateau d'eau le plus proche
+    Vector2 position_chateau_eau;
 } Habitation_t;
 
 /// Crée une habitation.
@@ -57,6 +61,10 @@ void habitation_evolve(Habitation_t* habitation);
 
 /// Renvoie le nombre d'habitants dans l'habitation.
 int habitation_get_nb_habitants(Habitation_t* habitation);
+
+/// Renvoie la position sur la carte de l'habitation.
+Vector2 get_habitation_position_cellule_iso_x_y(Habitation_t* habitation);
+
 
 /// Compare deux habitations.
 int habitation_cmp(Habitation_t* habitation1, Habitation_t* habitation2);

@@ -5,6 +5,7 @@
 #include "placement.h"
 #include "utils/grille.h"
 #include "destruction.h"
+#include "bfs.h"
 
 GameplayScreen_t *gameplay_create_screen() {
     GameplayScreen_t *gameplay = calloc(1, sizeof(GameplayScreen_t));
@@ -49,13 +50,28 @@ void gameplay_update(Jeu_t *jeu, GameplayScreen_t *gameplay) {
 
 
     /// Tests debug
-    if(IsKeyPressed(KEY_P)){
+    if(IsKeyPressed(KEY_O)){
         printMatrice(gameplay);
     }
     if(IsKeyPressed(KEY_O)){
         printf("%d, %d", gameplay->state.stateMouse.celluleIso.x, gameplay->state.stateMouse.celluleIso.y);
         printf("Mode rotation %d", gameplay->state.stateToolbar.rotationRoute);
     }
+
+    if(IsKeyPressed(KEY_K)){
+        bfs(gameplay);
+    }
+
+    if(IsKeyPressed(KEY_P)){
+        /*Vector2 routes[20];
+        printf("Nb routes : %d\n", get_nb_routes_adj_batiment(gameplay, (Vector2) {0,0}, ORIENTATION_6X4));
+        get_routes_adj_batiment(gameplay,(Vector2) {0,0}, ORIENTATION_6X4, routes);
+        for (int i = 0; i < 20; ++i) {
+            printf("(%d, %d)", (int) routes[i].x, (int) routes[i].y);
+        }*/
+        bfs(gameplay);
+    }
+
 }
 
 void gameplay_draw(Jeu_t *jeu, GameplayScreen_t *gameplay) {
@@ -67,7 +83,7 @@ void gameplay_draw(Jeu_t *jeu, GameplayScreen_t *gameplay) {
     draw_map(gameplay);
 
     Vector2I v = mouse_to_iso((Vector2I) {GetMouseX(), GetMouseY()}, gameplay->spriteSheet.spriteDetectionTuile);
-    /// Affichage de la cellule iso sous la souris (hover)
+    /// Affichage demm la cellule iso sous la souris (hover)
     if(!gameplay->state.stateMouse.outOfMapBorders)
     {
         bool is_valid = sim_check_can_place(gameplay->world, false, v.x, v.y, 1, 1);
@@ -84,4 +100,11 @@ void gameplay_draw(Jeu_t *jeu, GameplayScreen_t *gameplay) {
     DrawText(TextFormat("%d", gameplay->state.stateMouse.outOfMapBorders), 10, 10, 20, RED);
     DrawText(TextFormat("(%d, %d)", gameplay->state.stateMouse.celluleIso.x, gameplay->state.stateMouse.celluleIso.y),
              10, 30, 20, RED);
+    bool test = false;
+    if(gameplay->world->map[gameplay->state.stateMouse.celluleIso.y][gameplay->state.stateMouse.celluleIso.x].type == KIND_ROUTE){
+        test = true;
+    } else {
+        test = false;
+    }
+    DrawText(TextFormat("KIND_ROUTE : %d", test), 10, 50, 20, BLACK);
 }

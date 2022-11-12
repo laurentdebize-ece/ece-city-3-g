@@ -17,6 +17,10 @@ void centrale_step(CentraleElectrique_t* centrale) {
     centrale->capacite = CAPACITE_CENTRALE_ELECTRIQUE;
 }
 
+Vector2 get_centrale_position(CentraleElectrique_t* centrale){
+    return centrale->position;
+}
+
 /// Tente de délivrer de l'électricité à une habitation, si la centrale peut encore alimenter l'habitation.
 /// Retourne si la centrale a pu délivrer l'électricité demandée.
 bool centrale_deliver_power(CentraleElectrique_t* centrale, int qte) {
