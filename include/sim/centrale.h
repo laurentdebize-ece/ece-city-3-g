@@ -7,6 +7,7 @@
 #include "raylib.h"
 #include "sim/chateau.h"
 
+#define CENTRALE_PRIX_CONSTRUCTION 100000
 #define CAPACITE_CENTRALE_ELECTRIQUE 5000
 
 typedef enum ElecConnectionState_t {

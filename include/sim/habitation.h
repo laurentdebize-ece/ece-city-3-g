@@ -14,17 +14,19 @@ typedef enum SimRules_t {
     Communiste_t,
 } SimRules_t;
 
+
+#define HABITATION_PRIX_CONSTRUCTION 10000
 #define N_TICKS_EVOLUTION 15
 #define N_TICKS_REGRESSION 15
 #define IMPOT_PAR_HABITANT 10
 
 typedef enum NiveauHabitation_t {
-    NIVEAU_TERRAIN_VAGUE = 0,
-    NIVEAU_RUINE = NIVEAU_TERRAIN_VAGUE,
-    NIVEAU_CABANE = 10,
-    NIVEAU_MAISON = 50,
-    NIVEAU_IMMEUBLE = 100,
-    NIVEAU_GRATTE_CIEL = 1000
+    NIVEAU_RUINE,
+    NIVEAU_TERRAIN_VAGUE,
+    NIVEAU_CABANE,
+    NIVEAU_MAISON,
+    NIVEAU_IMMEUBLE,
+    NIVEAU_GRATTE_CIEL,
 } NiveauHabitation_t;
 
 
@@ -37,9 +39,7 @@ typedef struct Habitation_t {
     /// Flot d'électricité disponible pour l'habitation (-1 si pas relié au réseau).
     int electricite;
     /// Compteur de ticks avant prochaine évolution.
-    int ticks_evolution;
-    /// Compteur de ticks avant prochaine régression.
-    int ticks_regression;
+    int update_ticks;
     /// La position du bâtiment.
     Vector2 position;
     /// Orientation ici NULL car une habitation n'a pas d'orientation (3X3).

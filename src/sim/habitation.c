@@ -1,11 +1,11 @@
+
 #include "sim/habitation.h"
 
 /// Crée une habitation.
 Habitation_t* habitation_alloc(NiveauHabitation_t niveau) {
     Habitation_t* habitation = malloc(sizeof (Habitation_t));
     habitation->niveau = niveau;
-    habitation->ticks_evolution = 0;
-    habitation->ticks_regression = 0;
+    habitation->update_ticks = 0;
 
     return habitation;
 }
@@ -18,35 +18,13 @@ void habitation_free(Habitation_t* habitation) {
 /// Incrémente d'un tick la simulation d'un bâtiment.
 /// Renvoie si le bâtiment a évolué / régréssé.
 void habitation_step(Habitation_t* habitation, SimRules_t rules) {
-
-    // règles
-    if (rules == Communiste_t) {
-        // l'habitation remplit les conditions d'évolution en eau et en électricité.
-        if (habitation->eau >= habitation_get_nb_habitants(habitation)
-            && habitation->electricite >= habitation_get_nb_habitants(habitation)) {
-            habitation->ticks_evolution++;
-            habitation->ticks_regression = 0;
-        } else {
-            habitation->ticks_evolution = 0;
-            habitation->ticks_regression++;
-        }
-    }
-    else
-    {
-        //TODO: règles d'évolution capitalistes.
-        habitation->ticks_evolution++;
-    }
-
-    // on reset les flots d'eau et d'électricité.
-    habitation->eau = -1;
-    habitation->electricite = -1;
-
+    habitation->update_ticks++;
     habitation_evolve(habitation);
 }
 
 void habitation_evolve(Habitation_t* habitation) {
-    if (habitation->ticks_evolution >= N_TICKS_EVOLUTION) {
-        habitation->ticks_evolution = 0;
+    if (habitation->update_ticks >= N_TICKS_EVOLUTION) {
+        habitation->update_ticks = 0;
         switch (habitation->niveau) {
             case NIVEAU_TERRAIN_VAGUE:
                 habitation->niveau = NIVEAU_CABANE;
@@ -63,32 +41,7 @@ void habitation_evolve(Habitation_t* habitation) {
             default:
                 break;
         }
-    } else if (habitation->ticks_regression >= N_TICKS_REGRESSION) {
-        habitation->ticks_regression = 0;
-        switch (habitation->niveau) {
-            case NIVEAU_CABANE:
-                habitation->niveau = NIVEAU_RUINE;
-                break;
-            case NIVEAU_MAISON:
-                habitation->niveau = NIVEAU_CABANE;
-                break;
-            case NIVEAU_IMMEUBLE:
-                habitation->niveau = NIVEAU_MAISON;
-                break;
-            case NIVEAU_GRATTE_CIEL:
-                habitation->niveau = NIVEAU_IMMEUBLE;
-                break;
-                //case NIVEAU_RUINE:
-                //case NIVEAU_TERRAIN_VAGUE:
-            default:
-                break;
-        }
     }
-}
-
-/// Renvoie le nombre d'habitants dans l'habitation.
-int habitation_get_nb_habitants(Habitation_t* habitation) {
-    return (int)habitation->niveau;
 }
 
 Vector2 habitation_get_position_cellule_iso_x_y(Habitation_t* habitation){

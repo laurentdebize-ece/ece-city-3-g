@@ -46,6 +46,8 @@ void liste_ajouter_debut(Liste_t *liste, void *data);
 /// Supprime un élément en début de liste et le retourne.
 void* liste_supprimer_debut(Liste_t *liste);
 
+void liste_supprimer(Liste_t *liste, void *data);
+
 
 
 #endif //ECECITY_LISTE_H

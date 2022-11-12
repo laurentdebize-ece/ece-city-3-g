@@ -136,3 +136,26 @@ void liste_ajout_tri(Liste_t *liste, void *data, int (*comparateur)(void *, void
     liste->taille++;
 }
 
+
+void liste_supprimer(Liste_t *liste, void *data) {
+    struct Maillon_t *maillon = liste->premier;
+    while (maillon != NULL && maillon->data != data)
+        maillon = maillon->next;
+
+    if (maillon == NULL)
+        return;
+
+    if (maillon->prev == NULL)
+        liste->premier = maillon->next;
+    else
+        maillon->prev->next = maillon->next;
+
+    if (maillon->next == NULL)
+        liste->dernier = maillon->prev;
+    else
+        maillon->next->prev = maillon->prev;
+
+    free(maillon);
+    liste->taille--;
+}
+

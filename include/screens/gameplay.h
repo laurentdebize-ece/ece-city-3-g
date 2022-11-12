@@ -1,7 +1,9 @@
+
 #ifndef ECECITY_GAMEPLAY_H
 #define ECECITY_GAMEPLAY_H
 
 #include "jeu.h"
+#include <stdlib.h>
 #include "sim/sim.h"
 #include "ui.h"
 #include "spritesheet.h"
@@ -50,12 +52,16 @@ typedef struct GameplayScreen_t {
     UIState state;
     /// Les textures pour le dessin de la carte.
     SpriteSheet_t spriteSheet;
+    /// Position de la souris sur la carte.
+    Vector2I mousePos;
     /// Permet de savoir s'il y a eu un changement sur l'affichage de la carte (placement, destruction)
     bool reloadCarte;
     /// Les fichiers pour le chargement de la carte.
     Loader_t loader;
     /// Structure de données pour le BFS
     Bfs_t bfs;
+    /// Temps écoulé depuis la dernière seconde.
+    float elapsedTime;
 } GameplayScreen_t;
 
 // callbacks de l'écran.

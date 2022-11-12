@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "raylib.h"
 
+#define CHATEAU_PRIX_CONSTRUCTION 100000
 #define CAPACITE_CHATEAU_EAU 5000
 
 typedef enum Orientation_t {
