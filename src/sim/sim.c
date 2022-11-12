@@ -79,8 +79,8 @@ void sim_place_entity(SimWorld_t* world, CaseKind_t type, int x, int y) {
 
             for (int i = 0; i < 3; ++i) {
                 for (int j = 0; j < 3; ++j) {
-                    world->map[x + i][y + j].type = KIND_TERRAIN_VAGUE;
-                    world->map[x + i][y + j].donnees = habitation;
+                    world->map[y + j][x + i].type = KIND_TERRAIN_VAGUE;
+                    world->map[y + j][x + i].donnees = habitation;
                 }
             }
 
@@ -94,8 +94,8 @@ void sim_place_entity(SimWorld_t* world, CaseKind_t type, int x, int y) {
             centrale->position = (Vector2) {x, y};
             for (int i = 0; i < 6; ++i) {
                 for (int j = 0; j < 4; ++j) {
-                    world->map[x + i][y + j].type = KIND_CENTRALE;
-                    world->map[x + i][y + j].donnees = centrale;
+                    world->map[y + j][x + i].type = KIND_CENTRALE;
+                    world->map[y + j][x + i].donnees = centrale;
                 }
             }
 
@@ -108,8 +108,8 @@ void sim_place_entity(SimWorld_t* world, CaseKind_t type, int x, int y) {
             chateau->position = (Vector2) {x, y};
             for (int i = 0; i < 4; ++i) {
                 for (int j = 0; j < 6; ++j) {
-                    world->map[x + i][y + j].type = KIND_CHATEAU;
-                    world->map[x + i][y + j].donnees = chateau;
+                    world->map[y + j][x + i].type = KIND_CHATEAU;
+                    world->map[y + j][x + i].donnees = chateau;
                 }
             }
 
@@ -118,8 +118,8 @@ void sim_place_entity(SimWorld_t* world, CaseKind_t type, int x, int y) {
         break;
 
         case KIND_ROUTE: {
-            world->map[x][y].type = KIND_ROUTE;
-            world->map[x][y].donnees = NULL;
+            world->map[y][x].type = KIND_ROUTE;
+            world->map[y][x].donnees = NULL;
         }
         break;
 
@@ -163,16 +163,16 @@ void sim_destroy_entity(SimWorld_t* world, int x, int y) {
     if (x >= SIM_MAP_LARGEUR || y >= SIM_MAP_HAUTEUR || x < 0 || y < 0)
         return;
 
-    if (world->map[x][y].type != KIND_VIDE) {
-        switch (world->map[x][y].type) {
+    if (world->map[y][x].type != KIND_VIDE) {
+        switch (world->map[y][x].type) {
             case KIND_HABITATION:
             {
-                Habitation_t* habitation = (Habitation_t *) world->map[x][y].donnees;
+                Habitation_t* habitation = (Habitation_t *) world->map[y][x].donnees;
                 liste_supprimer(world->habitations, habitation);
                 for (int i = 0; i < 3; ++i) {
                     for (int j = 0; j < 3; ++j) {
-                        world->map[habitation->position.x + i][habitation->position.y + j].type = KIND_VIDE;
-                        world->map[habitation->position.x + i][habitation->position.y + j].donnees = NULL;
+                        world->map[(int) habitation->position.y + j][(int) habitation->position.x + i].type = KIND_VIDE;
+                        world->map[(int) habitation->position.y + j][(int) habitation->position.x + i].donnees = NULL;
                     }
                 }
                 habitation_free(habitation);
@@ -181,12 +181,12 @@ void sim_destroy_entity(SimWorld_t* world, int x, int y) {
 
             case KIND_CENTRALE:
             {
-                CentraleElectrique_t* centrale = (CentraleElectrique_t *) world->map[x][y].donnees;
+                CentraleElectrique_t* centrale = (CentraleElectrique_t *) world->map[y][x].donnees;
                 liste_supprimer(world->centrales, centrale);
                 for (int i = 0; i < 6; ++i) {
                     for (int j = 0; j < 4; ++j) {
-                        world->map[centrale->position.x + i][centrale->position.y + j].type = KIND_VIDE;
-                        world->map[centrale->position.x + i][centrale->position.y + j].donnees = NULL;
+                        world->map[(int)centrale->position.y + j][(int)centrale->position.x + i].type = KIND_VIDE;
+                        world->map[(int)centrale->position.y + j][(int)centrale->position.x + i].donnees = NULL;
                     }
                 }
                 centrale_free(centrale);
@@ -195,12 +195,12 @@ void sim_destroy_entity(SimWorld_t* world, int x, int y) {
 
             case KIND_CHATEAU:
             {
-                ChateauEau_t* chateau = (ChateauEau_t *) world->map[x][y].donnees;
+                ChateauEau_t* chateau = (ChateauEau_t *) world->map[y][x].donnees;
                 liste_supprimer(world->chateaux, chateau);
                 for (int i = 0; i < 4; ++i) {
                     for (int j = 0; j < 6; ++j) {
-                        world->map[chateau->position.x + i][chateau->position.y + j].type = KIND_VIDE;
-                        world->map[chateau->position.x + i][chateau->position.y + j].donnees = NULL;
+                        world->map[(int)chateau->position.y + j][(int)chateau->position.x + i].type = KIND_VIDE;
+                        world->map[(int)chateau->position.y + j][(int)chateau->position.x + i].donnees = NULL;
                     }
                 }
                 chateau_free(chateau);
@@ -208,8 +208,8 @@ void sim_destroy_entity(SimWorld_t* world, int x, int y) {
             break;
 
             case KIND_ROUTE: {
-                world->map[x][y].type = KIND_VIDE;
-                world->map[x][y].donnees = NULL;
+                world->map[y][x].type = KIND_VIDE;
+                world->map[y][x].donnees = NULL;
             }
             break;
 

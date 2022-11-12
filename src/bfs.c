@@ -665,7 +665,7 @@ void bfs(GameplayScreen_t *gameplay) {
                                 }
                             }
                             /// Si il y a une route non découverte au nord
-                            if (gameplay->bfs.matrice[(int) m.y - 1][(int) m.x + 1].route == 1 &&
+                            if (gameplay->bfs.matrice[(int) m.y - 1][(int) m.x].route == 1 &&
                                 gameplay->bfs.matrice[(int) m.y - 1][(int) m.x].decouverte == 0) {
                                 Vector2 temp = m;
                                 temp.y = temp.y - 1;
@@ -800,7 +800,7 @@ void bfs(GameplayScreen_t *gameplay) {
                                 }
                             }
                             /// Si il y a une route non découverte au nord
-                            if (gameplay->bfs.matrice[(int) m.y - 1][(int) m.x + 1].route == 1 &&
+                            if (gameplay->bfs.matrice[(int) m.y - 1][(int) m.x].route == 1 &&
                                 gameplay->bfs.matrice[(int) m.y - 1][(int) m.x].decouverte == 0) {
                                 Vector2 temp = m;
                                 temp.y = temp.y - 1;

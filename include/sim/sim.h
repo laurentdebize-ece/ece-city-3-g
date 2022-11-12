@@ -8,6 +8,11 @@
 #include "spritesheet.h"
 #include "raylib.h"
 
+typedef struct Vector2I {
+    int x;
+    int y;
+} Vector2I;
+
 #define ROUTE_PRIX_CONSTRUCTION 10
 
 /// Le type de case
@@ -15,7 +20,7 @@ typedef enum CaseKind_t {
     /// case vide
     KIND_VIDE = 0,
     /// KIND_HABITATION
-    //KIND_HABITATION,
+    KIND_HABITATION,
     KIND_TERRAIN_VAGUE,
     KIND_RUINE,
     KIND_CABANE,

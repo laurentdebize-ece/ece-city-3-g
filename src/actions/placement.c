@@ -750,10 +750,11 @@ void draw_placement_batiment(GameplayScreen_t *gameplay) {
     }
 }
 
-void update_word_placement_batiment(GameplayScreen_t *gameplay, int x, int y, int w, int h, CaseKind_t type) {
+void update_word_placement_batiment(GameplayScreen_t *gameplay, int x, int y, int w, int h, CaseKind_t type, void* data) {
     for (int i = 0; i < h; i++) {
         for (int j = 0; j < w; j++) {
             gameplay->world->map[y + i][x + j].type = type;
+            gameplay->world->map[y + i][x + j].donnees = data;
         }
     }
 }
@@ -766,12 +767,12 @@ void update_placement_batiment(GameplayScreen_t *gameplay) {
             check_route_near_placement(gameplay, gameplay->state.stateMouse.celluleIso.x,
                                        gameplay->state.stateMouse.celluleIso.y, 3, 3)) {
 
-            update_word_placement_batiment(gameplay, gameplay->state.stateMouse.celluleIso.x,
-                                           gameplay->state.stateMouse.celluleIso.y, 3, 3, KIND_TERRAIN_VAGUE);
             Habitation_t *habitation = habitation_alloc(NIVEAU_TERRAIN_VAGUE);
             habitation->position.x = gameplay->state.stateMouse.celluleIso.x;
             habitation->position.y = gameplay->state.stateMouse.celluleIso.y;
             habitation->orientation = ORIENTATION_NULL;
+            update_word_placement_batiment(gameplay, gameplay->state.stateMouse.celluleIso.x,
+                                           gameplay->state.stateMouse.celluleIso.y, 3, 3, KIND_TERRAIN_VAGUE, habitation);
             //liste_ajout_tri(gameplay->world->habitations, habitation, habitation_tri_par_distance);
             liste_ajouter_fin(gameplay->world->habitations, habitation);
 
@@ -792,13 +793,13 @@ void update_placement_batiment(GameplayScreen_t *gameplay) {
                 check_route_near_placement(gameplay, gameplay->state.stateMouse.celluleIso.x,
                                            gameplay->state.stateMouse.celluleIso.y, 4, 6)) {
 
-                update_word_placement_batiment(gameplay, gameplay->state.stateMouse.celluleIso.x,
-                                               gameplay->state.stateMouse.celluleIso.y, 4, 6, KIND_CENTRALE);
-
                 CentraleElectrique_t *centraleElectrique = centrale_alloc();
                 centraleElectrique->position.x = gameplay->state.stateMouse.celluleIso.x;
                 centraleElectrique->position.y = gameplay->state.stateMouse.celluleIso.y;
                 centraleElectrique->orientation = ORIENTATION_4X6;
+
+                update_word_placement_batiment(gameplay, gameplay->state.stateMouse.celluleIso.x,
+                                               gameplay->state.stateMouse.celluleIso.y, 4, 6, KIND_CENTRALE, centraleElectrique);
                 liste_ajouter_fin(gameplay->world->centrales, centraleElectrique);
 
                 gameplay->reloadCarte = true;
@@ -810,13 +811,13 @@ void update_placement_batiment(GameplayScreen_t *gameplay) {
                                            gameplay->state.stateMouse.celluleIso.y, 6, 4) &&
                 check_route_near_placement(gameplay, gameplay->state.stateMouse.celluleIso.x,
                                            gameplay->state.stateMouse.celluleIso.y, 6, 4)) {
-                update_word_placement_batiment(gameplay, gameplay->state.stateMouse.celluleIso.x,
-                                               gameplay->state.stateMouse.celluleIso.y, 6, 4, KIND_CENTRALE);
 
                 CentraleElectrique_t *centraleElectrique = centrale_alloc();
                 centraleElectrique->position.x = gameplay->state.stateMouse.celluleIso.x;
                 centraleElectrique->position.y = gameplay->state.stateMouse.celluleIso.y;
                 centraleElectrique->orientation = ORIENTATION_6X4;
+                update_word_placement_batiment(gameplay, gameplay->state.stateMouse.celluleIso.x,
+                                               gameplay->state.stateMouse.celluleIso.y, 6, 4, KIND_CENTRALE, centraleElectrique);
                 liste_ajouter_fin(gameplay->world->centrales, centraleElectrique);
 
                 gameplay->reloadCarte = true;
@@ -836,13 +837,13 @@ void update_placement_batiment(GameplayScreen_t *gameplay) {
                                            gameplay->state.stateMouse.celluleIso.y, 4, 6) &&
                 check_route_near_placement(gameplay, gameplay->state.stateMouse.celluleIso.x,
                                            gameplay->state.stateMouse.celluleIso.y, 4, 6)) {
-                update_word_placement_batiment(gameplay, gameplay->state.stateMouse.celluleIso.x,
-                                               gameplay->state.stateMouse.celluleIso.y, 4, 6, KIND_CHATEAU);
 
                 ChateauEau_t *chateauEau = chateau_alloc();
                 chateauEau->position.x = gameplay->state.stateMouse.celluleIso.x;
                 chateauEau->position.y = gameplay->state.stateMouse.celluleIso.y;
                 chateauEau->orientation = ORIENTATION_4X6;
+                update_word_placement_batiment(gameplay, gameplay->state.stateMouse.celluleIso.x,
+                                               gameplay->state.stateMouse.celluleIso.y, 4, 6, KIND_CHATEAU, chateauEau);
                 liste_ajouter_fin(gameplay->world->chateaux, chateauEau);
                 gameplay->reloadCarte = true;
                 gameplay->state.stateToolbar.modePlacementChateau = false;
@@ -853,12 +854,12 @@ void update_placement_batiment(GameplayScreen_t *gameplay) {
                                            gameplay->state.stateMouse.celluleIso.y, 6, 4) &&
                 check_route_near_placement(gameplay, gameplay->state.stateMouse.celluleIso.x,
                                            gameplay->state.stateMouse.celluleIso.y, 6, 4)) {
-                update_word_placement_batiment(gameplay, gameplay->state.stateMouse.celluleIso.x,
-                                               gameplay->state.stateMouse.celluleIso.y, 6, 4, KIND_CHATEAU);
                 ChateauEau_t *chateauEau = chateau_alloc();
                 chateauEau->position.x = gameplay->state.stateMouse.celluleIso.x;
                 chateauEau->position.y = gameplay->state.stateMouse.celluleIso.y;
                 chateauEau->orientation = ORIENTATION_6X4;
+                update_word_placement_batiment(gameplay, gameplay->state.stateMouse.celluleIso.x,
+                                               gameplay->state.stateMouse.celluleIso.y, 6, 4, KIND_CHATEAU, chateauEau);
                 liste_ajouter_fin(gameplay->world->chateaux, chateauEau);
                 gameplay->reloadCarte = true;
                 gameplay->state.stateToolbar.modePlacementChateau = false;

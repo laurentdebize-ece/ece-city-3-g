@@ -6,6 +6,7 @@
 #include "utils/grille.h"
 #include "destruction.h"
 #include "bfs.h"
+#include "string.h"
 
 void try_place_building(GameplayScreen_t *gameplay);
 
@@ -37,22 +38,14 @@ void gameplay_on_exit(Jeu_t *jeu, GameplayScreen_t *gameplay) {
 }
 
 void gameplay_update(Jeu_t *jeu, GameplayScreen_t *gameplay) {
-void gameplay_update(Jeu_t *jeu, GameplayScreen_t *gameplay) {
     /// Actualisation des données positions souris et états souris
     update_state_mouse(gameplay);
-    /// Actualisation des états de la toolbar (hover, click, etc.)
     ui_update_toolbar(&gameplay->state, gameplay->world);
     gameplay->mousePos = mouse_to_iso((Vector2I) {GetMouseX(), GetMouseY()},
                                       gameplay->spriteSheet.spriteDetectionTuile);
-    try_place_building(gameplay);
 
     gameplay->elapsedTime += GetFrameTime();
 
-    if (gameplay->elapsedTime >= 1.0f / gameplay->state.timeScale) {
-        sim_world_step(gameplay->world);
-        gameplay->elapsedTime = 0.f;
-    }
-    /// En mode placement route création de la route en surbrillance
     check_changement_cellule_placement_route(gameplay);
     /// Placement de la route et des bâtiments
     update_placement_batiment(gameplay);
@@ -60,9 +53,11 @@ void gameplay_update(Jeu_t *jeu, GameplayScreen_t *gameplay) {
     check_destruction(gameplay);
     /// Actualisation de la carte après placement si nécessaire
     check_upadate_carte(gameplay);
-    /// Actualisation de la carte après évolution si nécessaire
-    sim_world_step(gameplay->world);
 
+    if (gameplay->elapsedTime >= 1.0f / gameplay->state.timeScale) {
+        sim_world_step(gameplay->world);
+        gameplay->elapsedTime = 0.f;
+    }
 
     /// Tests debug
     if(IsKeyPressed(KEY_P)){
@@ -91,44 +86,20 @@ void gameplay_draw(Jeu_t *jeu, GameplayScreen_t *gameplay) {
     draw_map(gameplay);
 
     Vector2I v = mouse_to_iso((Vector2I) {GetMouseX(), GetMouseY()}, gameplay->spriteSheet.spriteDetectionTuile);
-    /// Affichage demm la cellule iso sous la souris (hover)
-    if(!gameplay->state.stateMouse.outOfMapBorders)
-    {
-        bool is_valid = sim_check_can_place(gameplay->world, false, v.x, v.y, 1, 1);
-        sprite_sheet_draw_sprite(&gameplay->spriteSheet, SPRITE_HOOVER, is_valid ? GREEN : RED, v.x, v.y);
-    }
+    /// Affichage de la cellule iso sous la souris (hover)
+
+    draw_hover(gameplay);
+
 
     /// Affichage de la route en surbrillance
     draw_route_selectionee(gameplay);
     /// Affichage du bâtiment à placer en surbrillance
     draw_placement_batiment(gameplay);
 
+    DrawText(TextFormat("%d", gameplay->world->map[gameplay->state.stateMouse.celluleIso.y][gameplay->state.stateMouse.celluleIso.x].type), 10, 10, 20, BLACK);
+    DrawText(TextFormat("(%d,%d)", gameplay->state.stateMouse.celluleIso.x,gameplay->state.stateMouse.celluleIso.y), 10, 30, 20, BLACK);
 
-    /// Tests debug
-    DrawText(TextFormat("%d", gameplay->state.stateMouse.outOfMapBorders), 10, 10, 20, RED);
-    DrawText(TextFormat("(%d, %d)", gameplay->state.stateMouse.celluleIso.x, gameplay->state.stateMouse.celluleIso.y),
-             10, 30, 20, RED);
-    bool test = false;
-    if(gameplay->world->map[gameplay->state.stateMouse.celluleIso.y][gameplay->state.stateMouse.celluleIso.x].type == KIND_ROUTE){
-        test = true;
-    } else {
-        test = false;
-    }
-    DrawText(TextFormat("KIND_ROUTE : %d", test), 10, 50, 20, BLACK);
 }
-    affichage_draw_terrain_background(&gameplay->spriteSheet, gameplay->world);
-    affichage_draw_entities(&gameplay->spriteSheet, gameplay->world,
-                            gameplay->state.currentBuildMode == BUILD_MODE_ROUTE ? LAYER_ROUTES : LAYER_ALL);
-
-    Vector2I v = mouse_to_iso((Vector2I) {GetMouseX(), GetMouseY()}, gameplay->spriteSheet.spriteDetectionTuile);
-
-    if (gameplay->state.currentBuildMode != BUILD_MODE_NONE)
-        affichage_draw_build_preview(&gameplay->spriteSheet, gameplay->world, v,
-                                     ui_buildmode_to_casekind(gameplay->state.currentBuildMode));
-
-    ui_draw_toolbar(&gameplay->state, gameplay->world);
-}
-
 
 void try_place_building(GameplayScreen_t *gameplay) {
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {

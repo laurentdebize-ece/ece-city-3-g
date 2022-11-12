@@ -5,6 +5,7 @@
 #include <raylib.h>
 #include "sim/sim.h"
 #include "spritesheet.h"
+#include "screens/gameplay.h"
 
 /// Enumère les composants du jeu à dessiner.
 enum RenderLayer {
@@ -18,10 +19,23 @@ enum RenderLayer {
 };
 
 /// Dessine le fond de la carte.
-void affichage_draw_terrain_background(SpriteSheet_t* sheet, SimWorld_t* world);
+//void affichage_draw_terrain_background(SpriteSheet_t* sheet, SimWorld_t* world);
+void affichage_draw_terrain_background(GameplayScreen_t *gameplay);
+
+
+struct Buffer {
+    Vector2 position;
+    int typeBloc;
+};
+
 
 /// Dessine les tuiles de la carte.
-void affichage_draw_entities(SpriteSheet_t* sheet, SimWorld_t* world, enum RenderLayer layers);
+//void affichage_draw_entities(SpriteSheet_t* sheet, SimWorld_t* world, enum RenderLayer layers);
+void affichage_draw_entities(GameplayScreen_t* gameplay, struct Buffer *buffer, int nbBuffer);
+
+void draw_hover(GameplayScreen_t* gameplay);
+
+void draw_map(GameplayScreen_t *gameplay);
 
 /// Dessine une habitation sur la carte.
 void affichage_draw_habitation(SpriteSheet_t* sheet, Habitation_t* habitation, Color teinte);

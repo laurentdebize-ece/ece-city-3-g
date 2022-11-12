@@ -29,7 +29,7 @@ bool check_route_near_placement(GameplayScreen_t *gameplay, int x, int y, int w,
 
 void draw_placement_batiment(GameplayScreen_t *gameplay);
 
-void update_word_placement_batiment(GameplayScreen_t *gameplay, int x, int y, int w, int h, CaseKind_t type);
+void update_word_placement_batiment(GameplayScreen_t *gameplay, int x, int y, int w, int h, CaseKind_t type, void* data);
 
 void update_placement_batiment(GameplayScreen_t *gameplay);
 

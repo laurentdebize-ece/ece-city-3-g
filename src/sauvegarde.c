@@ -2,25 +2,79 @@
 #include "screens/gameplay.h"
 #include "stdio.h"
 #include "stdlib.h"
+#include "string.h"
+#include <dirent.h>
 
-
-void ouvrirFichier(GameplayScreen_t* gameplayScreen) {
-    gameplayScreen->loader.fichierTxt = fopen("../resources/file/txt/carte.txt", "r+");
+int nombredeSauvegardes() {
+    int nbSauvegarde = 0, compteur = 0;
+    DIR *d;
+    struct dirent *dir;
+    d = opendir("../assets/txt");
+    if (d) {
+        while ((dir = readdir(d)) != NULL) {
+            compteur++;
+            if(compteur > 2){
+                printf("\t%s\n", dir->d_name);
+                nbSauvegarde++;
+            }
+            //printf("%s\n", dir->d_name);
+            //nbSauvegarde++;
+        }
+        closedir(d);
+    }
+    return (nbSauvegarde);
 }
 
-void ouvrirFichierEcriture(GameplayScreen_t* gameplayScreen) {
-    gameplayScreen->loader.fichierTxtWrite = fopen("../resources/file/txt/carte.txt", "w+");
+char* creationFichierParUtilisateur(char *nomSauvegarde) {
+    printf("Comment souhaitez vous appeler la sauvegarde ?\n");
+    fflush(stdin);
+    fgets(nomSauvegarde, 50, stdin);
+    if (nomSauvegarde[strlen(nomSauvegarde) - 1] == '\n') {
+        nomSauvegarde[strlen(nomSauvegarde) - 1] = '\0';
+    }
+    return nomSauvegarde;
 }
 
-void lireFichier(GameplayScreen_t* gameplayScreen){
+char* recuperationFichierParUtilisateur(char *nomSauvegarde) {
+    printf("Il y a %d sauvegardes. Avec quelle sauvegarde voulez-vous jouer ?\n\t", nombredeSauvegardes());
+    scanf("%s", nomSauvegarde);
+    if (nomSauvegarde[strlen(nomSauvegarde) - 1] == '\n') {
+        nomSauvegarde[strlen(nomSauvegarde) - 1] = '\0';
+    }
+    return nomSauvegarde;
+}
 
-    if (gameplayScreen->loader.fichierTxt != NULL) {
+FILE* ouvrirFicherLecture(char* nomSauvegarde) {
+    FILE* pMonFichier = NULL;
+    char chemin[100];
+    char extension[7] = ".txt";
+    sprintf(chemin, "../assets/txt/%s%s", nomSauvegarde, extension);
+    if ((pMonFichier = fopen(chemin, "r+")) == NULL) {
+        printf("Erreur ouverture fichier lecture\n");
+    }
+    return pMonFichier;
+}
+
+FILE* ouvrirFicherEcriture(char* nomSauvegarde) {
+    FILE* pMonFichier = NULL;
+    char chemin[100];
+    char extension[7] = ".txt";
+    sprintf(chemin, "../assets/txt/%s%s", nomSauvegarde, extension);
+    if ((pMonFichier = fopen(chemin, "w+")) == NULL) {
+        printf("Erreur ouverture fichier lecture\n");
+    }
+    return pMonFichier;
+}
+
+void lireFichier(GameplayScreen_t* gameplayScreen, FILE* fichier){
+
+    if (fichier != NULL) {
 
         char matrice[SIM_MAP_HAUTEUR][SIM_MAP_LARGEUR];
 
         for (int y = 0; y < SIM_MAP_HAUTEUR; y++) {
             for (int x = 0; x < SIM_MAP_LARGEUR; x++) {
-                fscanf(gameplayScreen->loader.fichierTxt, "%c ", &matrice[y][x]);
+                fscanf(fichier, "%c ", &matrice[y][x]);
             }
         }
 
@@ -64,18 +118,18 @@ void lireFichier(GameplayScreen_t* gameplayScreen){
             }
         }
 
-        fscanf(gameplayScreen->loader.fichierTxt, "%d", &gameplayScreen->world->rules);
+        fscanf(fichier, "%d", &gameplayScreen->world->rules);
 
-        fscanf(gameplayScreen->loader.fichierTxt, "%d", &gameplayScreen->world->monnaie);
+        fscanf(fichier, "%d", &gameplayScreen->world->monnaie);
 
-        fscanf(gameplayScreen->loader.fichierTxt, "%d", &gameplayScreen->world->n_ticks);
+        fscanf(fichier, "%d", &gameplayScreen->world->n_ticks);
 
     }
 }
 
-void ecrireFichier(GameplayScreen_t* gameplayScreen){
+void ecrireFichier(GameplayScreen_t* gameplayScreen, char* filename){
 
-    ouvrirFichierEcriture(gameplayScreen);
+    FILE* fichier = ouvrirFicherEcriture(filename);
 
     char matrice[SIM_MAP_HAUTEUR][SIM_MAP_LARGEUR];
 
@@ -119,23 +173,23 @@ void ecrireFichier(GameplayScreen_t* gameplayScreen){
         }
     }
 
-    if (gameplayScreen->loader.fichierTxt != NULL) {
+    if (fichier != NULL) {
 
         for (int y = 0; y < SIM_MAP_HAUTEUR; y++) {
             for (int x = 0; x < SIM_MAP_LARGEUR; x++) {
-                fprintf(gameplayScreen->loader.fichierTxt, "%c ", matrice[y][x]);
+                fprintf(fichier, "%c ", matrice[y][x]);
             }
-            fprintf(gameplayScreen->loader.fichierTxt, "\n");
+            fprintf(fichier, "\n");
         }
 
-        fprintf(gameplayScreen->loader.fichierTxt, "\n%d\n", gameplayScreen->world->rules);
+        fprintf(fichier, "\n%d\n", gameplayScreen->world->rules);
 
-        fprintf(gameplayScreen->loader.fichierTxt, "%d\n", gameplayScreen->world->monnaie);
+        fprintf(fichier, "%d\n", gameplayScreen->world->monnaie);
 
-        fprintf(gameplayScreen->loader.fichierTxt, "%d\n", gameplayScreen->world->n_ticks);
+        fprintf(fichier, "%d\n", gameplayScreen->world->n_ticks);
 
     }
 
-    fclose(gameplayScreen->loader.fichierTxt);
+    fclose(fichier);
 
 }

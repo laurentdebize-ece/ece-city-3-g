@@ -20,6 +20,7 @@
 
 typedef struct {
 
+    char* path;
     FILE* fichierTxt;
     FILE* fichierTxtWrite;
     FILE* autoTxt;

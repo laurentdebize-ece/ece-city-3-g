@@ -6,6 +6,7 @@
 #include "sim/sim.h"
 
 
+
 typedef enum BuildMode {
     BUILD_MODE_NONE,
     BUILD_MODE_ROUTE,
@@ -35,11 +36,51 @@ enum TOOLBAR_ICON {
 };
 
 
+typedef struct StateMouse_t {
+    Vector2I offsetCellule;
+    Vector2I celluleXY;
+    Vector2I celluleIso;
+    bool outOfMapBorders;
+    bool boolChangementDeCelluleIso;
+} StateMouse_t;
+
+typedef struct StateBuildRoad_t {
+    Vector2I depart[2];
+    int nbDepart;
+    Vector2I cheminRoute[100];
+    int nbChemins;
+} StateBuildRoad_t;
+
+typedef struct StateToolbar_t {
+    bool hoverMenu;
+    bool modeMenu;
+    bool hoverSave;
+    bool modeSave;
+    bool hoverRoute;
+    bool modePlacementRoute;
+    bool rotationRoute;
+    StateBuildRoad_t stateBuildRoad;
+    bool hoverHabitation;
+    bool modePlacementHabitation;
+    bool hoverCentrale;
+    bool modePlacementCentrale;
+    bool rotationCentraleElec;
+    bool hoverChateau;
+    bool modePlacementChateau;
+    bool rotationChateau;
+    bool hoverDestruction;
+    bool modeDestruction;
+} StateToolbar_t;
+
 /// Contient l'état de l'interface utilisateur.
 typedef struct UIState {
     Texture2D toolbarIcons[ICON_NB_LOGOS_TOOLBAR];
     /// Mode de construction actuel
     enum BuildMode currentBuildMode;
+    /// Informations sur la position actuelle de la souris.
+    StateMouse_t stateMouse;
+    /// Informations sur l'état de la toolbar.
+    StateToolbar_t stateToolbar;
     /// Multiplicateur de vitesse de jeu
     float timeScale;
 } UIState;
