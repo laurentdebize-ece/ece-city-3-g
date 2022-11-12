@@ -101,3 +101,61 @@ void* liste_supprimer_debut(Liste_t *liste) {
     return data;
 }
 
+void liste_ajout_tri(Liste_t *liste, void *data, int (*comparateur)(void *, void *)) {
+    struct Maillon_t *maillon = malloc(sizeof(struct Maillon_t));
+    maillon->data = data;
+
+    if (liste->taille == 0) {
+        maillon->next = NULL;
+        maillon->prev = NULL;
+        liste->premier = maillon;
+        liste->dernier = maillon;
+    } else {
+        struct Maillon_t *tmp = liste->premier;
+        while (tmp != NULL && comparateur(tmp->data, data) < 0)
+            tmp = tmp->next;
+
+        if (tmp == NULL) {
+            maillon->next = NULL;
+            maillon->prev = liste->dernier;
+            liste->dernier->next = maillon;
+            liste->dernier = maillon;
+        } else if (tmp->prev == NULL) {
+            maillon->next = tmp;
+            maillon->prev = NULL;
+            tmp->prev = maillon;
+            liste->premier = maillon;
+        } else {
+            maillon->next = tmp;
+            maillon->prev = tmp->prev;
+            tmp->prev->next = maillon;
+            tmp->prev = maillon;
+        }
+    }
+
+    liste->taille++;
+}
+
+
+void liste_supprimer(Liste_t *liste, void *data) {
+    struct Maillon_t *maillon = liste->premier;
+    while (maillon != NULL && maillon->data != data)
+        maillon = maillon->next;
+
+    if (maillon == NULL)
+        return;
+
+    if (maillon->prev == NULL)
+        liste->premier = maillon->next;
+    else
+        maillon->prev->next = maillon->next;
+
+    if (maillon->next == NULL)
+        liste->dernier = maillon->prev;
+    else
+        maillon->next->prev = maillon->prev;
+
+    free(maillon);
+    liste->taille--;
+}
+

@@ -47,17 +47,17 @@ void habitation_evolve(Habitation_t* habitation) {
     if (habitation->ticks_evolution >= N_TICKS_EVOLUTION) {
         habitation->ticks_evolution = 0;
         switch (habitation->niveau) {
-            case TERRAIN_VAGUE:
-                habitation->niveau = CABANE;
+            case NIVEAU_TERRAIN_VAGUE:
+                habitation->niveau = NIVEAU_CABANE;
                 break;
-            case CABANE:
-                habitation->niveau = MAISON;
+            case NIVEAU_CABANE:
+                habitation->niveau = NIVEAU_MAISON;
                 break;
-            case MAISON:
-                habitation->niveau = IMMEUBLE;
+            case NIVEAU_MAISON:
+                habitation->niveau = NIVEAU_IMMEUBLE;
                 break;
-            case IMMEUBLE:
-                habitation->niveau = GRATTE_CIEL;
+            case NIVEAU_IMMEUBLE:
+                habitation->niveau = NIVEAU_GRATTE_CIEL;
                 break;
             default:
                 break;
@@ -65,20 +65,20 @@ void habitation_evolve(Habitation_t* habitation) {
     } else if (habitation->ticks_regression >= N_TICKS_REGRESSION) {
         habitation->ticks_regression = 0;
         switch (habitation->niveau) {
-            case CABANE:
-                habitation->niveau = RUINE;
+            case NIVEAU_CABANE:
+                habitation->niveau = NIVEAU_RUINE;
                 break;
-            case MAISON:
-                habitation->niveau = CABANE;
+            case NIVEAU_MAISON:
+                habitation->niveau = NIVEAU_CABANE;
                 break;
-            case IMMEUBLE:
-                habitation->niveau = MAISON;
+            case NIVEAU_IMMEUBLE:
+                habitation->niveau = NIVEAU_MAISON;
                 break;
-            case GRATTE_CIEL:
-                habitation->niveau = IMMEUBLE;
+            case NIVEAU_GRATTE_CIEL:
+                habitation->niveau = NIVEAU_IMMEUBLE;
                 break;
-                //case RUINE:
-                //case TERRAIN_VAGUE:
+                //case NIVEAU_RUINE:
+                //case NIVEAU_TERRAIN_VAGUE:
             default:
                 break;
         }
@@ -92,4 +92,23 @@ int habitation_get_nb_habitants(Habitation_t* habitation) {
 
 int habitation_cmp(Habitation_t* habitation1, Habitation_t* habitation2) {
     return habitation1->niveau - habitation2->niveau;
+}
+
+int habitation_tri_par_distance(Habitation_t* a, Habitation_t* b)
+{
+    Habitation_t *hab_a = (Habitation_t *) a;
+    Habitation_t *hab_b = (Habitation_t *) b;
+    if (hab_a->position.x < hab_b->position.x) {
+        return -1;
+    } else if (hab_a->position.x > hab_b->position.x) {
+        return 1;
+    } else {
+        if (hab_a->position.y < hab_b->position.y) {
+            return -1;
+        } else if (hab_a->position.y > hab_b->position.y) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
 }

@@ -5,6 +5,7 @@
 #include <utils/liste.h>
 #include <sim/habitation.h>
 #include <sim/centrale.h>
+#include <sim/chateau.h>
 
 #define SIM_MAP_LARGEUR 45
 #define SIM_MAP_HAUTEUR 35
@@ -12,15 +13,16 @@
 /// Le type de case
 typedef enum CaseKind_t {
     /// case vide
-    Vide = 0,
-    /// Habitation
-    Habitation,
+    KIND_VIDE = 0,
+    /// KIND_HABITATION
+    KIND_HABITATION,
     /// Centrale électrique
-    CentraleE,
+    KIND_CENTRALE,
     /// Château d'eau
-    ChateauE,
-    /// Route
-    Route
+    KIND_CHATEAU,
+    /// KIND_ROUTE
+    KIND_ROUTE,
+    NB_CASE_KIND,
 } CaseKind_t;
 
 /// Une case dans la carte de la simulation.
@@ -61,5 +63,14 @@ void sim_world_step(SimWorld_t* world);
 
 /// Détruit un monde de simulation.
 void sim_world_destroy(SimWorld_t* world);
+
+/// Détruit l'entitée séléctionnée.
+void sim_destroy_entity(SimWorld_t* world, int x, int y);
+
+/// Place une entité dans la carte de la simulation aux coordonnées données.
+void sim_place_entity(SimWorld_t* world, CaseKind_t type, int x, int y);
+
+/// Vérifie si un bâtiment de dimensions précisés peut être placé à une position donnée.
+bool sim_check_can_place(SimWorld_t* world, bool isBat, int x, int y, int w, int h);
 
 #endif //ECECITY_SIM_H

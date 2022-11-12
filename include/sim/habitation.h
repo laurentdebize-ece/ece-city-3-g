@@ -5,6 +5,8 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+#include "utils/grille.h"
+
 typedef enum SimRules_t {
     Capitaliste_t,
     Communiste_t,
@@ -15,12 +17,12 @@ typedef enum SimRules_t {
 #define IMPOT_PAR_HABITANT 10
 
 typedef enum NiveauHabitation_t {
-    TERRAIN_VAGUE = 0,
-    RUINE = TERRAIN_VAGUE,
-    CABANE = 10,
-    MAISON = 50,
-    IMMEUBLE = 100,
-    GRATTE_CIEL = 1000
+    NIVEAU_TERRAIN_VAGUE = 0,
+    NIVEAU_RUINE = NIVEAU_TERRAIN_VAGUE,
+    NIVEAU_CABANE = 10,
+    NIVEAU_MAISON = 50,
+    NIVEAU_IMMEUBLE = 100,
+    NIVEAU_GRATTE_CIEL = 1000
 } NiveauHabitation_t;
 
 
@@ -36,6 +38,8 @@ typedef struct Habitation_t {
     int ticks_evolution;
     /// Compteur de ticks avant prochaine régression.
     int ticks_regression;
+    /// La position du bâtiment.
+    Vector2I position;
 } Habitation_t;
 
 /// Crée une habitation.
@@ -55,5 +59,7 @@ int habitation_get_nb_habitants(Habitation_t* habitation);
 
 /// Compare deux habitations.
 int habitation_cmp(Habitation_t* habitation1, Habitation_t* habitation2);
+
+int habitation_tri_par_distance(Habitation_t* a, Habitation_t* b);
 
 #endif //ECECITY_HABITATION_H

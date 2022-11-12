@@ -5,6 +5,18 @@
 #include <raylib.h>
 #include "sim/sim.h"
 
+
+typedef enum BuildMode {
+    BUILD_MODE_NONE,
+    BUILD_MODE_ROUTE,
+    BUILD_MODE_CENTRALE,
+    BUILD_MODE_CHATEAU,
+    BUILD_MODE_HABITATION,
+    BUILD_MODE_DESTROY,
+} BuildMode;
+
+/// Le mode de construction actuel.
+
 enum TOOLBAR_ICON {
     ICON_HAMBURGER,
     ICON_SAVE,
@@ -22,12 +34,20 @@ enum TOOLBAR_ICON {
     ICON_NB_LOGOS_TOOLBAR
 };
 
-typedef struct UITextures_t {
+
+/// Contient l'état de l'interface utilisateur.
+typedef struct UIState {
     Texture2D toolbarIcons[ICON_NB_LOGOS_TOOLBAR];
-} UITextures_t;
+    /// Mode de construction actuel
+    enum BuildMode currentBuildMode;
+} UIState;
 
-void ui_charger_textures(UITextures_t* textures);
+void ui_charger_textures(UIState* textures);
 
-void ui_draw_toolbar(UITextures_t* textures, SimWorld_t* sim);
+void ui_draw_toolbar(UIState* textures, SimWorld_t* sim);
+
+void ui_update_toolbar(UIState* textures, SimWorld_t* sim);
+
+CaseKind_t ui_buildmode_to_casekind(BuildMode mode);
 
 #endif //ECECITY_UI_H
