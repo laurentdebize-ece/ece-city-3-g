@@ -874,15 +874,7 @@ void check_upadate_carte(GameplayScreen_t *gameplay) {
     if (gameplay->reloadCarte) {
         update_type_bloc_general(gameplay);
         bfs(gameplay);
+        update_liste_bfs(gameplay);
         gameplay->reloadCarte = false;
-    }
-}
-
-void printMatrice(GameplayScreen_t *gameplay) {
-    for (int i = 0; i < 35; i++) {
-        for (int j = 0; j < 45; j++) {
-            printf("%d ", gameplay->world->map[i][j].type);
-        }
-        printf("\n");
     }
 }

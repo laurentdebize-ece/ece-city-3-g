@@ -26,6 +26,10 @@ typedef struct CentraleE_t {
     Orientation_t orientation;
     /// Position de la centrale en celulle isométrique sur la carte
     Vector2 position;
+    /// Le nombre de routes adjacentes autour de la centrale
+    int nb_routes_adjacentes;
+    /// La position en cellules isométriques des routes adjacentes autour de la centrale
+    Vector2 routes_adjacentes[20];
 } CentraleElectrique_t;
 
 /// Crée une centrale électrique.

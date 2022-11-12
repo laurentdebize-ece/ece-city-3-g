@@ -34,6 +34,8 @@ typedef struct Matrice {
 typedef struct Bfs_t {
     /// Tableau dynamique de chateau eau pour le parcours en largeur
     ChateauEau_t* tab_chateaux;
+    /// Tableau dynamique de centrales électriques pour le parcours en largeur
+    CentraleElectrique_t* tab_centrales;
     /// Tableau dynamique d'habitation pour le parcours en largeur
     Habitation_t* tab_habitations;
     /// Matrice de routes pour le parcours en largeur

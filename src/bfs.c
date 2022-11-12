@@ -528,6 +528,33 @@ void bfs(GameplayScreen_t *gameplay) {
         }
     }
 
+    gameplay->bfs.tab_centrales = malloc(sizeof(CentraleElectrique_t) * gameplay->world->chateaux->taille);
+
+    struct Maillon_t *parcours3 = gameplay->world->chateaux->premier;
+    int y = 0;
+
+    while (parcours3 != NULL) {
+        gameplay->bfs.tab_centrales[y].position = ((ChateauEau_t *) parcours3->data)->position;
+        gameplay->bfs.tab_centrales[y].orientation = ((ChateauEau_t *) parcours3->data)->orientation;
+        y++;
+        parcours3 = parcours3->next;
+    }
+
+
+    for (int j = 0; j < gameplay->world->chateaux->taille; j++) {
+        gameplay->bfs.tab_centrales[j].nb_routes_adjacentes = get_nb_routes_adj_batiment(gameplay,
+                                                                                        gameplay->bfs.tab_centrales[j].position,
+                                                                                        gameplay->bfs.tab_centrales[j].orientation);
+    }
+
+    for (int j = 0; j < gameplay->world->chateaux->taille; j++) {
+        for (int k = 0; k < gameplay->bfs.tab_centrales[j].nb_routes_adjacentes; k++) {
+            get_routes_adj_batiment(gameplay, gameplay->bfs.tab_centrales[j].position,
+                                    gameplay->bfs.tab_centrales[j].orientation,
+                                    gameplay->bfs.tab_centrales[j].routes_adjacentes);
+        }
+    }
+
     gameplay->bfs.tab_habitations = malloc(sizeof(Habitation_t) * gameplay->world->habitations->taille);
 
     struct Maillon_t *parcours2 = gameplay->world->habitations->premier;
@@ -536,6 +563,7 @@ void bfs(GameplayScreen_t *gameplay) {
     while (parcours2 != NULL) {
         gameplay->bfs.tab_habitations[z].position = ((Habitation_t *) parcours2->data)->position;
         gameplay->bfs.tab_habitations[z].orientation = ((Habitation_t *) parcours2->data)->orientation;
+        gameplay->bfs.tab_habitations[z].connexion_reseau_electrique = false;
         gameplay->bfs.tab_habitations[z].distance_chateau_eau = malloc(sizeof(int) * gameplay->world->chateaux->taille);
         gameplay->bfs.tab_habitations[z].position_chateau_eau = malloc(
                 sizeof(Vector2) * gameplay->world->chateaux->taille);
@@ -707,6 +735,135 @@ void bfs(GameplayScreen_t *gameplay) {
             }
         }
     }
+
+    for (int l = 0; l < gameplay->world->centrales->taille; l++) {
+        for (int n = 0; n < gameplay->bfs.tab_centrales->nb_routes_adjacentes; n++) {
+            for (int j = 0; j < gameplay->world->habitations->taille; j++) {
+                for (int k = 0; k < gameplay->bfs.tab_habitations[j].nb_routes_adjacentes; k++) {
+                    /// Route sur laquelle on fait le parcours en largeur
+                    Vector2 depart = gameplay->bfs.tab_habitations[j].routes_adjacentes[k];
+
+                    /// On créé une file vide
+                    File file = fileVide();
+
+                    /// On enfile la première route
+                    enfiler(file, depart);
+
+                    /// Variable qui sert à défiler
+                    Vector2 m;
+
+                    /// Variable qui sert à savoir si une route a déjà un prédecesseur ou non
+                    Vector2 comparateur = {-1, -1};
+
+                    /// Tant que la file n'est pas vide
+                    while (longueur(file)) {
+
+                        /// On défile la dernière route enfilée
+                        m = defilement(file);
+
+                        /// Si cette route n'a pas été découverte
+                        if (gameplay->bfs.matrice[(int) m.y][(int) m.x].decouverte == 0) {
+                            /// Si il y a une route non découverte à l'est
+                            if (gameplay->bfs.matrice[(int) m.y][(int) m.x + 1].route == 1 &&
+                                gameplay->bfs.matrice[(int) m.y][(int) m.x + 1].decouverte == 0) {
+                                Vector2 temp = m;
+                                temp.x = temp.x + 1;
+                                /// On enfile la route à l'est
+                                enfiler(file, temp);
+                                /// Si cette route n'a pas de prédécesseur
+                                if (comparateur.x == gameplay->bfs.matrice[(int) temp.y][(int) temp.x].predecesseur.x &&
+                                    comparateur.y == gameplay->bfs.matrice[(int) temp.y][(int) temp.x].predecesseur.y) {
+                                    /// Son prédecesseur est la route défilée
+                                    gameplay->bfs.matrice[(int) temp.y][(int) temp.x].predecesseur = m;
+                                }
+                            }
+                            /// Si il y a une route non découverte à l'ouest
+                            if (gameplay->bfs.matrice[(int) m.y][(int) m.x - 1].route == 1 &&
+                                gameplay->bfs.matrice[(int) m.y][(int) m.x - 1].decouverte == 0) {
+                                Vector2 temp = m;
+                                temp.x = temp.x - 1;
+                                enfiler(file, temp);
+                                if (comparateur.x == gameplay->bfs.matrice[(int) temp.y][(int) temp.x].predecesseur.x &&
+                                    comparateur.y == gameplay->bfs.matrice[(int) temp.y][(int) temp.x].predecesseur.y) {
+                                    gameplay->bfs.matrice[(int) temp.y][(int) temp.x].predecesseur = m;
+                                }
+                            }
+                            /// Si il y a une route non découverte au sud
+                            if (gameplay->bfs.matrice[(int) m.y + 1][(int) m.x].route == 1 &&
+                                gameplay->bfs.matrice[(int) m.y + 1][(int) m.x].decouverte == 0) {
+                                Vector2 temp = m;
+                                temp.y = temp.y + 1;
+                                enfiler(file, temp);
+                                if (comparateur.x == gameplay->bfs.matrice[(int) temp.y][(int) temp.x].predecesseur.x &&
+                                    comparateur.y == gameplay->bfs.matrice[(int) temp.y][(int) temp.x].predecesseur.y) {
+                                    gameplay->bfs.matrice[(int) temp.y][(int) temp.x].predecesseur = m;
+                                }
+                            }
+                            /// Si il y a une route non découverte au nord
+                            if (gameplay->bfs.matrice[(int) m.y - 1][(int) m.x + 1].route == 1 &&
+                                gameplay->bfs.matrice[(int) m.y - 1][(int) m.x].decouverte == 0) {
+                                Vector2 temp = m;
+                                temp.y = temp.y - 1;
+                                enfiler(file, temp);
+                                if (comparateur.x == gameplay->bfs.matrice[(int) temp.y][(int) temp.x].predecesseur.x &&
+                                    comparateur.y == gameplay->bfs.matrice[(int) temp.y][(int) temp.x].predecesseur.y) {
+                                    gameplay->bfs.matrice[(int) temp.y][(int) temp.x].predecesseur = m;
+                                }
+                            }
+
+                            /// La route défilée est désormais découverte
+                            gameplay->bfs.matrice[(int) m.y][(int) m.x].decouverte = 1;
+
+                        }
+                    }
+
+
+                    /// On vient de parcourir tout le réseau de route depuis une route adjacente à une habitation
+                    /// On va désormais calculer la distance qu'il faut pour aller depuis cette route vers les centrales.
+
+                    Vector2 tabRoute[100];
+                    int distance = 0;
+
+
+                    Vector2 predecesseur = gameplay->bfs.tab_chateaux[l].routes_adjacentes[n];
+                    tabRoute[distance] = predecesseur;
+                    distance++;
+
+                    bool conditionFin = false;
+
+                    while ((predecesseur.x != depart.x || predecesseur.y != depart.y) && !conditionFin) {
+                        if (predecesseur.x == -1 && predecesseur.y == -1) {
+                            /// Il n'existe pas de chemin qui relient ces deux routes
+                            conditionFin = true;
+                        }
+                        /// On passe au prédecesseur suivant
+                        predecesseur = gameplay->bfs.matrice[(int) predecesseur.y][(int) predecesseur.x].predecesseur;
+                        tabRoute[distance] = predecesseur;
+                        /// On augmente la distance de 1
+                        distance++;
+                    }
+
+
+                    /// Si un chemin existe
+                    if (!conditionFin) {
+                        gameplay->bfs.tab_habitations[j].connexion_reseau_electrique = true;
+                    }
+
+                    for (int b = 0; b < SIM_MAP_HAUTEUR; ++b) {
+                        for (int a = 0; a < SIM_MAP_LARGEUR; ++a) {
+                            if (gameplay->world->map[b][a].type == KIND_ROUTE) {
+                                gameplay->bfs.matrice[b][a].route = 1;
+                            } else {
+                                gameplay->bfs.matrice[b][a].route = 0;
+                            }
+                            gameplay->bfs.matrice[b][a].decouverte = 0;
+                            gameplay->bfs.matrice[b][a].predecesseur = (Vector2) {-1, -1};
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 void update_liste_bfs(GameplayScreen_t* gameplay){
@@ -715,10 +872,9 @@ void update_liste_bfs(GameplayScreen_t* gameplay){
     while (parcours != NULL){
         for (int i = 0; i < gameplay->world->habitations->taille; i++) {
             if(gameplay->bfs.tab_habitations[i].position.x == ((Habitation_t*) parcours->data)->position.x && gameplay->bfs.tab_habitations[i].position.y == ((Habitation_t*) parcours->data)->position.y){
-                /*((Habitation_t*) parcours->data)->distance_chateau_eau = gameplay->bfs.tab_habitations[i].distance_chateau_eau;
-                for (int j = 0; j < gameplay->world->chateaux->taille; j++) {
-                    ((Habitation_t *) parcours->data)->position_chateau_eau[j] = gameplay->bfs.tab_habitations[i].position_chateau_eau[j];
-                }*/
+                ((Habitation_t *) parcours->data)->distance_chateau_eau = gameplay->bfs.tab_habitations[i].distance_chateau_eau;
+                ((Habitation_t *) parcours->data)->position_chateau_eau = gameplay->bfs.tab_habitations[i].position_chateau_eau;
+                ((Habitation_t *) parcours->data)->connexion_reseau_electrique = gameplay->bfs.tab_habitations[i].connexion_reseau_electrique;
             }
         }
 

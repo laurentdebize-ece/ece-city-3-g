@@ -50,22 +50,21 @@ void gameplay_update(Jeu_t *jeu, GameplayScreen_t *gameplay) {
 
 
     /// Tests debug
-    if(IsKeyPressed(KEY_O)){
-        printMatrice(gameplay);
-    }
-    if(IsKeyPressed(KEY_O)){
-        printf("%d, %d", gameplay->state.stateMouse.celluleIso.x, gameplay->state.stateMouse.celluleIso.y);
-        printf("Mode rotation %d", gameplay->state.stateToolbar.rotationRoute);
-    }
-
-    if(IsKeyPressed(KEY_K)){
-        bfs(gameplay);
-    }
-
     if(IsKeyPressed(KEY_P)){
+        struct Maillon_t* parcours = gameplay->world->habitations->premier;
 
+        while (parcours != NULL){
+            for (int j = 0; j < gameplay->world->chateaux->taille; j++) {
+                printf("Habitation (%2.f, %2.f), Chateau (%2.f, %2.f) : distance : %d, Connexion electrique : %d\n",
+                       ((Habitation_t *) parcours->data)->position.x, ((Habitation_t *) parcours->data)->position.y,
+                       ((Habitation_t *) parcours->data)->position_chateau_eau[j].x,
+                       ((Habitation_t *) parcours->data)->position_chateau_eau[j].y,
+                       ((Habitation_t *) parcours->data)->distance_chateau_eau[j],
+                       ((Habitation_t *)parcours->data)->connexion_reseau_electrique);
+            }
+            parcours = parcours->next;
+        }
     }
-
 }
 
 void gameplay_draw(Jeu_t *jeu, GameplayScreen_t *gameplay) {

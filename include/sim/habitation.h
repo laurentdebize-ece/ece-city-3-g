@@ -52,6 +52,8 @@ typedef struct Habitation_t {
     int* distance_chateau_eau;
     /// La position du chateau d'eau le plus proche
     Vector2* position_chateau_eau;
+    /// Connexion au réseau électrique
+    bool connexion_reseau_electrique;
 } Habitation_t;
 
 /// Crée une habitation.
