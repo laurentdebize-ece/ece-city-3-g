@@ -48,4 +48,6 @@ void ui_draw_toolbar(UIState* textures, SimWorld_t* sim);
 
 void ui_update_toolbar(UIState* textures, SimWorld_t* sim);
 
+CaseKind_t ui_buildmode_to_casekind(BuildMode mode);
+
 #endif //ECECITY_UI_H

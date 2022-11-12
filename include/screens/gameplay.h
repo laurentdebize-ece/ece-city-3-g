@@ -18,9 +18,9 @@ typedef struct GameplayScreen_t {
     UIState state;
     /// Les textures pour le dessin de la carte.
     SpriteSheet_t spriteSheet;
+    /// Position de la souris sur la carte.
+    Vector2I mousePos;
 } GameplayScreen_t;
-
-// callbacks de l'écran.
 
 /// Crée un écran de gameplay prêt à être utilisé.
 GameplayScreen_t* gameplay_create_screen();
