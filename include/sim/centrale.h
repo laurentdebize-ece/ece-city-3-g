@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "raylib.h"
+#include "sim/chateau.h"
 
 #define CAPACITE_CENTRALE_ELECTRIQUE 5000
 
@@ -21,6 +22,9 @@ typedef struct CentraleE_t {
     /// Réinitialisé à chaque début de tick de simulation.
     int capacite;
 
+    /// Orientation de la centrale
+    Orientation_t orientation;
+    /// Position de la centrale en celulle isométrique sur la carte
     Vector2 position;
 } CentraleElectrique_t;
 

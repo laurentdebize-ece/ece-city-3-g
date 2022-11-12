@@ -3,6 +3,9 @@
 
 #include "screens/gameplay.h"
 
+int get_nb_routes_adj_batiment(GameplayScreen_t *gameplay, Vector2 position, Orientation_t orientation);
+
+void get_routes_adj_batiment(GameplayScreen_t *gameplay, Vector2 position, Orientation_t orientation, Vector2* routes);
 
 bool check_collision_batiment(GameplayScreen_t *gameplay);
 

@@ -1,5 +1,6 @@
 #include "placement.h"
 #include "utils/grille.h"
+#include "bfs.h"
 
 bool check_collision_batiment(GameplayScreen_t *gameplay) {
     for (int i = 0; i < gameplay->state.stateToolbar.stateBuildRoad.nbChemins; i++) {
@@ -81,6 +82,83 @@ CaseSprite_t update_type_route(Vector2I *chemin, int cheminActuel, int nbChemins
     }
 }
 
+int get_nb_routes_adj_batiment(GameplayScreen_t *gameplay, Vector2 position, Orientation_t orientation) {
+
+    int compteur = 0;
+    int w = 0;
+    int h = 0;
+
+    if (orientation == ORIENTATION_4X6) {
+        w = 4;
+        h = 6;
+    } else if (orientation == ORIENTATION_6X4) {
+        w = 6;
+        h = 4;
+    } else if (orientation == ORIENTATION_NULL) {
+        w = 3;
+        h = 3;
+    }
+
+    for (int y = 0; y < h; y++) {
+        if (gameplay->world->map[((int) position.y) + y][((int) position.x) - 1].type == KIND_ROUTE) {
+            compteur++;
+        }
+        if (gameplay->world->map[((int) position.y) + y][((int) position.x) + w].type == KIND_ROUTE) {
+            compteur++;
+        }
+    }
+
+    for (int x = 0; x < w; x++) {
+        if (gameplay->world->map[((int) position.y) - 1][((int) position.x) + x].type == KIND_ROUTE) {
+            compteur++;
+        }
+        if (gameplay->world->map[((int) position.y) + h][((int) position.x) + x].type == KIND_ROUTE) {
+            compteur++;
+        }
+    }
+
+    return compteur;
+}
+
+void get_routes_adj_batiment(GameplayScreen_t *gameplay, Vector2 position, Orientation_t orientation, Vector2 *routes) {
+    int compteur = 0;
+    int w = 0;
+    int h = 0;
+    int nbRoutes = 0;
+
+    if (orientation == ORIENTATION_4X6) {
+        w = 4;
+        h = 6;
+    } else if (orientation == ORIENTATION_6X4) {
+        w = 6;
+        h = 4;
+    } else if (orientation == ORIENTATION_NULL) {
+        w = 3;
+        h = 3;
+    }
+
+    for (int y = 0; y < h; y++) {
+        if (gameplay->world->map[(int) position.y + y][(int) position.x - 1].type == KIND_ROUTE) {
+            routes[nbRoutes] = (Vector2) {position.x - 1, position.y + y};
+            nbRoutes++;
+        }
+        if (gameplay->world->map[(int) position.y + y][(int) position.x + w].type == KIND_ROUTE) {
+            routes[nbRoutes] = (Vector2) {position.x + w, position.y + y};
+            nbRoutes++;
+        }
+    }
+
+    for (int x = 0; x < w; x++) {
+        if (gameplay->world->map[(int) position.y - 1][(int) position.x + x].type == KIND_ROUTE) {
+            routes[nbRoutes] = (Vector2) {position.x + x, position.y - 1};
+            nbRoutes++;
+        }
+        if (gameplay->world->map[(int) position.y + h][(int) position.x + x].type == KIND_ROUTE) {
+            routes[nbRoutes] = (Vector2) {position.x + x, position.y + h};
+            nbRoutes++;
+        }
+    }
+}
 
 void draw_route_selectionee(GameplayScreen_t *gameplay) {
     if (gameplay->state.stateToolbar.stateBuildRoad.nbChemins > 0 &&
@@ -693,6 +771,7 @@ void update_placement_batiment(GameplayScreen_t *gameplay) {
             Habitation_t *habitation = habitation_alloc(NIVEAU_TERRAIN_VAGUE);
             habitation->position.x = gameplay->state.stateMouse.celluleIso.x;
             habitation->position.y = gameplay->state.stateMouse.celluleIso.y;
+            habitation->orientation = ORIENTATION_NULL;
             //liste_ajout_tri(gameplay->world->habitations, habitation, habitation_tri_par_distance);
             liste_ajouter_fin(gameplay->world->habitations, habitation);
 
@@ -719,6 +798,7 @@ void update_placement_batiment(GameplayScreen_t *gameplay) {
                 CentraleElectrique_t *centraleElectrique = centrale_alloc();
                 centraleElectrique->position.x = gameplay->state.stateMouse.celluleIso.x;
                 centraleElectrique->position.y = gameplay->state.stateMouse.celluleIso.y;
+                centraleElectrique->orientation = ORIENTATION_4X6;
                 liste_ajouter_fin(gameplay->world->centrales, centraleElectrique);
 
                 gameplay->reloadCarte = true;
@@ -736,6 +816,7 @@ void update_placement_batiment(GameplayScreen_t *gameplay) {
                 CentraleElectrique_t *centraleElectrique = centrale_alloc();
                 centraleElectrique->position.x = gameplay->state.stateMouse.celluleIso.x;
                 centraleElectrique->position.y = gameplay->state.stateMouse.celluleIso.y;
+                centraleElectrique->orientation = ORIENTATION_6X4;
                 liste_ajouter_fin(gameplay->world->centrales, centraleElectrique);
 
                 gameplay->reloadCarte = true;
@@ -761,8 +842,8 @@ void update_placement_batiment(GameplayScreen_t *gameplay) {
                 ChateauEau_t *chateauEau = chateau_alloc();
                 chateauEau->position.x = gameplay->state.stateMouse.celluleIso.x;
                 chateauEau->position.y = gameplay->state.stateMouse.celluleIso.y;
+                chateauEau->orientation = ORIENTATION_4X6;
                 liste_ajouter_fin(gameplay->world->chateaux, chateauEau);
-
                 gameplay->reloadCarte = true;
                 gameplay->state.stateToolbar.modePlacementChateau = false;
             }
@@ -777,8 +858,8 @@ void update_placement_batiment(GameplayScreen_t *gameplay) {
                 ChateauEau_t *chateauEau = chateau_alloc();
                 chateauEau->position.x = gameplay->state.stateMouse.celluleIso.x;
                 chateauEau->position.y = gameplay->state.stateMouse.celluleIso.y;
+                chateauEau->orientation = ORIENTATION_6X4;
                 liste_ajouter_fin(gameplay->world->chateaux, chateauEau);
-
                 gameplay->reloadCarte = true;
                 gameplay->state.stateToolbar.modePlacementChateau = false;
             }
@@ -792,6 +873,7 @@ void update_placement_batiment(GameplayScreen_t *gameplay) {
 void check_upadate_carte(GameplayScreen_t *gameplay) {
     if (gameplay->reloadCarte) {
         update_type_bloc_general(gameplay);
+        bfs(gameplay);
         gameplay->reloadCarte = false;
     }
 }

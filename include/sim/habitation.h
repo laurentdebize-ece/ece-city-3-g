@@ -5,6 +5,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include "raylib.h"
+#include "sim/chateau.h"
 
 //#include "utils/grille.h"
 
@@ -41,10 +42,16 @@ typedef struct Habitation_t {
     int ticks_regression;
     /// La position du bâtiment.
     Vector2 position;
+    /// Orientation ici NULL car une habitation n'a pas d'orientation (3X3).
+    Orientation_t orientation;
+    /// Le nombre de routes adjacentes à l'habitation.
+    int nb_routes_adjacentes;
+    /// Positions des routes adjacentes à l'habitation.
+    Vector2 routes_adjacentes[20];
     /// La distance vers le chateau d'eau le plus proche
-    int distance_chateau_eau;
+    int* distance_chateau_eau;
     /// La position du chateau d'eau le plus proche
-    Vector2 position_chateau_eau;
+    Vector2* position_chateau_eau;
 } Habitation_t;
 
 /// Crée une habitation.

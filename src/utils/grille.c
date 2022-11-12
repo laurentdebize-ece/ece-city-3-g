@@ -90,7 +90,6 @@ void update_state_mouse(GameplayScreen_t *gameplay) {
     }
 }
 
-
 Vector2I mouse_to_iso(Vector2I mouse, Image img) {
     Vector2I isoPos = cartesien_to_iso((Vector2I) {
             mouse.x / LARGUEUR_TUILE_ISO,

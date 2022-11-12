@@ -25,6 +25,21 @@ typedef struct {
 
 } Loader_t;
 
+typedef struct Matrice {
+    int route;
+    int decouverte;
+    Vector2 predecesseur;
+} Matrice;
+
+typedef struct Bfs_t {
+    /// Tableau dynamique de chateau eau pour le parcours en largeur
+    ChateauEau_t* tab_chateaux;
+    /// Tableau dynamique d'habitation pour le parcours en largeur
+    Habitation_t* tab_habitations;
+    /// Matrice de routes pour le parcours en largeur
+    Matrice matrice[SIM_MAP_HAUTEUR][SIM_MAP_LARGEUR];
+} Bfs_t;
+
 typedef struct GameplayScreen_t {
     ScreenInfo_t screen_info;
     /// La simulation
@@ -37,6 +52,8 @@ typedef struct GameplayScreen_t {
     bool reloadCarte;
     /// Les fichiers pour le chargement de la carte.
     Loader_t loader;
+    /// Structure de données pour le BFS
+    Bfs_t bfs;
 } GameplayScreen_t;
 
 // callbacks de l'écran.

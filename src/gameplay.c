@@ -63,13 +63,7 @@ void gameplay_update(Jeu_t *jeu, GameplayScreen_t *gameplay) {
     }
 
     if(IsKeyPressed(KEY_P)){
-        /*Vector2 routes[20];
-        printf("Nb routes : %d\n", get_nb_routes_adj_batiment(gameplay, (Vector2) {0,0}, ORIENTATION_6X4));
-        get_routes_adj_batiment(gameplay,(Vector2) {0,0}, ORIENTATION_6X4, routes);
-        for (int i = 0; i < 20; ++i) {
-            printf("(%d, %d)", (int) routes[i].x, (int) routes[i].y);
-        }*/
-        bfs(gameplay);
+
     }
 
 }

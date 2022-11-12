@@ -1,4 +1,3 @@
-
 #ifndef ECECITY_CHATEAU_H
 #define ECECITY_CHATEAU_H
 
@@ -7,13 +6,24 @@
 
 #define CAPACITE_CHATEAU_EAU 5000
 
-typedef enum Orientation_t {ORIENTATION_6X4, ORIENTATION_4X6, ORIENTATION_NULL} Orientation_t;
+typedef enum Orientation_t {
+    ORIENTATION_6X4,
+    ORIENTATION_4X6,
+    ORIENTATION_NULL
+} Orientation_t;
+
 
 /// Représente un château d'eau simulé.
 typedef struct ChateauEau_t {
     int capacite;
+    /// Orientation sur la carte 4X6 ou 6X4
     Orientation_t orientation;
+    /// Position sur la carte en cellule isométrique
     Vector2 position;
+    /// Le nombre de routes adjacentes autour du château
+    int nb_routes_adjacentes;
+    /// La position en cellules isométriques des routes adjacentes autour du château
+    Vector2 routes_adjacentes[20];
 } ChateauEau_t;
 
 /// Crée un château d'eau.
