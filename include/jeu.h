@@ -1,4 +1,3 @@
-
 #ifndef ECECITY_JEU_H
 #define ECECITY_JEU_H
 
@@ -6,8 +5,8 @@
 #include <stdlib.h>
 #include <raylib.h>
 
-#define FENETRE_JEU_LARGEUR 900
-#define FENETRE_JEU_HAUTEUR 700
+#define FENETRE_JEU_LARGEUR 1024
+#define FENETRE_JEU_HAUTEUR 768
 
 #ifndef NDEBUG
 #define DBG_LOG(text, ...) TraceLog(LOG_INFO, text, ##__VA_ARGS__)
@@ -55,5 +54,12 @@ void jeu_switch_screen(Jeu_t* jeu, ScreenInfo_t* ecran);
 
 /// Quitte le jeu
 inline void jeu_quitter(Jeu_t* jeu) { jeu->should_exit = true; }
+
+//dessine l'ensemble de l'écran d'acceuil
+void drawScreenAcceuil (Font font_ttf, Texture2D texture);
+
+static void *LoadDataThread(void *arg);
+
+void barre_chargement(Font font_ttf, Texture2D texture_fond, Texture2D texture_logo, Texture2D texture_EA, Texture2D texture_loading);
 
 #endif //ECECITY_JEU_H
