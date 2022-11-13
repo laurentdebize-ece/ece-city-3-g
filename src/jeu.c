@@ -1,4 +1,3 @@
-
 #include "jeu.h"
 
 
@@ -50,3 +49,4 @@ void jeu_switch_screen(Jeu_t* game, ScreenInfo_t* ecran) {
             game->screen->on_exit_callback(game, game->screen);
     }
 }
+
