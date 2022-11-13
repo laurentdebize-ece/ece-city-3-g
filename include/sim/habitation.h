@@ -48,10 +48,14 @@ Habitation_t* habitation_alloc(NiveauHabitation_t niveau);
 void habitation_free(Habitation_t* habitation);
 
 /// Incrémente d'un tick la simulation d'un bâtiment.
-void habitation_step(Habitation_t* habitation, SimRules_t rules);
+/// Retourne les impôts générés par l'habitation.
+int habitation_step(Habitation_t* habitation, SimRules_t rules);
 
 /// Fait évoluer un bâtiment en fonction des ticks d'évolution / régression.
 void habitation_evolve(Habitation_t* habitation);
+
+/// Retourne le nombre d'habitants dans l'habitation.
+int habitation_get_nb_habitants(Habitation_t* habitation);
 
 /// Compare deux habitations.
 int habitation_cmp(Habitation_t* habitation1, Habitation_t* habitation2);
