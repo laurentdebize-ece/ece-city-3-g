@@ -643,6 +643,14 @@ void update_type_bloc_general(GameplayScreen_t *gameplay) {
 bool check_collision_placement(GameplayScreen_t *gameplay, int x, int y, int w, int h) {
     for (int i = 0; i < w; i++) {
         for (int j = 0; j < h; j++) {
+            if (y + j > SIM_MAP_HAUTEUR || x + i > SIM_MAP_LARGEUR) {
+                return true; //Collision
+            }
+        }
+    }
+
+    for (int i = 0; i < w; i++) {
+        for (int j = 0; j < h; j++) {
             if (gameplay->world->map[y + j][x + i].type != KIND_VIDE) {
                 return true; //Collision
             }
