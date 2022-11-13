@@ -5,6 +5,7 @@
 #include "placement.h"
 #include "utils/grille.h"
 #include "destruction.h"
+#include "utils/capacite.h"
 #include "bfs.h"
 #include "string.h"
 
@@ -31,6 +32,7 @@ void gameplay_on_enter(Jeu_t *jeu, GameplayScreen_t *gameplay) {
     gameplay->reloadCarte = true;
     gameplay->state.timeScale = 1.0f;
     gameplay->elapsedTime = 0.f;
+    gameplay->state.stateToolbar.niveauNormal = true;
 }
 
 void gameplay_on_exit(Jeu_t *jeu, GameplayScreen_t *gameplay) {
@@ -60,17 +62,17 @@ void gameplay_update(Jeu_t *jeu, GameplayScreen_t *gameplay) {
     }
 
     /// Tests debug
-    if(IsKeyPressed(KEY_P)){
-        struct Maillon_t* parcours = gameplay->world->habitations->premier;
+    if (IsKeyPressed(KEY_P)) {
+        struct Maillon_t *parcours = gameplay->world->habitations->premier;
 
-        while (parcours != NULL){
+        while (parcours != NULL) {
             for (int j = 0; j < gameplay->world->chateaux->taille; j++) {
                 printf("Habitation (%2.f, %2.f), Chateau (%2.f, %2.f) : distance : %d, Connexion electrique : %d\n",
                        ((Habitation_t *) parcours->data)->position.x, ((Habitation_t *) parcours->data)->position.y,
                        ((Habitation_t *) parcours->data)->position_chateau_eau[j].x,
                        ((Habitation_t *) parcours->data)->position_chateau_eau[j].y,
                        ((Habitation_t *) parcours->data)->distance_chateau_eau[j],
-                       ((Habitation_t *)parcours->data)->connexion_reseau_electrique);
+                       ((Habitation_t *) parcours->data)->connexion_reseau_electrique);
             }
             parcours = parcours->next;
         }
@@ -78,6 +80,7 @@ void gameplay_update(Jeu_t *jeu, GameplayScreen_t *gameplay) {
 }
 
 void gameplay_draw(Jeu_t *jeu, GameplayScreen_t *gameplay) {
+
 
     /// Affichage de la toolbar
     ui_draw_toolbar(&gameplay->state, gameplay->world);
@@ -96,8 +99,18 @@ void gameplay_draw(Jeu_t *jeu, GameplayScreen_t *gameplay) {
     /// Affichage du bâtiment à placer en surbrillance
     draw_placement_batiment(gameplay);
 
-    DrawText(TextFormat("%d", gameplay->world->map[gameplay->state.stateMouse.celluleIso.y][gameplay->state.stateMouse.celluleIso.x].type), 10, 10, 20, BLACK);
-    DrawText(TextFormat("(%d,%d)", gameplay->state.stateMouse.celluleIso.x,gameplay->state.stateMouse.celluleIso.y), 10, 30, 20, BLACK);
+    DrawText(TextFormat("%d",
+                        gameplay->world->map[gameplay->state.stateMouse.celluleIso.y][gameplay->state.stateMouse.celluleIso.x].type),
+             10, 10, 20, BLACK);
+    DrawText(TextFormat("(%d,%d)", gameplay->state.stateMouse.celluleIso.x, gameplay->state.stateMouse.celluleIso.y),
+             10, 30, 20, BLACK);
+    DrawText(TextFormat("(%d,%d)", GetMouseX(), GetMouseY()), 10, 70, 20, BLACK);
+
+    if (gameplay->state.stateToolbar.niveauEau) {
+        afficher_level_eau(&gameplay->spriteSheet, gameplay->world);
+    } else if (gameplay->state.stateToolbar.niveauElectricite) {
+        afficher_level_elec(&gameplay->spriteSheet, gameplay->world, gameplay);
+    }
 
 }
 

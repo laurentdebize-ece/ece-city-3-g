@@ -18,6 +18,8 @@
 #define SIM_MAP_LARGEUR 45
 #define SIM_MAP_HAUTEUR 35
 
+#define DISTANCE_CHATEAU_EAU_NULL 1000
+
 typedef struct {
 
     char* path;

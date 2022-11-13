@@ -31,6 +31,9 @@ enum TOOLBAR_ICON {
     ICON_HABITATION,
     ICON_CENTRALE,
     ICON_CHATEAU,
+    ICON_GRID,
+    ICON_ELECTRICITY_GRID,
+    ICON_WATER_GRID,
     ICON_DOLLAR,
     ICON_NB_LOGOS_TOOLBAR
 };
@@ -52,6 +55,14 @@ typedef struct StateBuildRoad_t {
 } StateBuildRoad_t;
 
 typedef struct StateToolbar_t {
+    bool hoverNiveauEau;
+    bool hoverNiveauElectricite;
+    bool hoverNiveauNormal;
+    bool niveauEau;
+    bool niveauElectricite;
+    bool niveauNormal;
+    bool hoverChangementNiveau;
+    bool modeChangementNiveau;
     bool hoverMenu;
     bool modeMenu;
     bool hoverSave;

@@ -1,10 +1,11 @@
-#include <utils/liste.h>
-#include <sim/habitation.h>
-#include <sim/centrale.h>
-#include <sim/chateau.h>
-#include <screens/gameplay.h>
 #ifndef ECECITY_CAPACITE_H
 #define ECECITY_CAPACITE_H
+
+#include "utils/liste.h"
+#include "sim/habitation.h"
+#include "sim/centrale.h"
+#include "sim/chateau.h"
+#include "screens/gameplay.h"
 
 void afficher_capacite(SimWorld_t* world);
 

@@ -244,7 +244,7 @@ void bfs_debug_struct_gameplay(GameplayScreen_t *gameplay) {
         gameplay->bfs.tab_habitations[z].position_chateau_eau = malloc(
                 sizeof(Vector2) * gameplay->world->chateaux->taille);
         for (int u = 0; u < gameplay->world->chateaux->taille; u++) {
-            gameplay->bfs.tab_habitations[z].distance_chateau_eau[u] = 1000;
+            gameplay->bfs.tab_habitations[z].distance_chateau_eau[u] = DISTANCE_CHATEAU_EAU_NULL;
         }
         z++;
         parcours2 = parcours2->next;
@@ -568,7 +568,7 @@ void bfs(GameplayScreen_t *gameplay) {
         gameplay->bfs.tab_habitations[z].position_chateau_eau = malloc(
                 sizeof(Vector2) * gameplay->world->chateaux->taille);
         for (int u = 0; u < gameplay->world->chateaux->taille; u++) {
-            gameplay->bfs.tab_habitations[z].distance_chateau_eau[u] = 1000;
+            gameplay->bfs.tab_habitations[z].distance_chateau_eau[u] = DISTANCE_CHATEAU_EAU_NULL;
         }
         z++;
         parcours2 = parcours2->next;

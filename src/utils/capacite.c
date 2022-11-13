@@ -26,15 +26,23 @@ void afficher_capacite(SimWorld_t* world) {
 
 void afficher_level_eau(SpriteSheet_t* sheet, SimWorld_t* world){
     struct Maillon_t* chateaux = world->chateaux->premier;
+    enum SPRITE_MAP map;
     while(chateaux){
         ChateauEau_t* chateauEau = (ChateauEau_t*)chateaux->data;
-        sprite_sheet_draw_sprite(sheet, SPRITE_EAU_4X6, BLUE, chateauEau->position.x, chateauEau->position.y);
+        if(chateauEau->orientation == ORIENTATION_4X6){
+            map = SPRITE_EAU_4X6;
+        } else {
+            map = SPRITE_EAU_6X4;
+        }
+        sprite_sheet_draw_sprite(sheet, map, BLUE, chateauEau->position.x, chateauEau->position.y);
         chateaux = chateaux->next;
     }
     struct Maillon_t* maison = world->habitations->premier;
     while (maison) {
         Habitation_t * hab = (Habitation_t*) maison->data;
-        sprite_sheet_draw_sprite(sheet, SPRITE_GRATTE_CIEL_3X3, BLUE, hab->position.x, hab->position.y);
+        if (hab->distance_chateau_eau[0] != DISTANCE_CHATEAU_EAU_NULL) {
+            sprite_sheet_draw_sprite(sheet, SPRITE_GRATTE_CIEL_3X3, BLUE, hab->position.x, hab->position.y);
+        }
         maison = maison->next;
     }
 }
@@ -43,15 +51,23 @@ void afficher_level_eau(SpriteSheet_t* sheet, SimWorld_t* world){
 
 void afficher_level_elec(SpriteSheet_t* sheet, SimWorld_t* world){
     struct Maillon_t* centrales = world->centrales->premier;
+    enum SPRITE_MAP map;
     while (centrales) {
         CentraleElectrique_t* centraleElectrique = (CentraleElectrique_t*)centrales->data;
-        sprite_sheet_draw_sprite(sheet, SPRITE_ENERGY_6X4, YELLOW, centraleElectrique->position.x, centraleElectrique->position.y);
+        if(centraleElectrique->orientation == ORIENTATION_4X6){
+            map = SPRITE_ENERGY_4X6;
+        } else {
+            map = SPRITE_ENERGY_6X4;
+        }
+        sprite_sheet_draw_sprite(sheet, map, YELLOW, centraleElectrique->position.x, centraleElectrique->position.y);
         centrales = centrales->next;
     }
     struct Maillon_t* maison = world->habitations->premier;
     while (maison) {
         Habitation_t * hab = (Habitation_t*) maison->data;
-        sprite_sheet_draw_sprite(sheet, SPRITE_GRATTE_CIEL_3X3, YELLOW, hab->position.x, hab->position.y);
+        if (hab->connexion_reseau_electrique) {
+            sprite_sheet_draw_sprite(sheet, SPRITE_GRATTE_CIEL_3X3, YELLOW, hab->position.x, hab->position.y);
+        }
         maison = maison->next;
     }
 }
