@@ -48,9 +48,9 @@ typedef struct Habitation_t {
     int nb_routes_adjacentes;
     /// Positions des routes adjacentes à l'habitation.
     Vector2 routes_adjacentes[20];
-    /// La distance vers le chateau d'eau le plus proche
+    /// Tableau de distance vers tous les chateaux d'eau si chateau non connexe distance == 1000 (MACRO)
     int* distance_chateau_eau;
-    /// La position du chateau d'eau le plus proche
+    /// Tableau de position de tous les chateaux d'eau connexes ou non si non connexe (distance au chateau == 1000)
     Vector2* position_chateau_eau;
     /// Connexion au réseau électrique
     bool connexion_reseau_electrique;
