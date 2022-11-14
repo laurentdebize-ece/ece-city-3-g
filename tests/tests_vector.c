@@ -54,6 +54,5 @@ int main() {
     assert(vector_pop(vec) == 2);
     assert(vector_pop(vec) == 3);
 
-
     return 0;
 }
