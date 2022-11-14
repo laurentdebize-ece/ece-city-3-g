@@ -60,10 +60,6 @@ void gameplay_draw(Jeu_t *jeu, GameplayScreen_t *gameplay) {
     ui_draw_toolbar(&gameplay->state, gameplay->world);
 }
 
-
-    bool is_valid = sim_check_can_place(gameplay->world, w > 1, v.x, v.y, w, h);
-    sprite_sheet_draw_sprite(&gameplay->spriteSheet, bat, is_valid ? GREEN : RED, v.x, v.y);
-
 void try_place_building(GameplayScreen_t *gameplay) {
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
         switch (gameplay->state.currentBuildMode) {
