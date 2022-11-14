@@ -278,8 +278,11 @@ void update_placement_route(GameplayScreen_t *gameplay) {
                         }
 
                         /// La carte a été mise à jour, on peut donc réinitialiser le chemin
-
+                        gameplay->world->monnaie -= (gameplay->state.stateToolbar.stateBuildRoad.nbChemins - 1) *ROUTE_PRIX_CONSTRUCTION;
+                        gameplay->reloadCarte = true;
                     }
+
+
 
                     gameplay->state.stateToolbar.stateBuildRoad.nbDepart = 0;
                     gameplay->state.stateToolbar.stateBuildRoad.nbChemins = 0;
@@ -292,8 +295,6 @@ void update_placement_route(GameplayScreen_t *gameplay) {
                     gameplay->state.stateToolbar.stateBuildRoad.depart[1].x = -1;
                     gameplay->state.stateToolbar.stateBuildRoad.depart[1].y = -1;
 
-                    gameplay->world->monnaie -= ROUTE_PRIX_CONSTRUCTION;
-                    gameplay->reloadCarte = true;
                 }
             }
         }

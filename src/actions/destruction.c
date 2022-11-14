@@ -48,6 +48,42 @@ void update_word_map_after_destroy(GameplayScreen_t* gameplay){
                 break;
             }
 
+            case KIND_CABANE:
+            {
+                Habitation_t* habitation = (Habitation_t*) gameplay->world->map[gameplay->state.stateMouse.celluleIso.y][gameplay->state.stateMouse.celluleIso.x].donnees;
+                update_boucle_for_destruction(gameplay, habitation->position.x, habitation->position.y, habitation->orientation);
+                liste_supprimer(gameplay->world->habitations, habitation);
+                habitation_free(habitation);
+                break;
+            }
+
+            case KIND_MAISON:
+            {
+                Habitation_t* habitation = (Habitation_t*) gameplay->world->map[gameplay->state.stateMouse.celluleIso.y][gameplay->state.stateMouse.celluleIso.x].donnees;
+                update_boucle_for_destruction(gameplay, habitation->position.x, habitation->position.y, habitation->orientation);
+                liste_supprimer(gameplay->world->habitations, habitation);
+                habitation_free(habitation);
+                break;
+            }
+
+            case KIND_IMMEUBLE:
+            {
+                Habitation_t* habitation = (Habitation_t*) gameplay->world->map[gameplay->state.stateMouse.celluleIso.y][gameplay->state.stateMouse.celluleIso.x].donnees;
+                update_boucle_for_destruction(gameplay, habitation->position.x, habitation->position.y, habitation->orientation);
+                liste_supprimer(gameplay->world->habitations, habitation);
+                habitation_free(habitation);
+                break;
+            }
+
+            case KIND_GRATTES_CIEL:
+            {
+                Habitation_t* habitation = (Habitation_t*) gameplay->world->map[gameplay->state.stateMouse.celluleIso.y][gameplay->state.stateMouse.celluleIso.x].donnees;
+                update_boucle_for_destruction(gameplay, habitation->position.x, habitation->position.y, habitation->orientation);
+                liste_supprimer(gameplay->world->habitations, habitation);
+                habitation_free(habitation);
+                break;
+            }
+
             case KIND_CENTRALE:
             {
                 CentraleElectrique_t* centrale = (CentraleElectrique_t*) gameplay->world->map[gameplay->state.stateMouse.celluleIso.y][gameplay->state.stateMouse.celluleIso.x].donnees;
