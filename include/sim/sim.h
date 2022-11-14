@@ -66,6 +66,8 @@ typedef struct SimWorld_t {
     Case_t map[35][45];
     /// La qte de monnaie disponible.
     int monnaie;
+    /// Nombre d'habitants dans le monde.
+    int nb_total_habitants;
     /// Les règles d'évolution pour la simulation.
     SimRules_t rules;
     /// Le temps écoulé depuis le début de la simulation (en ticks).
@@ -76,7 +78,7 @@ typedef struct SimWorld_t {
 SimWorld_t* sim_world_create(SimRules_t rules, int monnaie);
 
 /// Avance d'une étape la simulation.
-void sim_world_step(SimWorld_t* world);
+void sim_world_step(SimWorld_t* world, bool* reloadCarte);
 
 /// Détruit un monde de simulation.
 void sim_world_destroy(SimWorld_t* world);

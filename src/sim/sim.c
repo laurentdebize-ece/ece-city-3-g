@@ -10,6 +10,7 @@ SimWorld_t* sim_world_create(SimRules_t rules, int monnaie) {
     world->centrales = liste_alloc();
     world->chateaux = liste_alloc();
     world->routes = liste_alloc();
+    world->nb_total_habitants = 0;
 
     // mise à zéro de la carte.
     for (int i = 0; i < SIM_MAP_HAUTEUR; i++) {
@@ -35,19 +36,20 @@ void sim_world_destroy(SimWorld_t* world) {
     free(world);
 }
 
-void sim_world_step(SimWorld_t* world) {
+void sim_world_step(SimWorld_t* world, bool* reloadCarte) {
     world->n_ticks++;
+    world->nb_total_habitants = 0;
     sim_reset_flow_distribution(world);
 
 
     struct Maillon_t *maisons = world->habitations->premier;
     while (maisons) {
         Habitation_t *hab = (Habitation_t *) maisons->data;
-        habitation_step(hab, Communiste_t);
+        habitation_step(hab, Communiste_t, reloadCarte);
+        world->monnaie += habitation_step(hab, Communiste_t, reloadCarte);
+        world->nb_total_habitants += habitation_get_nb_habitants(hab);
         maisons = maisons->next;
     }
-
-    world->monnaie += 10000;
 
     /// seconde étape: répartition de la capacité d'eau pour les bâtiments (BFS + tri de l'ordre).
     /// troisième étape: répartition de l'électricité pour les bâtiments. (BFS + tri de l'ordre).

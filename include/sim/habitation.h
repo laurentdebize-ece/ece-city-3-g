@@ -62,8 +62,8 @@ Habitation_t* habitation_alloc(NiveauHabitation_t niveau);
 /// Détruit une habitation.
 void habitation_free(Habitation_t* habitation);
 
-/// Incrémente d'un tick la simulation d'un bâtiment.
-void habitation_step(Habitation_t* habitation, SimRules_t rules);
+/// Retourne les impôts générés par l'habitation.
+int habitation_step(Habitation_t* habitation, SimRules_t rules, bool* reloadCarte);
 
 /// Fait évoluer un bâtiment en fonction des ticks d'évolution / régression.
 void habitation_evolve(Habitation_t* habitation);

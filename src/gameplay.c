@@ -57,7 +57,7 @@ void gameplay_update(Jeu_t *jeu, GameplayScreen_t *gameplay) {
     check_upadate_carte(gameplay);
 
     if (gameplay->elapsedTime >= 1.0f / gameplay->state.timeScale) {
-        sim_world_step(gameplay->world);
+        sim_world_step(gameplay->world, &gameplay->reloadCarte);
         gameplay->elapsedTime = 0.f;
     }
 

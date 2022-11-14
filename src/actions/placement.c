@@ -271,7 +271,7 @@ void update_placement_route(GameplayScreen_t *gameplay) {
                 if (gameplay->state.stateToolbar.stateBuildRoad.nbDepart < 1) {
                     gameplay->state.stateToolbar.stateBuildRoad.nbDepart++;
                 } else {
-                    if (!check_collision_batiment(gameplay)) {
+                    if (!check_collision_batiment(gameplay) && gameplay->world->monnaie > ROUTE_PRIX_CONSTRUCTION) {
 
                         for (int i = 0; i < gameplay->state.stateToolbar.stateBuildRoad.nbChemins; ++i) {
                             gameplay->world->map[(int) gameplay->state.stateToolbar.stateBuildRoad.cheminRoute[i].y][(int) gameplay->state.stateToolbar.stateBuildRoad.cheminRoute[i].x].type = KIND_ROUTE;
@@ -292,6 +292,7 @@ void update_placement_route(GameplayScreen_t *gameplay) {
                     gameplay->state.stateToolbar.stateBuildRoad.depart[1].x = -1;
                     gameplay->state.stateToolbar.stateBuildRoad.depart[1].y = -1;
 
+                    gameplay->world->monnaie -= ROUTE_PRIX_CONSTRUCTION;
                     gameplay->reloadCarte = true;
                 }
             }
@@ -365,6 +366,59 @@ void update_type_bloc_route(GameplayScreen_t *gameplay) {
 }
 
 void update_type_bloc_general(GameplayScreen_t *gameplay) {
+
+    struct Maillon_t* parcours = gameplay->world->habitations->premier;
+
+    while (parcours != NULL){
+        Vector2 position = ((Habitation_t*)parcours->data)->position;
+
+        switch (((Habitation_t*)parcours->data)->niveau) {
+            case NIVEAU_RUINE:
+                for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < 3; j++) {
+                        gameplay->world->map[(int) position.y + i][(int) position.x + j].type = KIND_RUINE;
+                    }
+                }
+                break;
+            case NIVEAU_TERRAIN_VAGUE:
+                for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < 3; j++) {
+                        gameplay->world->map[(int) position.y + i][(int) position.x + j].type = KIND_TERRAIN_VAGUE;
+                    }
+                }
+                break;
+            case NIVEAU_CABANE:
+                for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < 3; j++) {
+                        gameplay->world->map[(int) position.y + i][(int) position.x + j].type = KIND_CABANE;
+                    }
+                }
+                break;
+            case NIVEAU_MAISON:
+                for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < 3; j++) {
+                        gameplay->world->map[(int) position.y + i][(int) position.x + j].type = KIND_MAISON;
+                    }
+                }
+                break;
+            case NIVEAU_IMMEUBLE:
+                for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < 3; j++) {
+                        gameplay->world->map[(int) position.y + i][(int) position.x + j].type = KIND_IMMEUBLE;
+                    }
+                }
+                break;
+            case NIVEAU_GRATTE_CIEL:
+                for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < 3; j++) {
+                        gameplay->world->map[(int) position.y + i][(int) position.x + j].type = KIND_GRATTES_CIEL;
+                    }
+                }
+                break;
+        }
+
+        parcours = parcours->next;
+    }
 
     for (int y = 0; y < SIM_MAP_HAUTEUR; y++) {
         for (int x = 0; x < SIM_MAP_LARGEUR; x++) {
@@ -773,7 +827,7 @@ void update_placement_batiment(GameplayScreen_t *gameplay) {
             !check_collision_placement(gameplay, gameplay->state.stateMouse.celluleIso.x,
                                        gameplay->state.stateMouse.celluleIso.y, 3, 3) &&
             check_route_near_placement(gameplay, gameplay->state.stateMouse.celluleIso.x,
-                                       gameplay->state.stateMouse.celluleIso.y, 3, 3)) {
+                                       gameplay->state.stateMouse.celluleIso.y, 3, 3) && gameplay->world->monnaie >= HABITATION_PRIX_CONSTRUCTION) {
 
             Habitation_t *habitation = habitation_alloc(NIVEAU_TERRAIN_VAGUE);
             habitation->position.x = gameplay->state.stateMouse.celluleIso.x;
@@ -784,6 +838,7 @@ void update_placement_batiment(GameplayScreen_t *gameplay) {
             //liste_ajout_tri(gameplay->world->habitations, habitation, habitation_tri_par_distance);
             liste_ajouter_fin(gameplay->world->habitations, habitation);
 
+            gameplay->world->monnaie -= HABITATION_PRIX_CONSTRUCTION;
             gameplay->reloadCarte = true;
             gameplay->state.stateToolbar.modePlacementHabitation = false;
         }
@@ -799,7 +854,7 @@ void update_placement_batiment(GameplayScreen_t *gameplay) {
                 !check_collision_placement(gameplay, gameplay->state.stateMouse.celluleIso.x,
                                            gameplay->state.stateMouse.celluleIso.y, 4, 6) &&
                 check_route_near_placement(gameplay, gameplay->state.stateMouse.celluleIso.x,
-                                           gameplay->state.stateMouse.celluleIso.y, 4, 6)) {
+                                           gameplay->state.stateMouse.celluleIso.y, 4, 6) && gameplay->world->monnaie >= CENTRALE_PRIX_CONSTRUCTION) {
 
                 CentraleElectrique_t *centraleElectrique = centrale_alloc();
                 centraleElectrique->position.x = gameplay->state.stateMouse.celluleIso.x;
@@ -810,7 +865,7 @@ void update_placement_batiment(GameplayScreen_t *gameplay) {
                                                gameplay->state.stateMouse.celluleIso.y, 4, 6, KIND_CENTRALE, centraleElectrique);
                 liste_ajouter_fin(gameplay->world->centrales, centraleElectrique);
 
-
+                gameplay->world->monnaie -= CENTRALE_PRIX_CONSTRUCTION;
                 gameplay->reloadCarte = true;
                 gameplay->state.stateToolbar.modePlacementCentrale = false;
             }
@@ -819,7 +874,7 @@ void update_placement_batiment(GameplayScreen_t *gameplay) {
                 !check_collision_placement(gameplay, gameplay->state.stateMouse.celluleIso.x,
                                            gameplay->state.stateMouse.celluleIso.y, 6, 4) &&
                 check_route_near_placement(gameplay, gameplay->state.stateMouse.celluleIso.x,
-                                           gameplay->state.stateMouse.celluleIso.y, 6, 4)) {
+                                           gameplay->state.stateMouse.celluleIso.y, 6, 4) && gameplay->world->monnaie >= CENTRALE_PRIX_CONSTRUCTION) {
 
                 CentraleElectrique_t *centraleElectrique = centrale_alloc();
                 centraleElectrique->position.x = gameplay->state.stateMouse.celluleIso.x;
@@ -828,7 +883,7 @@ void update_placement_batiment(GameplayScreen_t *gameplay) {
                 update_word_placement_batiment(gameplay, gameplay->state.stateMouse.celluleIso.x,
                                                gameplay->state.stateMouse.celluleIso.y, 6, 4, KIND_CENTRALE, centraleElectrique);
                 liste_ajouter_fin(gameplay->world->centrales, centraleElectrique);
-
+                gameplay->world->monnaie -= CENTRALE_PRIX_CONSTRUCTION;
                 gameplay->reloadCarte = true;
                 gameplay->state.stateToolbar.modePlacementCentrale = false;
             }
@@ -845,7 +900,7 @@ void update_placement_batiment(GameplayScreen_t *gameplay) {
                 !check_collision_placement(gameplay, gameplay->state.stateMouse.celluleIso.x,
                                            gameplay->state.stateMouse.celluleIso.y, 4, 6) &&
                 check_route_near_placement(gameplay, gameplay->state.stateMouse.celluleIso.x,
-                                           gameplay->state.stateMouse.celluleIso.y, 4, 6)) {
+                                           gameplay->state.stateMouse.celluleIso.y, 4, 6) && gameplay->world->monnaie >= CHATEAU_PRIX_CONSTRUCTION) {
 
                 ChateauEau_t *chateauEau = chateau_alloc();
                 chateauEau->position.x = gameplay->state.stateMouse.celluleIso.x;
@@ -855,6 +910,7 @@ void update_placement_batiment(GameplayScreen_t *gameplay) {
                                                gameplay->state.stateMouse.celluleIso.y, 4, 6, KIND_CHATEAU, chateauEau);
                 liste_ajouter_fin(gameplay->world->chateaux, chateauEau);
                 ((ChateauEau_t*) gameplay->world->chateaux->dernier->data)->habitations = liste_alloc();
+                gameplay->world->monnaie -= CHATEAU_PRIX_CONSTRUCTION;
                 gameplay->reloadCarte = true;
                 gameplay->state.stateToolbar.modePlacementChateau = false;
             }
@@ -863,7 +919,7 @@ void update_placement_batiment(GameplayScreen_t *gameplay) {
                 !check_collision_placement(gameplay, gameplay->state.stateMouse.celluleIso.x,
                                            gameplay->state.stateMouse.celluleIso.y, 6, 4) &&
                 check_route_near_placement(gameplay, gameplay->state.stateMouse.celluleIso.x,
-                                           gameplay->state.stateMouse.celluleIso.y, 6, 4)) {
+                                           gameplay->state.stateMouse.celluleIso.y, 6, 4) && gameplay->world->monnaie >= CHATEAU_PRIX_CONSTRUCTION) {
                 ChateauEau_t *chateauEau = chateau_alloc();
                 chateauEau->position.x = gameplay->state.stateMouse.celluleIso.x;
                 chateauEau->position.y = gameplay->state.stateMouse.celluleIso.y;
@@ -872,6 +928,7 @@ void update_placement_batiment(GameplayScreen_t *gameplay) {
                                                gameplay->state.stateMouse.celluleIso.y, 6, 4, KIND_CHATEAU, chateauEau);
                 liste_ajouter_fin(gameplay->world->chateaux, chateauEau);
                 ((ChateauEau_t*) gameplay->world->chateaux->dernier->data)->habitations = liste_alloc();
+                gameplay->world->monnaie -= CHATEAU_PRIX_CONSTRUCTION;
                 gameplay->reloadCarte = true;
                 gameplay->state.stateToolbar.modePlacementChateau = false;
             }

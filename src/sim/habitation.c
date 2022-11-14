@@ -17,30 +17,50 @@ void habitation_free(Habitation_t* habitation) {
 
 /// Incrémente d'un tick la simulation d'un bâtiment.
 /// Renvoie si le bâtiment a évolué / régréssé.
-void habitation_step(Habitation_t* habitation, SimRules_t rules) {
+int habitation_step(Habitation_t* habitation, SimRules_t rules, bool* reloadCarte) {
     habitation->update_ticks++;
-    habitation_evolve(habitation);
+
+    if(habitation->update_ticks >= N_TICKS_EVOLUTION) {
+        habitation->update_ticks = 0;
+        habitation_evolve(habitation);
+        *reloadCarte = true;
+        return habitation_get_nb_habitants(habitation) * IMPOT_PAR_HABITANT;
+    }
+
+    return 0;
 }
 
-void habitation_evolve(Habitation_t* habitation) {
-    if (habitation->update_ticks >= N_TICKS_EVOLUTION) {
-        habitation->update_ticks = 0;
-        switch (habitation->niveau) {
-            case NIVEAU_TERRAIN_VAGUE:
-                habitation->niveau = NIVEAU_CABANE;
-                break;
-            case NIVEAU_CABANE:
-                habitation->niveau = NIVEAU_MAISON;
-                break;
-            case NIVEAU_MAISON:
-                habitation->niveau = NIVEAU_IMMEUBLE;
-                break;
-            case NIVEAU_IMMEUBLE:
-                habitation->niveau = NIVEAU_GRATTE_CIEL;
-                break;
-            default:
-                break;
-        }
+int habitation_get_nb_habitants(Habitation_t* habitation) {
+    switch (habitation->niveau) {
+        case NIVEAU_CABANE:
+            return 10;
+        case NIVEAU_MAISON:
+            return 50;
+        case NIVEAU_IMMEUBLE:
+            return 100;
+        case NIVEAU_GRATTE_CIEL:
+            return 1000;
+        default:
+            return 0;
+    }
+}
+
+void habitation_evolve(Habitation_t *habitation) {
+    switch (habitation->niveau) {
+        case NIVEAU_TERRAIN_VAGUE:
+            habitation->niveau = NIVEAU_CABANE;
+            break;
+        case NIVEAU_CABANE:
+            habitation->niveau = NIVEAU_MAISON;
+            break;
+        case NIVEAU_MAISON:
+            habitation->niveau = NIVEAU_IMMEUBLE;
+            break;
+        case NIVEAU_IMMEUBLE:
+            habitation->niveau = NIVEAU_GRATTE_CIEL;
+            break;
+        default:
+            break;
     }
 }
 
@@ -48,12 +68,11 @@ Vector2 habitation_get_position_cellule_iso_x_y(Habitation_t* habitation){
     return habitation->position;
 }
 
-int habitation_cmp(Habitation_t* habitation1, Habitation_t* habitation2) {
+int habitation_cmp(Habitation_t *habitation1, Habitation_t *habitation2) {
     return habitation1->niveau - habitation2->niveau;
 }
 
-int habitation_tri_par_distance(Habitation_t* a, Habitation_t* b)
-{
+int habitation_tri_par_distance(Habitation_t *a, Habitation_t *b) {
     Habitation_t *hab_a = (Habitation_t *) a;
     Habitation_t *hab_b = (Habitation_t *) b;
     if (hab_a->position.x < hab_b->position.x) {
