@@ -28,5 +28,6 @@ Vector2 defilement(File F);
 
 void bfs(GameplayScreen_t* gameplay);
 void update_liste_bfs(GameplayScreen_t* gameplay);
+void update_liste_habitation_triee_par_chateau(GameplayScreen_t* gameplay);
 
 #endif

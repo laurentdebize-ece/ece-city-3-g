@@ -810,6 +810,7 @@ void update_placement_batiment(GameplayScreen_t *gameplay) {
                                                gameplay->state.stateMouse.celluleIso.y, 4, 6, KIND_CENTRALE, centraleElectrique);
                 liste_ajouter_fin(gameplay->world->centrales, centraleElectrique);
 
+
                 gameplay->reloadCarte = true;
                 gameplay->state.stateToolbar.modePlacementCentrale = false;
             }
@@ -853,6 +854,7 @@ void update_placement_batiment(GameplayScreen_t *gameplay) {
                 update_word_placement_batiment(gameplay, gameplay->state.stateMouse.celluleIso.x,
                                                gameplay->state.stateMouse.celluleIso.y, 4, 6, KIND_CHATEAU, chateauEau);
                 liste_ajouter_fin(gameplay->world->chateaux, chateauEau);
+                ((ChateauEau_t*) gameplay->world->chateaux->dernier->data)->habitations = liste_alloc();
                 gameplay->reloadCarte = true;
                 gameplay->state.stateToolbar.modePlacementChateau = false;
             }
@@ -869,6 +871,7 @@ void update_placement_batiment(GameplayScreen_t *gameplay) {
                 update_word_placement_batiment(gameplay, gameplay->state.stateMouse.celluleIso.x,
                                                gameplay->state.stateMouse.celluleIso.y, 6, 4, KIND_CHATEAU, chateauEau);
                 liste_ajouter_fin(gameplay->world->chateaux, chateauEau);
+                ((ChateauEau_t*) gameplay->world->chateaux->dernier->data)->habitations = liste_alloc();
                 gameplay->reloadCarte = true;
                 gameplay->state.stateToolbar.modePlacementChateau = false;
             }
@@ -884,6 +887,7 @@ void check_upadate_carte(GameplayScreen_t *gameplay) {
         update_type_bloc_general(gameplay);
         bfs(gameplay);
         update_liste_bfs(gameplay);
+        update_liste_habitation_triee_par_chateau(gameplay);
         gameplay->reloadCarte = false;
     }
 }

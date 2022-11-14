@@ -22,7 +22,6 @@ typedef struct CentraleE_t {
     /// Flot d'électricité disponible pour la centrale.
     /// Réinitialisé à chaque début de tick de simulation.
     int capacite;
-
     /// Orientation de la centrale
     Orientation_t orientation;
     /// Position de la centrale en celulle isométrique sur la carte
@@ -31,6 +30,7 @@ typedef struct CentraleE_t {
     int nb_routes_adjacentes;
     /// La position en cellules isométriques des routes adjacentes autour de la centrale
     Vector2 routes_adjacentes[20];
+
 } CentraleElectrique_t;
 
 /// Crée une centrale électrique.

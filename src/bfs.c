@@ -501,91 +501,98 @@ Vector2 defilement(File F) {
 
 void bfs(GameplayScreen_t *gameplay) {
 
-    gameplay->bfs.tab_chateaux = malloc(sizeof(ChateauEau_t) * gameplay->world->chateaux->taille);
+    if (gameplay->world->chateaux->taille > 0) {
+        gameplay->bfs.tab_chateaux = malloc(sizeof(ChateauEau_t) * gameplay->world->chateaux->taille);
 
-    struct Maillon_t *parcours = gameplay->world->chateaux->premier;
-    int i = 0;
+        struct Maillon_t *parcours = gameplay->world->chateaux->premier;
+        int i = 0;
 
-    while (parcours != NULL) {
-        gameplay->bfs.tab_chateaux[i].position = ((ChateauEau_t *) parcours->data)->position;
-        gameplay->bfs.tab_chateaux[i].orientation = ((ChateauEau_t *) parcours->data)->orientation;
-        i++;
-        parcours = parcours->next;
-    }
+        while (parcours != NULL) {
+            gameplay->bfs.tab_chateaux[i].position = ((ChateauEau_t *) parcours->data)->position;
+            gameplay->bfs.tab_chateaux[i].orientation = ((ChateauEau_t *) parcours->data)->orientation;
+            i++;
+            parcours = parcours->next;
+        }
 
 
-    for (int j = 0; j < gameplay->world->chateaux->taille; j++) {
-        gameplay->bfs.tab_chateaux[j].nb_routes_adjacentes = get_nb_routes_adj_batiment(gameplay,
-                                                                                        gameplay->bfs.tab_chateaux[j].position,
-                                                                                        gameplay->bfs.tab_chateaux[j].orientation);
-    }
+        for (int j = 0; j < gameplay->world->chateaux->taille; j++) {
+            gameplay->bfs.tab_chateaux[j].nb_routes_adjacentes = get_nb_routes_adj_batiment(gameplay,
+                                                                                            gameplay->bfs.tab_chateaux[j].position,
+                                                                                            gameplay->bfs.tab_chateaux[j].orientation);
+        }
 
-    for (int j = 0; j < gameplay->world->chateaux->taille; j++) {
-        for (int k = 0; k < gameplay->bfs.tab_chateaux[j].nb_routes_adjacentes; k++) {
-            get_routes_adj_batiment(gameplay, gameplay->bfs.tab_chateaux[j].position,
-                                    gameplay->bfs.tab_chateaux[j].orientation,
-                                    gameplay->bfs.tab_chateaux[j].routes_adjacentes);
+        for (int j = 0; j < gameplay->world->chateaux->taille; j++) {
+            for (int k = 0; k < gameplay->bfs.tab_chateaux[j].nb_routes_adjacentes; k++) {
+                get_routes_adj_batiment(gameplay, gameplay->bfs.tab_chateaux[j].position,
+                                        gameplay->bfs.tab_chateaux[j].orientation,
+                                        gameplay->bfs.tab_chateaux[j].routes_adjacentes);
+            }
         }
     }
 
-    gameplay->bfs.tab_centrales = malloc(sizeof(CentraleElectrique_t) * gameplay->world->chateaux->taille);
+    if (gameplay->world->centrales->taille > 0) {
+        gameplay->bfs.tab_centrales = malloc(sizeof(CentraleElectrique_t) * gameplay->world->chateaux->taille);
 
-    struct Maillon_t *parcours3 = gameplay->world->chateaux->premier;
-    int y = 0;
+        struct Maillon_t *parcours3 = gameplay->world->chateaux->premier;
+        int y = 0;
 
-    while (parcours3 != NULL) {
-        gameplay->bfs.tab_centrales[y].position = ((ChateauEau_t *) parcours3->data)->position;
-        gameplay->bfs.tab_centrales[y].orientation = ((ChateauEau_t *) parcours3->data)->orientation;
-        y++;
-        parcours3 = parcours3->next;
-    }
+        while (parcours3 != NULL) {
+            gameplay->bfs.tab_centrales[y].position = ((ChateauEau_t *) parcours3->data)->position;
+            gameplay->bfs.tab_centrales[y].orientation = ((ChateauEau_t *) parcours3->data)->orientation;
+            y++;
+            parcours3 = parcours3->next;
+        }
 
 
-    for (int j = 0; j < gameplay->world->chateaux->taille; j++) {
-        gameplay->bfs.tab_centrales[j].nb_routes_adjacentes = get_nb_routes_adj_batiment(gameplay,
-                                                                                        gameplay->bfs.tab_centrales[j].position,
-                                                                                        gameplay->bfs.tab_centrales[j].orientation);
-    }
+        for (int j = 0; j < gameplay->world->chateaux->taille; j++) {
+            gameplay->bfs.tab_centrales[j].nb_routes_adjacentes = get_nb_routes_adj_batiment(gameplay,
+                                                                                             gameplay->bfs.tab_centrales[j].position,
+                                                                                             gameplay->bfs.tab_centrales[j].orientation);
+        }
 
-    for (int j = 0; j < gameplay->world->chateaux->taille; j++) {
-        for (int k = 0; k < gameplay->bfs.tab_centrales[j].nb_routes_adjacentes; k++) {
-            get_routes_adj_batiment(gameplay, gameplay->bfs.tab_centrales[j].position,
-                                    gameplay->bfs.tab_centrales[j].orientation,
-                                    gameplay->bfs.tab_centrales[j].routes_adjacentes);
+        for (int j = 0; j < gameplay->world->chateaux->taille; j++) {
+            for (int k = 0; k < gameplay->bfs.tab_centrales[j].nb_routes_adjacentes; k++) {
+                get_routes_adj_batiment(gameplay, gameplay->bfs.tab_centrales[j].position,
+                                        gameplay->bfs.tab_centrales[j].orientation,
+                                        gameplay->bfs.tab_centrales[j].routes_adjacentes);
+            }
         }
     }
 
-    gameplay->bfs.tab_habitations = malloc(sizeof(Habitation_t) * gameplay->world->habitations->taille);
+    if (gameplay->world->habitations->taille > 0) {
+        gameplay->bfs.tab_habitations = malloc(sizeof(Habitation_t) * gameplay->world->habitations->taille);
 
-    struct Maillon_t *parcours2 = gameplay->world->habitations->premier;
-    int z = 0;
+        struct Maillon_t *parcours2 = gameplay->world->habitations->premier;
+        int z = 0;
 
-    while (parcours2 != NULL) {
-        gameplay->bfs.tab_habitations[z].position = ((Habitation_t *) parcours2->data)->position;
-        gameplay->bfs.tab_habitations[z].orientation = ((Habitation_t *) parcours2->data)->orientation;
-        gameplay->bfs.tab_habitations[z].connexion_reseau_electrique = false;
-        gameplay->bfs.tab_habitations[z].distance_chateau_eau = malloc(sizeof(int) * gameplay->world->chateaux->taille);
-        gameplay->bfs.tab_habitations[z].position_chateau_eau = malloc(
-                sizeof(Vector2) * gameplay->world->chateaux->taille);
-        for (int u = 0; u < gameplay->world->chateaux->taille; u++) {
-            gameplay->bfs.tab_habitations[z].distance_chateau_eau[u] = DISTANCE_CHATEAU_EAU_NULL;
+        while (parcours2 != NULL) {
+            gameplay->bfs.tab_habitations[z].position = ((Habitation_t *) parcours2->data)->position;
+            gameplay->bfs.tab_habitations[z].orientation = ((Habitation_t *) parcours2->data)->orientation;
+            gameplay->bfs.tab_habitations[z].connexion_reseau_electrique = false;
+            gameplay->bfs.tab_habitations[z].distance_chateau_eau = malloc(
+                    sizeof(int) * gameplay->world->chateaux->taille);
+            gameplay->bfs.tab_habitations[z].position_chateau_eau = malloc(
+                    sizeof(Vector2) * gameplay->world->chateaux->taille);
+            for (int u = 0; u < gameplay->world->chateaux->taille; u++) {
+                gameplay->bfs.tab_habitations[z].distance_chateau_eau[u] = DISTANCE_CHATEAU_EAU_NULL;
+            }
+            z++;
+            parcours2 = parcours2->next;
         }
-        z++;
-        parcours2 = parcours2->next;
-    }
 
-    for (int j = 0; j < gameplay->world->habitations->taille; j++) {
-        gameplay->bfs.tab_habitations[j].nb_routes_adjacentes = get_nb_routes_adj_batiment(gameplay,
-                                                                                           gameplay->bfs.tab_habitations[j].position,
-                                                                                           gameplay->bfs.tab_habitations[j].orientation);
+        for (int j = 0; j < gameplay->world->habitations->taille; j++) {
+            gameplay->bfs.tab_habitations[j].nb_routes_adjacentes = get_nb_routes_adj_batiment(gameplay,
+                                                                                               gameplay->bfs.tab_habitations[j].position,
+                                                                                               gameplay->bfs.tab_habitations[j].orientation);
 
-    }
+        }
 
-    for (int j = 0; j < gameplay->world->habitations->taille; j++) {
-        for (int k = 0; k < gameplay->bfs.tab_habitations[j].nb_routes_adjacentes; k++) {
-            get_routes_adj_batiment(gameplay, gameplay->bfs.tab_habitations[j].position,
-                                    gameplay->bfs.tab_habitations[j].orientation,
-                                    gameplay->bfs.tab_habitations[j].routes_adjacentes);
+        for (int j = 0; j < gameplay->world->habitations->taille; j++) {
+            for (int k = 0; k < gameplay->bfs.tab_habitations[j].nb_routes_adjacentes; k++) {
+                get_routes_adj_batiment(gameplay, gameplay->bfs.tab_habitations[j].position,
+                                        gameplay->bfs.tab_habitations[j].orientation,
+                                        gameplay->bfs.tab_habitations[j].routes_adjacentes);
+            }
         }
     }
 
@@ -866,12 +873,13 @@ void bfs(GameplayScreen_t *gameplay) {
     }
 }
 
-void update_liste_bfs(GameplayScreen_t* gameplay){
-    struct Maillon_t* parcours = gameplay->world->habitations->premier;
+void update_liste_bfs(GameplayScreen_t *gameplay) {
+    struct Maillon_t *parcours = gameplay->world->habitations->premier;
 
-    while (parcours != NULL){
+    while (parcours != NULL) {
         for (int i = 0; i < gameplay->world->habitations->taille; i++) {
-            if(gameplay->bfs.tab_habitations[i].position.x == ((Habitation_t*) parcours->data)->position.x && gameplay->bfs.tab_habitations[i].position.y == ((Habitation_t*) parcours->data)->position.y){
+            if (gameplay->bfs.tab_habitations[i].position.x == ((Habitation_t *) parcours->data)->position.x &&
+                gameplay->bfs.tab_habitations[i].position.y == ((Habitation_t *) parcours->data)->position.y) {
                 ((Habitation_t *) parcours->data)->distance_chateau_eau = gameplay->bfs.tab_habitations[i].distance_chateau_eau;
                 ((Habitation_t *) parcours->data)->position_chateau_eau = gameplay->bfs.tab_habitations[i].position_chateau_eau;
                 ((Habitation_t *) parcours->data)->connexion_reseau_electrique = gameplay->bfs.tab_habitations[i].connexion_reseau_electrique;
@@ -879,5 +887,56 @@ void update_liste_bfs(GameplayScreen_t* gameplay){
         }
 
         parcours = parcours->next;
+    }
+}
+
+void update_liste_habitation_triee_par_chateau(GameplayScreen_t *gameplay) {
+    struct Maillon_t *chateaux = gameplay->world->chateaux->premier;
+    int compteur = 0;
+    while (chateaux) {
+        ChateauEau_t *chateauEau = (ChateauEau_t *) chateaux->data;
+        liste_free(chateauEau->habitations);
+        chateauEau->habitations = liste_alloc();
+
+        for (int i = 0; i < gameplay->world->habitations->taille; i++) {
+            if (chateauEau->habitations->premier == NULL && gameplay->bfs.tab_habitations[i].distance_chateau_eau[compteur] != DISTANCE_CHATEAU_EAU_NULL){
+                liste_ajouter_debut(chateauEau->habitations, &gameplay->bfs.tab_habitations[i]);
+            } else if (gameplay->bfs.tab_habitations[i].distance_chateau_eau[compteur] != DISTANCE_CHATEAU_EAU_NULL && gameplay->bfs.tab_habitations[i].distance_chateau_eau[compteur] <
+                ((Habitation_t *) chateauEau->habitations->premier->data)->distance_chateau_eau[compteur]) {
+                liste_ajouter_debut(chateauEau->habitations, &gameplay->bfs.tab_habitations[i]);
+            } else if (gameplay->bfs.tab_habitations[i].distance_chateau_eau[compteur] != DISTANCE_CHATEAU_EAU_NULL && gameplay->bfs.tab_habitations[i].distance_chateau_eau[compteur] >
+                       ((Habitation_t *) chateauEau->habitations->dernier->data)->distance_chateau_eau[compteur]) {
+                liste_ajouter_fin(chateauEau->habitations, &gameplay->bfs.tab_habitations[i]);
+            } else {
+                if (gameplay->bfs.tab_habitations[i].distance_chateau_eau[compteur] != DISTANCE_CHATEAU_EAU_NULL) {
+                    struct Maillon_t *parcours = chateauEau->habitations->premier;
+                    bool conditionFin = false;
+                    while (parcours != NULL || !conditionFin) {
+                        if (parcours == NULL) {
+                            conditionFin = true;
+                            continue;
+                        }
+                        if (gameplay->bfs.tab_habitations[i].distance_chateau_eau[compteur] >
+                            ((Habitation_t *) parcours->data)->distance_chateau_eau[compteur] &&
+                            gameplay->bfs.tab_habitations[i].distance_chateau_eau[compteur] <
+                            ((Habitation_t *) parcours->next->data)->distance_chateau_eau[compteur]) {
+                            struct Maillon_t *maillon = malloc(sizeof(struct Maillon_t));
+                            maillon->data = &gameplay->bfs.tab_habitations[i];
+                            maillon->next = parcours->next;
+                            maillon->prev = parcours;
+                            parcours->next->prev = maillon;
+                            parcours->next = maillon;
+                            chateauEau->habitations->taille++;
+                            conditionFin = true;
+                        }
+                        parcours = parcours->next;
+                    }
+                }
+            }
+        }
+
+        compteur++;
+        chateaux = chateaux->next;
+
     }
 }

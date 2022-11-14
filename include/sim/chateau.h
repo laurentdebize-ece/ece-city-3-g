@@ -3,6 +3,8 @@
 
 #include <stdlib.h>
 #include "raylib.h"
+#include "utils/liste.h"
+//#include "sim/habitation.h"
 
 #define CHATEAU_PRIX_CONSTRUCTION 100000
 #define CAPACITE_CHATEAU_EAU 5000
@@ -25,6 +27,8 @@ typedef struct ChateauEau_t {
     int nb_routes_adjacentes;
     /// La position en cellules isométriques des routes adjacentes autour du château
     Vector2 routes_adjacentes[20];
+    /// La liste ordonnée des habitations pour distribuer l'électricité
+    Liste_t* habitations;
 } ChateauEau_t;
 
 /// Crée un château d'eau.

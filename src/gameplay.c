@@ -76,6 +76,27 @@ void gameplay_update(Jeu_t *jeu, GameplayScreen_t *gameplay) {
             }
             parcours = parcours->next;
         }
+
+        parcours = gameplay->world->chateaux->premier;
+        int compteur = 0;
+
+        while(parcours){
+            ChateauEau_t* chateauEau = (ChateauEau_t*) parcours->data;
+
+
+            struct Maillon_t *parcours2 = chateauEau->habitations->premier;
+            int compteur2 = 0;
+            while (parcours2 != NULL){
+                printf("Chateau (%2.f, %2.f) : habitation %d, (%2.f, %2.f) : distance %d\n", chateauEau->position.x,
+                       chateauEau->position.y,compteur2,  ((Habitation_t *) parcours2->data)->position.x, ((Habitation_t *) parcours2->data)->position.y, ((Habitation_t *) parcours2->data)->distance_chateau_eau[compteur]);
+                parcours2 = parcours2->next;
+                compteur2++;
+            }
+
+
+            compteur++;
+            parcours = parcours->next;
+        }
     }
 }
 
