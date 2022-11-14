@@ -10,6 +10,8 @@
 #define SIM_MAP_LARGEUR 45
 #define SIM_MAP_HAUTEUR 35
 
+#define ROUTE_PRIX_CONSTRUCTION 10
+
 /// Le type de case
 typedef enum CaseKind_t {
     /// case vide
@@ -49,6 +51,8 @@ typedef struct SimWorld_t {
     Case_t map[SIM_MAP_LARGEUR][SIM_MAP_HAUTEUR];
     /// La qte de monnaie disponible.
     int monnaie;
+    /// Nombre d'habitants dans le monde.
+    int nb_total_habitants;
     /// Les règles d'évolution pour la simulation.
     SimRules_t rules;
     /// Le temps écoulé depuis le début de la simulation (en ticks).

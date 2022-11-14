@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <utils/grille.h>
 
+#define CHATEAU_PRIX_CONSTRUCTION 100000
 #define CAPACITE_CHATEAU_EAU 5000
 
 /// Représente un château d'eau simulé.

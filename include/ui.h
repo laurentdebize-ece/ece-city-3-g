@@ -40,6 +40,8 @@ typedef struct UIState {
     Texture2D toolbarIcons[ICON_NB_LOGOS_TOOLBAR];
     /// Mode de construction actuel
     enum BuildMode currentBuildMode;
+    /// Multiplicateur de vitesse de jeu
+    float timeScale;
 } UIState;
 
 void ui_charger_textures(UIState* textures);

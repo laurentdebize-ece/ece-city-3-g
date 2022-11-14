@@ -20,6 +20,8 @@ typedef struct GameplayScreen_t {
     SpriteSheet_t spriteSheet;
     /// Position de la souris sur la carte.
     Vector2I mousePos;
+    /// Temps écoulé depuis la dernière seconde.
+    float elapsedTime;
 } GameplayScreen_t;
 
 /// Crée un écran de gameplay prêt à être utilisé.
