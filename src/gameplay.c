@@ -129,8 +129,10 @@ void gameplay_draw(Jeu_t *jeu, GameplayScreen_t *gameplay) {
 
     if (gameplay->state.stateToolbar.niveauEau) {
         afficher_level_eau(&gameplay->spriteSheet, gameplay->world);
+        afficher_capacite(gameplay->world);
     } else if (gameplay->state.stateToolbar.niveauElectricite) {
         afficher_level_elec(&gameplay->spriteSheet, gameplay->world, gameplay);
+        afficher_capacite(gameplay->world);
     }
 
 }
