@@ -12,6 +12,6 @@ typedef struct HabitationNode_t {
     Habitation_t* habitation;
 } HabitationNode_t;
 
-void bfs(SimWorld_t* world, Vector2I start, void* batId, Liste_t* resultats);
+void bfs(SimWorld_t* world, Vector2I start, void* batId, Vector_t* resultats);
 
 #endif //ECECITY_BFS_H

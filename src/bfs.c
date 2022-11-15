@@ -32,20 +32,16 @@ void tryUpdateChemin(Vector_t* vecteur, int d, void* data) {
             return;
         }
     }
-
-    printf("Pas de chemin plus court trouvé pour %x, ajout de %d \n\r", data, d);
     vector_push(vecteur, node_alloc(data, d));
 }
 
-void bfs(SimWorld_t* world, Vector2I start, void* batId, Liste_t* resultats) {
+void bfs(SimWorld_t* world, Vector2I start, void* batId, Vector_t* chemins) {
 
     BFSNode_t *start_node = bfs_node_alloc(start, 0);
     bool visited[SIM_MAP_LARGEUR][SIM_MAP_HAUTEUR] = {false};
 
     Liste_t* file = liste_alloc();
     liste_ajouter_fin(file, start_node);
-
-    Vector_t* chemins = vector_alloc(world->habitations->taille);
 
     while (!liste_estVide(file)) {
         BFSNode_t* node = liste_supprimer_debut(file);
@@ -71,6 +67,8 @@ void bfs(SimWorld_t* world, Vector2I start, void* batId, Liste_t* resultats) {
         if (world->map[node->pos.x][node->pos.y].type == KIND_HABITATION) {
             Habitation_t* habitation = world->map[node->pos.x][node->pos.y].donnees;
             tryUpdateChemin(chemins, node->distance, habitation);
+            free(node);
+            continue;
         }
 
         for (int i = -1; i < 2; ++i) {
@@ -97,10 +95,8 @@ void bfs(SimWorld_t* world, Vector2I start, void* batId, Liste_t* resultats) {
 
                         case KIND_CENTRALE:
                         case KIND_CHATEAU:
-                            if (world->map[nextPos.x][nextPos.y].donnees == batId) {
-                                printf("Explo du chateau.");
+                            if (world->map[nextPos.x][nextPos.y].donnees == batId)
                                 liste_ajouter_fin(file, bfs_node_alloc(nextPos, node->distance));
-                            }
                         default:
                             break;
                         }
@@ -110,12 +106,5 @@ void bfs(SimWorld_t* world, Vector2I start, void* batId, Liste_t* resultats) {
 
         visited[node->pos.x][node->pos.y] = true;
         free(node);
-    }
-
-    for (int i = 0; i < chemins->taille; ++i)
-    {
-        HabitationNode_t* node = chemins->data[i];
-        printf("Chemin trouvé pour %x : %d \n\r", node->habitation, node->distance);
-        node->habitation->dst = node->distance;
     }
 }

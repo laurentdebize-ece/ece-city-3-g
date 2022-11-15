@@ -6,7 +6,8 @@ Habitation_t *habitation_alloc(NiveauHabitation_t niveau) {
     Habitation_t *habitation = malloc(sizeof(Habitation_t));
     habitation->niveau = niveau;
     habitation->update_ticks = 0;
-    habitation->dst = 0;
+    habitation->eau_dst = -1;
+    habitation->alimentee_en_eau = false;
 }
 
 /// Détruit une habitation.
@@ -18,7 +19,7 @@ void habitation_free(Habitation_t *habitation) {
 int habitation_step(Habitation_t *habitation, SimRules_t rules) {
     habitation->update_ticks++;
 
-    if (habitation->update_ticks >= N_TICKS_EVOLUTION) {
+    if (habitation->update_ticks >= N_TICKS_EVOLUTION && habitation->alimentee_en_eau) {
         habitation->update_ticks = 0;
         habitation_evolve(habitation);
         return habitation_get_nb_habitants(habitation) * IMPOT_PAR_HABITANT;

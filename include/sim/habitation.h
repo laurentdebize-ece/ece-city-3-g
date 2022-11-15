@@ -39,9 +39,11 @@ typedef struct Habitation_t {
     int update_ticks;
     /// La position du bâtiment.
     Vector2I position;
-
     /// Distance a la centrale la plus proche
-    int dst;
+    //TODO: doit dégager.
+    int eau_dst;
+    /// L'habitation est-elle reliée au réseau d'eau?
+    bool alimentee_en_eau;
 } Habitation_t;
 
 /// Crée une habitation.

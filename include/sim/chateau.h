@@ -11,11 +11,11 @@
 
 /// Représente un château d'eau simulé.
 typedef struct ChateauEau_t {
+    /// La capacité restante du château d'eau.
     int capacite;
-
     /// La liste des bâtiments deservis par le château.
     Liste_t* habitations;
-
+    /// La position du château sur la carte.
     Vector2I position;
 } ChateauEau_t;
 

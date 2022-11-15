@@ -1,5 +1,7 @@
 
+#include <stdio.h>
 #include "sim/sim.h"
+#include "bfs.h"
 
 void sim_reset_flow_distribution(SimWorld_t* world);
 
@@ -124,6 +126,7 @@ void sim_place_entity(SimWorld_t* world, CaseKind_t type, int x, int y) {
         default:
             break;
     }
+    sim_update_voisins_chateaux(world);
 }
 
 bool sim_check_can_place(SimWorld_t* world, bool isBat, int x, int y, int w, int h) {
@@ -214,5 +217,45 @@ void sim_destroy_entity(SimWorld_t* world, int x, int y) {
             default:
                 break;
         }
+
+        sim_update_voisins_chateaux(world);
+    }
+}
+
+void sim_update_voisins_chateaux(SimWorld_t* world) {
+
+    /// on reset toutes les distances
+    struct Maillon_t* habs = world->habitations->premier;
+    while (habs) {
+        ((Habitation_t*)habs->data)->eau_dst = 0;
+        ((Habitation_t*)habs->data)->alimentee_en_eau = false;
+        habs = habs->next;
+    }
+
+    Vector_t* chemins = vector_alloc(world->chateaux->taille);
+    struct Maillon_t* chateaux = world->chateaux->premier;
+    while (chateaux) {
+        ChateauEau_t* chateau = chateaux->data;
+
+        /// on vide la liste des chemins calculés.
+        vector_clear(chemins);
+
+        /// on vide la liste des habitations voisines
+        liste_vider(chateau->habitations);
+
+        /// on fait le BFS depuis le point mentionné
+        bfs(world, chateau->position, chateau, chemins);
+
+        /// on ajoute les chemins
+        for (int i = 0; i < chemins->taille; ++i) {
+            HabitationNode_t* node = chemins->data[i];
+            /// on ajoute le bâtiment à la liste d'habitations voisines du château.
+            liste_ajouter_fin(chateau->habitations, node->habitation);
+            node->habitation->eau_dst = node->distance;
+            /// on marque que l'habitation est connectée au réseau éléctrique.
+            node->habitation->alimentee_en_eau = true;
+        }
+
+        chateaux = chateaux->next;
     }
 }

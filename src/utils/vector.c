@@ -56,3 +56,8 @@ void vector_set(Vector_t* vector, size_t index, void* data) {
 void vector_sort(Vector_t* vector, int (*compar)(const void*, const void*)) {
     qsort(vector->data, vector->taille, sizeof(void*), compar);
 }
+
+/// Vide le tableau dynamique
+void vector_clear(Vector_t* vector) {
+    vector->taille = 0;
+}

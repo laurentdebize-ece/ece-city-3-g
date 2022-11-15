@@ -33,4 +33,7 @@ void vector_set(Vector_t* vector, size_t index, void* data);
 /// Trie le tableau dynamique avec la fonction de comparaison donnée.
 void vector_sort(Vector_t* vector, int (*compar)(const void*, const void*));
 
+/// Vide le tableau
+void vector_clear(Vector_t* vector);
+
 #endif //ECECITY_VECTOR_H
