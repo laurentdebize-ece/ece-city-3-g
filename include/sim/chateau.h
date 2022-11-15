@@ -4,6 +4,7 @@
 
 #include <stdlib.h>
 #include <utils/grille.h>
+#include "utils/liste.h"
 
 #define CHATEAU_PRIX_CONSTRUCTION 100000
 #define CAPACITE_CHATEAU_EAU 5000
@@ -11,6 +12,9 @@
 /// Représente un château d'eau simulé.
 typedef struct ChateauEau_t {
     int capacite;
+
+    /// La liste des bâtiments deservis par le château.
+    Liste_t* habitations;
 
     Vector2I position;
 } ChateauEau_t;

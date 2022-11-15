@@ -6,6 +6,7 @@ Habitation_t *habitation_alloc(NiveauHabitation_t niveau) {
     Habitation_t *habitation = malloc(sizeof(Habitation_t));
     habitation->niveau = niveau;
     habitation->update_ticks = 0;
+    habitation->dst = 0;
 }
 
 /// Détruit une habitation.

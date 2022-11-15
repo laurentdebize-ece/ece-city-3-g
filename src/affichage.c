@@ -97,6 +97,10 @@ void affichage_draw_entities(SpriteSheet_t *sheet, SimWorld_t *world, enum Rende
     while (maison) {
         Habitation_t *hab = (Habitation_t *) maison->data;
         affichage_draw_habitation(sheet, hab, routesColor);
+        int oX = (ORIGINEX * SPRITELARGEUR) + hab->position.x * (SPRITELARGEUR/2) - hab->position.y * (SPRITELARGEUR/2);
+        int oY = (ORIGINEY * SPRITEHAUTEUR) + hab->position.y * (SPRITEHAUTEUR/2) + hab->position.x * (SPRITEHAUTEUR/2);
+        if (hab->dst != 0)
+            DrawText(TextFormat("%d", hab->dst), oX, oY, 24, BLUE);
         maison = maison->next;
     }
 }

@@ -9,6 +9,7 @@
 #include "spritesheet.h"
 #include "utils/grille.h"
 #include "affichage.h"
+#include "bfs.h"
 
 typedef struct GameplayScreen_t {
     ScreenInfo_t screen_info;

@@ -3,6 +3,7 @@
 ChateauEau_t* chateau_alloc() {
     ChateauEau_t* chateau = malloc(sizeof(ChateauEau_t));
     chateau->capacite = CAPACITE_CHATEAU_EAU;
+    chateau->habitations = liste_alloc();
     return chateau;
 }
 

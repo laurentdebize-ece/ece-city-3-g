@@ -43,6 +43,26 @@ void gameplay_update(Jeu_t *jeu, GameplayScreen_t *gameplay) {
         sim_world_step(gameplay->world);
         gameplay->elapsedTime = 0.f;
     }
+
+    if (IsKeyPressed(KEY_SPACE)) {
+        switch (gameplay->world->map[gameplay->mousePos.x][gameplay->mousePos.y].type) {
+            case KIND_VIDE:
+                printf("Vide\n");
+                break;
+
+            case KIND_ROUTE:
+            case KIND_CHATEAU:
+            case KIND_CENTRALE:
+                printf("Chateau\n");
+                Liste_t* resultats = liste_alloc();
+                bfs(gameplay->world, gameplay->mousePos,gameplay->world->map[gameplay->mousePos.x][gameplay->mousePos.y].donnees, resultats);
+                break;
+
+
+                default:
+                    break;
+        }
+    }
 }
 
 void gameplay_draw(Jeu_t *jeu, GameplayScreen_t *gameplay) {

@@ -39,6 +39,9 @@ typedef struct Habitation_t {
     int update_ticks;
     /// La position du bâtiment.
     Vector2I position;
+
+    /// Distance a la centrale la plus proche
+    int dst;
 } Habitation_t;
 
 /// Crée une habitation.
