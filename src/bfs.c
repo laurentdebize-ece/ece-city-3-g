@@ -35,6 +35,8 @@ void tryUpdateChemin(Vector_t* vecteur, int d, void* data) {
     vector_push(vecteur, node_alloc(data, d));
 }
 
+
+//todo: trier les résultats par ordre de distance.
 void bfs(SimWorld_t* world, Vector2I start, void* batId, Vector_t* chemins) {
 
     BFSNode_t *start_node = bfs_node_alloc(start, 0);

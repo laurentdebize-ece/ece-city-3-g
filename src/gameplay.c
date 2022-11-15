@@ -2,7 +2,10 @@
 #include <stdio.h>
 #include "screens/gameplay.h"
 
+#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
+
 void try_place_building(GameplayScreen_t *gameplay);
+void draw_debug_info(GameplayScreen_t *gameplay);
 
 
 GameplayScreen_t *gameplay_create_screen() {
@@ -24,6 +27,10 @@ void gameplay_on_enter(Jeu_t *jeu, GameplayScreen_t *gameplay) {
     gameplay->state.currentBuildMode = BUILD_MODE_NONE;
     gameplay->state.timeScale = 1.0f;
     gameplay->elapsedTime = 0.f;
+
+
+    gameplay->dbgDisplayChateauNeighbors = 0;
+    gameplay->dbgDisplayCentraleNeighbors = 0;
 }
 
 void gameplay_on_exit(Jeu_t *jeu, GameplayScreen_t *gameplay) {
@@ -35,7 +42,6 @@ void gameplay_update(Jeu_t *jeu, GameplayScreen_t *gameplay) {
 
     gameplay->mousePos = mouse_to_iso((Vector2I) {GetMouseX(), GetMouseY()},
                                       gameplay->spriteSheet.spriteDetectionTuile);
-    try_place_building(gameplay);
 
     gameplay->elapsedTime += GetFrameTime();
 
@@ -44,25 +50,28 @@ void gameplay_update(Jeu_t *jeu, GameplayScreen_t *gameplay) {
         gameplay->elapsedTime = 0.f;
     }
 
-    if (IsKeyPressed(KEY_SPACE)) {
-        switch (gameplay->world->map[gameplay->mousePos.x][gameplay->mousePos.y].type) {
-            case KIND_VIDE:
-                printf("Vide\n");
-                break;
-
-            case KIND_ROUTE:
-            case KIND_CHATEAU:
-            case KIND_CENTRALE:
-                printf("Chateau\n");
-                Liste_t* resultats = liste_alloc();
-                bfs(gameplay->world, gameplay->mousePos,gameplay->world->map[gameplay->mousePos.x][gameplay->mousePos.y].donnees, resultats);
-                break;
-
-
-                default:
-                    break;
+    if (IsKeyDown(KEY_LEFT_SHIFT)) {
+        if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
+            try_place_building(gameplay);
         }
     }
+
+    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+        try_place_building(gameplay);
+
+
+    /// menus de débogage.
+
+    if (IsKeyPressed(KEY_H)) {
+        gameplay->dbgDisplayChateauNeighbors = (gameplay->dbgDisplayChateauNeighbors + 1) % (gameplay->world->chateaux->taille + 1);
+    }
+
+    if (IsKeyPressed(KEY_C)) {
+        gameplay->dbgDisplayCentraleNeighbors = (gameplay->dbgDisplayCentraleNeighbors + 1) % (gameplay->world->centrales->taille + 1);
+    }
+
+    gameplay->dbgDisplayChateauNeighbors = MIN(gameplay->dbgDisplayChateauNeighbors, gameplay->world->chateaux->taille + 1);
+    gameplay->dbgDisplayCentraleNeighbors = MIN(gameplay->dbgDisplayCentraleNeighbors, gameplay->world->centrales->taille + 1);
 }
 
 void gameplay_draw(Jeu_t *jeu, GameplayScreen_t *gameplay) {
@@ -77,11 +86,14 @@ void gameplay_draw(Jeu_t *jeu, GameplayScreen_t *gameplay) {
         affichage_draw_build_preview(&gameplay->spriteSheet, gameplay->world, v,
                                      ui_buildmode_to_casekind(gameplay->state.currentBuildMode));
 
+
+    draw_debug_info(gameplay);
+
+
     ui_draw_toolbar(&gameplay->state, gameplay->world);
 }
 
 void try_place_building(GameplayScreen_t *gameplay) {
-    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
         switch (gameplay->state.currentBuildMode) {
             case BUILD_MODE_ROUTE:
                 if (sim_check_can_place(gameplay->world, false, gameplay->mousePos.x, gameplay->mousePos.y, 1, 1) &&
@@ -124,7 +136,34 @@ void try_place_building(GameplayScreen_t *gameplay) {
             default:
                 break;
         }
+}
+
+void draw_debug_info(GameplayScreen_t *gameplay) {
+    if (gameplay->dbgDisplayChateauNeighbors > 0) {
+        struct Maillon_t* chateaux = gameplay->world->chateaux->premier;
+        int n = 1;
+        while (chateaux) {
+            if (n == gameplay->dbgDisplayChateauNeighbors) {
+                ChateauEau_t* chateau = chateaux->data;
+                affichage_debug_draw_voisins_chateau(&gameplay->spriteSheet, chateau, BLUE);
+                break;
+            }
+            n++;
+            chateaux = chateaux->next;
+        }
     }
 
-    ui_draw_toolbar(&gameplay->state, gameplay->world);
+    if (gameplay->dbgDisplayCentraleNeighbors > 0) {
+        struct Maillon_t* centrales = gameplay->world->centrales->premier;
+        int n = 1;
+        while (centrales) {
+            if (n == gameplay->dbgDisplayCentraleNeighbors) {
+                CentraleElectrique_t* centrale = centrales->data;
+                affichage_debug_draw_voisins_centrale(&gameplay->spriteSheet, centrale, ORANGE);
+                break;
+            }
+            n++;
+            centrales = centrales->next;
+        }
+    }
 }

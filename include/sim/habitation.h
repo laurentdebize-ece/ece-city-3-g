@@ -31,19 +31,19 @@ typedef enum NiveauHabitation_t {
 typedef struct Habitation_t {
     /// Niveau de l'habitation.
     NiveauHabitation_t niveau;
-    /// Flot d'eau disponible pour l'habitation (-1 si pas relié au réseau).
+    /// Flot d'eau disponible pour l'habitation.
     int eau;
-    /// Flot d'électricité disponible pour l'habitation (-1 si pas relié au réseau).
+    /// Flot d'électricité disponible pour l'habitation.
     int electricite;
     /// Compteur de ticks avant prochaine évolution.
     int update_ticks;
     /// La position du bâtiment.
     Vector2I position;
     /// Distance a la centrale la plus proche
-    //TODO: doit dégager.
-    int eau_dst;
     /// L'habitation est-elle reliée au réseau d'eau?
     bool alimentee_en_eau;
+    /// L'habitation est-elle reliée au réseau d'électrique?
+    bool alimentee_en_electricite;
 } Habitation_t;
 
 /// Crée une habitation.

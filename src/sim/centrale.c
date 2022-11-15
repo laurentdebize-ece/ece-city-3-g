@@ -5,6 +5,7 @@
 CentraleElectrique_t* centrale_alloc() {
     CentraleElectrique_t* centrale = malloc(sizeof(CentraleElectrique_t));
     centrale->capacite = CAPACITE_CENTRALE_ELECTRIQUE;
+    centrale->habitations = liste_alloc();
     return centrale;
 }
 

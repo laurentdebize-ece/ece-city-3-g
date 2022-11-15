@@ -78,7 +78,7 @@ void sim_place_entity(SimWorld_t* world, CaseKind_t type, int x, int y);
 /// Vérifie si un bâtiment de dimensions précisés peut être placé à une position donnée.
 bool sim_check_can_place(SimWorld_t* world, bool isBat, int x, int y, int w, int h);
 
-/// Recalcule pour toutes les chateaux les bâtiments voisins triés par ordre de distance.
-void sim_update_voisins_chateaux(SimWorld_t* world);
+/// Recalcule les voisins de chacunes des centrales & châteaux.
+void sim_update_voisins(SimWorld_t* world);
 
 #endif //ECECITY_SIM_H
