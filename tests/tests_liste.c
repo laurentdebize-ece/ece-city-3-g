@@ -20,8 +20,21 @@ int main() {
 
     assert(liste_supprimer_fin(list) == 0xDEADBEEF);
 
-    printf("La liste est vide");
+    printf("La liste est vide\n\r");
     assert(liste_estVide(list) == true);
 
+    printf("Test iteration\n\r");
+    liste_ajouter_fin(list, 1);
+    liste_ajouter_fin(list, 2);
+    liste_ajouter_fin(list, 3);
+
+    struct Maillon_t* maillon = list->premier;
+    assert(maillon->data == 1);
+
+    maillon = maillon->next;
+    assert(maillon->data == 2);
+
+    maillon = maillon->next;
+    assert(maillon->data == 3);
      return 0;
 }

@@ -25,11 +25,17 @@ typedef struct Liste_t {
 /// Crée une liste vide.
 Liste_t* liste_alloc();
 
+/// Détruit une liste.
+void liste_free(Liste_t* liste);
+
 /// Regarde si la liste est vide.
 bool liste_estVide(Liste_t *liste);
 
 /// Ajoute un élément à la fin de la liste.
 void liste_ajouter_fin(Liste_t *liste, void *data);
+
+/// Ajoute un élément à la liste en respectant l'ordre d'insertion.
+void liste_ajout_tri(Liste_t *liste, void *data, int (*comparateur)(void *, void *));
 
 /// Supprime un élément en fin de liste et le retourne.
 void* liste_supprimer_fin(Liste_t *liste);
@@ -39,6 +45,8 @@ void liste_ajouter_debut(Liste_t *liste, void *data);
 
 /// Supprime un élément en début de liste et le retourne.
 void* liste_supprimer_debut(Liste_t *liste);
+
+void liste_supprimer(Liste_t *liste, void *data);
 
 
 
