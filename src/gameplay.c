@@ -1,6 +1,7 @@
 
 #include <stdio.h>
 #include "screens/gameplay.h"
+#include "utils/capacite.h"
 
 #define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
 
@@ -82,6 +83,9 @@ void gameplay_draw(Jeu_t *jeu, GameplayScreen_t *gameplay) {
 
 
     ui_draw_toolbar(&gameplay->state, gameplay->world);
+
+    afficher_etat_alim_eau(&gameplay->spriteSheet, gameplay->world);
+    afficher_etat_alim_elec(&gameplay->spriteSheet, gameplay->world);
 }
 
 void try_place_building(GameplayScreen_t *gameplay) {
