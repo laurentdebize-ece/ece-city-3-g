@@ -33,8 +33,8 @@ void ui_draw_toolbar(UIState* textures, SimWorld_t* sim) {
     DrawRectangle(717, 954, 125, 40, (Color) { 238,238,238,200});
 
     DrawText(TextFormat("%d", sim->nb_total_habitants), 271, 954, 20, (Color) { 0, 0, 0, 255 });
-    DrawText(TextFormat("%d", 0), 493, 954, 20, (Color) { 0, 0, 0, 255 });
-    DrawText(TextFormat("%d", 0), 717, 954, 20, (Color) { 0, 0, 0, 255 });
+    DrawText(TextFormat("%d", sim->qte_totale_electricite), 493, 954, 20, (Color) { 0, 0, 0, 255 });
+    DrawText(TextFormat("%d", sim->qte_totale_eau), 717, 954, 20, (Color) { 0, 0, 0, 255 });
 
     DrawTexture(textures->toolbarIcons[ICON_HAMBURGER], 26, 954, WHITE);
     DrawTexture(textures->toolbarIcons[ICON_SAVE], 109, 954, WHITE);

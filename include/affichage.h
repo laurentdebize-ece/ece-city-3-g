@@ -29,4 +29,8 @@ void affichage_draw_habitation(SpriteSheet_t* sheet, Habitation_t* habitation, C
 /// Dessine l'apercu de construction d'un bâtiment sur la carte.
 void affichage_draw_build_preview(SpriteSheet_t* sheet, SimWorld_t* world, Vector2I pos, CaseKind_t type);
 
+void affichage_debug_draw_voisins_chateau(SpriteSheet_t* sheet, ChateauEau_t* chateau, Color teinte);
+
+void affichage_debug_draw_voisins_centrale(SpriteSheet_t* sheet, CentraleElectrique_t* centrale, Color teinte);
+
 #endif //ECECITY_AFFICHAGE_H

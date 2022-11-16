@@ -14,4 +14,8 @@ void afficher_level_elec(SpriteSheet_t* sheet, SimWorld_t* world, GameplayScreen
 
 void afficher_level(SpriteSheet_t* sheet, SimWorld_t* world, GameplayScreen_t *gameplay);
 
+void afficher_etat_alim_eau(SpriteSheet_t* sheet, SimWorld_t* world);
+
+void afficher_etat_alim_elec(SpriteSheet_t* sheet, SimWorld_t* world);
+
 #endif //ECECITY_CAPACITE_H

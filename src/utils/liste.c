@@ -159,3 +159,7 @@ void liste_supprimer(Liste_t *liste, void *data) {
     liste->taille--;
 }
 
+void liste_vider(Liste_t* liste) {
+    while (!liste_estVide(liste))
+        liste_supprimer_fin(liste);
+}

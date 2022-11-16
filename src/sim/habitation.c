@@ -6,6 +6,8 @@ Habitation_t *habitation_alloc(NiveauHabitation_t niveau) {
     Habitation_t *habitation = malloc(sizeof(Habitation_t));
     habitation->niveau = niveau;
     habitation->update_ticks = 0;
+    habitation->alimentee_en_eau = false;
+    habitation->alimentee_en_electricite = false;
 }
 
 /// Détruit une habitation.
@@ -42,21 +44,43 @@ int habitation_get_nb_habitants(Habitation_t* habitation) {
 }
 
 void habitation_evolve(Habitation_t *habitation) {
-    switch (habitation->niveau) {
-        case NIVEAU_TERRAIN_VAGUE:
-            habitation->niveau = NIVEAU_CABANE;
-            break;
-        case NIVEAU_CABANE:
-            habitation->niveau = NIVEAU_MAISON;
-            break;
-        case NIVEAU_MAISON:
-            habitation->niveau = NIVEAU_IMMEUBLE;
-            break;
-        case NIVEAU_IMMEUBLE:
-            habitation->niveau = NIVEAU_GRATTE_CIEL;
-            break;
-        default:
-            break;
+    if (habitation->alimentee_en_eau && habitation->alimentee_en_electricite) {
+        switch (habitation->niveau) {
+            case NIVEAU_TERRAIN_VAGUE:
+                habitation->niveau = NIVEAU_CABANE;
+                break;
+            case NIVEAU_CABANE:
+                habitation->niveau = NIVEAU_MAISON;
+                break;
+            case NIVEAU_MAISON:
+                habitation->niveau = NIVEAU_IMMEUBLE;
+                break;
+            case NIVEAU_IMMEUBLE:
+                habitation->niveau = NIVEAU_GRATTE_CIEL;
+                break;
+            case NIVEAU_RUINE:
+                habitation->niveau = NIVEAU_CABANE;
+                break;
+            default:
+                break;
+        }
+    } else {
+        switch (habitation->niveau) {
+            case NIVEAU_CABANE:
+                habitation->niveau = NIVEAU_RUINE;
+                break;
+            case NIVEAU_MAISON:
+                habitation->niveau = NIVEAU_CABANE;
+                break;
+            case NIVEAU_IMMEUBLE:
+                habitation->niveau = NIVEAU_MAISON;
+                break;
+            case NIVEAU_GRATTE_CIEL:
+                habitation->niveau = NIVEAU_IMMEUBLE;
+                break;
+            default:
+                break;
+        }
     }
 }
 

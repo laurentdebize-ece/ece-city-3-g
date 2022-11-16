@@ -48,6 +48,9 @@ void* liste_supprimer_debut(Liste_t *liste);
 
 void liste_supprimer(Liste_t *liste, void *data);
 
+/// Vide une liste
+void liste_vider(Liste_t* liste);
+
 
 
 #endif //ECECITY_LISTE_H
