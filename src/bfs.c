@@ -9,6 +9,10 @@ typedef struct BFSNode_t {
     int distance;
 } BFSNode_t;
 
+int trier_habitations_par_distance(HabitationNode_t* node, HabitationNode_t* node2) {
+    return node->distance - node2->distance;
+}
+
 HabitationNode_t* node_alloc(Habitation_t* habitation, int distance) {
     HabitationNode_t* node = malloc(sizeof(HabitationNode_t));
     node->habitation = habitation;
@@ -112,4 +116,11 @@ void bfs(SimWorld_t* world, Vector2I start, void* batId, Vector_t* chemins) {
         visited[node->pos.x][node->pos.y] = true;
         free(node);
     }
+
+    // on trie les résultats par distance
+    vector_sort(chemins, trier_habitations_par_distance);
+
+
+    for (int i = 0; i < chemins->taille; ++i)
+        printf("Chemin de d %d vers %x \n\r", ((HabitationNode_t*)chemins->data[i])->distance, chemins->data[i]);
 }
