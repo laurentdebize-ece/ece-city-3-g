@@ -73,6 +73,9 @@ void bfs(SimWorld_t* world, Vector2I start, void* batId, Vector_t* chemins) {
             continue;
         }
 
+        if (world->map[node->pos.x][node->pos.y].type == KIND_ROUTE)
+            world->map[node->pos.x][node->pos.y].connexe = true;
+
         for (int i = -1; i < 2; ++i) {
             for (int j = -1; j < 2; ++j) {
                 if (abs(i) == abs(j)) continue; // On ne veut que les voisins directs "de von neumann"

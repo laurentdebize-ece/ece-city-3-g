@@ -21,13 +21,15 @@ SimWorld_t* sim_world_create(SimRules_t rules, int monnaie) {
         for (int j = 0; j < SIM_MAP_HAUTEUR; j++) {
             world->map[i][j].donnees = NULL;
             world->map[i][j].type = KIND_VIDE;
-            world->map[i][j].discriminant = 0;
+            world->map[i][j].connexe = 0;
         }
     }
 
     world->monnaie = monnaie;
     world->rules = rules;
     world->n_ticks = 0;
+    world->qte_totale_eau = 0;
+    world->qte_totale_electricite = 0;
 }
 
 /// Détruit un monde de simulation.
@@ -43,6 +45,11 @@ void sim_world_step(SimWorld_t* world) {
     world->nb_total_habitants = 0;
     sim_reset_flow_distribution(world);
 
+    world->qte_totale_eau = 0;
+    world->qte_totale_electricite = 0;
+
+
+    /// évolution et récolte des impôts des habitations
     struct Maillon_t *maisons = world->habitations->premier;
     while (maisons) {
         Habitation_t *hab = (Habitation_t *) maisons->data;
@@ -50,6 +57,20 @@ void sim_world_step(SimWorld_t* world) {
         world->nb_total_habitants += habitation_get_nb_habitants(hab);
         maisons = maisons->next;
     }
+
+    /// maj des qte d'eau et d'électricité
+    struct Maillon_t* chateaux = world->chateaux->premier;
+    while (chateaux) {
+        world->qte_totale_eau += ((ChateauEau_t*)chateaux->data)->capacite;
+        chateaux = chateaux->next;
+    }
+
+    struct Maillon_t* centrales = world->centrales->premier;
+    while (centrales) {
+        world->qte_totale_electricite += ((CentraleElectrique_t*)centrales->data)->capacite;
+        centrales = centrales->next;
+    }
+
 
     /// seconde étape: répartition de la capacité d'eau pour les bâtiments (BFS + tri de l'ordre).
     /// troisième étape: répartition de l'électricité pour les bâtiments. (BFS + tri de l'ordre).
@@ -231,6 +252,13 @@ void sim_update_voisins(SimWorld_t* world) {
         ((Habitation_t*)habs->data)->alimentee_en_electricite = false;
         habs = habs->next;
     }
+
+    for (int i = 0; i < SIM_MAP_LARGEUR; ++i) {
+        for (int j = 0; j < SIM_MAP_HAUTEUR; ++j) {
+            world->map[i][j].connexe = false;
+        }
+    }
+
     sim_update_voisins_chateaux(world);
     sim_update_voisins_centrales(world);
 }

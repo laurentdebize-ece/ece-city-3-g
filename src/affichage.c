@@ -61,7 +61,8 @@ void affichage_draw_terrain_background(SpriteSheet_t *sheet, SimWorld_t *world) 
             switch (world->map[i][j].type) {
 
                 case KIND_ROUTE:
-                    sprite_sheet_draw_sprite(sheet, get_route_sprite_variant(world, i, j), WHITE, i, j);
+                    Color col = (world->map[i][j].connexe) ? PINK : WHITE;
+                    sprite_sheet_draw_sprite(sheet, get_route_sprite_variant(world, i, j), col, i, j);
                     break;
 
                 default:
