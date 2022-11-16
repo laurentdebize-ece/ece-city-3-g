@@ -6,6 +6,7 @@
 
 void try_place_building(GameplayScreen_t *gameplay);
 void draw_debug_info(GameplayScreen_t *gameplay);
+void update_debug_info(GameplayScreen_t *gameplay);
 
 
 GameplayScreen_t *gameplay_create_screen() {
@@ -61,17 +62,7 @@ void gameplay_update(Jeu_t *jeu, GameplayScreen_t *gameplay) {
 
 
     /// menus de débogage.
-
-    if (IsKeyPressed(KEY_H)) {
-        gameplay->dbgDisplayChateauNeighbors = (gameplay->dbgDisplayChateauNeighbors + 1) % (gameplay->world->chateaux->taille + 1);
-    }
-
-    if (IsKeyPressed(KEY_C)) {
-        gameplay->dbgDisplayCentraleNeighbors = (gameplay->dbgDisplayCentraleNeighbors + 1) % (gameplay->world->centrales->taille + 1);
-    }
-
-    gameplay->dbgDisplayChateauNeighbors = MIN(gameplay->dbgDisplayChateauNeighbors, gameplay->world->chateaux->taille + 1);
-    gameplay->dbgDisplayCentraleNeighbors = MIN(gameplay->dbgDisplayCentraleNeighbors, gameplay->world->centrales->taille + 1);
+    update_debug_info(gameplay);
 }
 
 void gameplay_draw(Jeu_t *jeu, GameplayScreen_t *gameplay) {
@@ -136,6 +127,20 @@ void try_place_building(GameplayScreen_t *gameplay) {
             default:
                 break;
         }
+}
+
+
+void update_debug_info(GameplayScreen_t* gameplay) {
+    if (IsKeyPressed(KEY_H)) {
+        gameplay->dbgDisplayChateauNeighbors = (gameplay->dbgDisplayChateauNeighbors + 1) % (gameplay->world->chateaux->taille + 1);
+    }
+
+    if (IsKeyPressed(KEY_C)) {
+        gameplay->dbgDisplayCentraleNeighbors = (gameplay->dbgDisplayCentraleNeighbors + 1) % (gameplay->world->centrales->taille + 1);
+    }
+
+    gameplay->dbgDisplayChateauNeighbors = MIN(gameplay->dbgDisplayChateauNeighbors, gameplay->world->chateaux->taille + 1);
+    gameplay->dbgDisplayCentraleNeighbors = MIN(gameplay->dbgDisplayCentraleNeighbors, gameplay->world->centrales->taille + 1);
 }
 
 void draw_debug_info(GameplayScreen_t *gameplay) {
