@@ -1,6 +1,18 @@
 #include <stdio.h>
 #include "bfs.h"
 
+void bfs_connexite_eau(SimWorld_t* world, Vector2I start) {
+    if (world->map[start.x][start.y].type == KIND_ROUTE) {
+        world->map[start.x][start.y].connexe_eau = true;
+    }
+}
+
+void bfs_connexite_elec(SimWorld_t* world, Vector2I start) {
+    if (world->map[start.x][start.y].type == KIND_ROUTE) {
+        world->map[start.x][start.y].connexe_elec = true;
+    }
+}
+
 /// Un noeud pour le parcours en largeur.
 typedef struct BFSNode_t {
     /// La position du noeud.
@@ -41,7 +53,7 @@ void tryUpdateChemin(Vector_t* vecteur, int d, void* data) {
 
 
 //todo: trier les résultats par ordre de distance.
-void bfs(SimWorld_t* world, Vector2I start, void* batId, Vector_t* chemins) {
+void bfs(SimWorld_t* world, Vector2I start, void* batId, Vector_t* chemins, void (*visiteur)(SimWorld_t* world, Vector2I pos)) {
 
     BFSNode_t *start_node = bfs_node_alloc(start, 0);
     bool visited[SIM_MAP_LARGEUR][SIM_MAP_HAUTEUR] = {false};
@@ -77,8 +89,8 @@ void bfs(SimWorld_t* world, Vector2I start, void* batId, Vector_t* chemins) {
             continue;
         }
 
-        if (world->map[node->pos.x][node->pos.y].type == KIND_ROUTE)
-            world->map[node->pos.x][node->pos.y].connexe = true;
+        if (visiteur)
+            visiteur(world, node->pos);
 
         for (int i = -1; i < 2; ++i) {
             for (int j = -1; j < 2; ++j) {

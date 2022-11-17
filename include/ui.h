@@ -5,6 +5,11 @@
 #include <raylib.h>
 #include "sim/sim.h"
 
+enum AffichageNiveaux {
+    AFFICHAGE_NIVEAUX_AUCUN = 0,
+    AFFICHAGE_NIVEAUX_EAU = (1 << 0),
+    AFFICHAGE_NIVEAUX_ELEC = (1 << 1),
+};
 
 typedef enum BuildMode {
     BUILD_MODE_NONE,
@@ -34,12 +39,13 @@ enum TOOLBAR_ICON {
     ICON_NB_LOGOS_TOOLBAR
 };
 
-
 /// Contient l'état de l'interface utilisateur.
 typedef struct UIState {
     Texture2D toolbarIcons[ICON_NB_LOGOS_TOOLBAR];
     /// Mode de construction actuel
     enum BuildMode currentBuildMode;
+    /// Affichage des niveaux d'eau et d'électricité
+    enum AffichageNiveaux affichageNiveaux;
     /// Multiplicateur de vitesse de jeu
     float timeScale;
 } UIState;

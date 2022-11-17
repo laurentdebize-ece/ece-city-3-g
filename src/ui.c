@@ -39,8 +39,8 @@ void ui_draw_toolbar(UIState* textures, SimWorld_t* sim) {
     DrawTexture(textures->toolbarIcons[ICON_HAMBURGER], 26, 954, WHITE);
     DrawTexture(textures->toolbarIcons[ICON_SAVE], 109, 954, WHITE);
     DrawTexture(textures->toolbarIcons[ICON_PEOPLE], 211, 954, WHITE);
-    DrawTexture(textures->toolbarIcons[ICON_ENERGY], 446, 954, WHITE);
-    DrawTexture(textures->toolbarIcons[ICON_WATER], 668, 954, WHITE);
+    DrawTexture(textures->toolbarIcons[ICON_ENERGY], 446, 954, textures->affichageNiveaux == AFFICHAGE_NIVEAUX_ELEC ? YELLOW : WHITE);
+    DrawTexture(textures->toolbarIcons[ICON_WATER], 668, 954, textures->affichageNiveaux == AFFICHAGE_NIVEAUX_EAU ? YELLOW : WHITE);
     DrawTexture(textures->toolbarIcons[ICON_BUILD], 892, 954, WHITE);
     DrawTexture(textures->toolbarIcons[ICON_DESTROY], 1376, 954, textures->currentBuildMode == BUILD_MODE_DESTROY ? YELLOW : WHITE);
 
@@ -96,12 +96,18 @@ void ui_update_toolbar(UIState* textures, SimWorld_t* sim) {
 
         if (CheckCollisionPointRec(mousePos, (Rectangle) {446, 954, textures->toolbarIcons[ICON_ENERGY].width,
                                                           textures->toolbarIcons[ICON_ENERGY].height})) {
-            printf("Energy\n");
+            if (textures->affichageNiveaux == AFFICHAGE_NIVEAUX_ELEC)
+                textures->affichageNiveaux = AFFICHAGE_NIVEAUX_AUCUN;
+            else
+                textures->affichageNiveaux = AFFICHAGE_NIVEAUX_ELEC;
         }
 
         if (CheckCollisionPointRec(mousePos, (Rectangle) {668, 954, textures->toolbarIcons[ICON_WATER].width,
                                                           textures->toolbarIcons[ICON_WATER].height})) {
-            printf("Water\n");
+            if (textures->affichageNiveaux == AFFICHAGE_NIVEAUX_EAU)
+                textures->affichageNiveaux = AFFICHAGE_NIVEAUX_AUCUN;
+            else
+                textures->affichageNiveaux = AFFICHAGE_NIVEAUX_EAU;
         }
 
         if (CheckCollisionPointRec(mousePos, (Rectangle) {892, 954, textures->toolbarIcons[ICON_BUILD].width,

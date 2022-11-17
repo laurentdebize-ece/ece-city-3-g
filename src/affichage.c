@@ -55,14 +55,20 @@ enum SPRITE_MAP get_route_sprite_variant(SimWorld_t *eceCity, int x, int y) {
     return SPRITE_ROUTE_0;
 }
 
-void affichage_draw_terrain_background(SpriteSheet_t *sheet, SimWorld_t *world) {
+void affichage_draw_terrain_background(SpriteSheet_t *sheet, SimWorld_t *world, bool connexite_eau, bool connexite_elec) {
     for (int i = 0; i < 45; ++i) {
         for (int j = 0; j < 35; ++j) {
             switch (world->map[i][j].type) {
 
                 case KIND_ROUTE:
-                    Color col = (world->map[i][j].connexe) ? PINK : WHITE;
-                    sprite_sheet_draw_sprite(sheet, get_route_sprite_variant(world, i, j), col, i, j);
+                    Color couleur = WHITE;
+
+                    if (connexite_eau && world->map[i][j].connexe_eau)
+                        couleur = BLUE;
+                    else if (connexite_elec && world->map[i][j].connexe_elec)
+                        couleur = YELLOW;
+
+                    sprite_sheet_draw_sprite(sheet, get_route_sprite_variant(world, i, j), couleur, i, j);
                     break;
 
                 default:

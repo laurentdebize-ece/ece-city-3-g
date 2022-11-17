@@ -68,9 +68,19 @@ void gameplay_update(Jeu_t *jeu, GameplayScreen_t *gameplay) {
 
 void gameplay_draw(Jeu_t *jeu, GameplayScreen_t *gameplay) {
 
-    affichage_draw_terrain_background(&gameplay->spriteSheet, gameplay->world);
+    affichage_draw_terrain_background(&gameplay->spriteSheet, gameplay->world, gameplay->state.affichageNiveaux == AFFICHAGE_NIVEAUX_EAU, gameplay->state.affichageNiveaux == AFFICHAGE_NIVEAUX_ELEC);
     affichage_draw_entities(&gameplay->spriteSheet, gameplay->world,
                             gameplay->state.currentBuildMode == BUILD_MODE_ROUTE ? LAYER_ROUTES : LAYER_ALL);
+
+    if (gameplay->state.affichageNiveaux == AFFICHAGE_NIVEAUX_EAU) {
+        afficher_level_eau(&gameplay->spriteSheet, gameplay->world);
+        afficher_etat_alim_eau(&gameplay->spriteSheet, gameplay->world);
+        afficher_capacite(gameplay->world, false);
+    } else if (gameplay->state.affichageNiveaux == AFFICHAGE_NIVEAUX_ELEC) {
+        afficher_level_elec(&gameplay->spriteSheet, gameplay->world, gameplay);
+        afficher_etat_alim_elec(&gameplay->spriteSheet, gameplay->world);
+        afficher_capacite(gameplay->world, true);
+    }
 
     Vector2I v = mouse_to_iso((Vector2I) {GetMouseX(), GetMouseY()}, gameplay->spriteSheet.spriteDetectionTuile);
 
@@ -78,14 +88,9 @@ void gameplay_draw(Jeu_t *jeu, GameplayScreen_t *gameplay) {
         affichage_draw_build_preview(&gameplay->spriteSheet, gameplay->world, v,
                                      ui_buildmode_to_casekind(gameplay->state.currentBuildMode));
 
-
     draw_debug_info(gameplay);
 
-
     ui_draw_toolbar(&gameplay->state, gameplay->world);
-
-    afficher_etat_alim_eau(&gameplay->spriteSheet, gameplay->world);
-    afficher_etat_alim_elec(&gameplay->spriteSheet, gameplay->world);
 }
 
 void try_place_building(GameplayScreen_t *gameplay) {
