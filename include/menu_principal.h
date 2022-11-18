@@ -13,6 +13,14 @@ typedef struct MenuPrincipal_t {
     Texture2D texture_fond;
     Texture2D texture_logo;
     int nbClique;
+    Rectangle boxNouvellePartie;
+    Rectangle boxChargerPartie;
+    Rectangle textBoxJouer;
+    Rectangle textBoxRegles;
+    Rectangle textBoxCredits;
+    Rectangle textBoxRetour;
+    Rectangle boxCommuniste ;
+    Rectangle boxCapitaliste;
 } MenuPrincipal_t;
 
 MenuPrincipal_t* menu_principal_alloc();

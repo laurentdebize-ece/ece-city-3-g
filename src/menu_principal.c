@@ -13,153 +13,151 @@ MenuPrincipal_t* menu_principal_alloc() {
 
 void menu_principal_draw(Jeu_t* jeu, MenuPrincipal_t* menu) {
     bool SourisSurTexte;
-    Rectangle textBoxJouer = {50, 200, 280, 85};
-    Rectangle textBoxRegles = {50, 380, 300, 85};
-    Rectangle textBoxCredits = {50, 560, 325, 85};
-    Rectangle textBoxRetour = {15, 710, 165, 50};
-    Rectangle boxCommuniste = {100, 200, 300, 150};
-    Rectangle boxCapitaliste = {650, 200, 300, 150};
-    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) menu->nbClique++;
-
-
     DrawTexture(menu->texture_fond, 0, 0, WHITE);
-
-
     switch (menu->nbClique) {
             case 0:
-                if(CheckCollisionPointRec(GetMousePosition(), textBoxJouer) ||
-                   CheckCollisionPointRec(GetMousePosition(), textBoxCredits) ||
-                   CheckCollisionPointRec(GetMousePosition(), textBoxRegles)) {
+                if(CheckCollisionPointRec(GetMousePosition(), menu->textBoxJouer) ||
+                   CheckCollisionPointRec(GetMousePosition(), menu->textBoxCredits) ||
+                   CheckCollisionPointRec(GetMousePosition(), menu->textBoxRegles)) {
                     SourisSurTexte = true;
                 }
                 else{
                     SourisSurTexte = false;
-                    DrawTextEx(menu->font_ttf, "JOUER", (Vector2) {52, 206}, 88, 8, ORANGE);
-                    DrawTextEx(menu->font_ttf, "JOUER", (Vector2) {57, 205}, 82, 10, WHITE);
-                    DrawTextEx(menu->font_ttf, "REGLES", (Vector2 ) {50, 386}, 88, 8, ORANGE);
-                    DrawTextEx(menu->font_ttf, "REGLES", (Vector2 ) {57, 385}, 82, 10, WHITE);
-                    DrawTextEx(menu->font_ttf, "CREDITS",(Vector2) {51, 566}, 88,8, ORANGE);
-                    DrawTextEx(menu->font_ttf, "CREDITS",(Vector2) {57, 565}, 82, 10, WHITE);
-                    DrawRectangle(18, 597, 12, 12, ORANGE);
-                    DrawRectangle(18, 237, 12, 12, ORANGE);
-                    DrawRectangle(18, 417, 12, 12, ORANGE);
-                    DrawRectangle(20, 235, 10, 10, WHITE);
-                    DrawRectangle(20, 415, 10, 10, WHITE);
-                    DrawRectangle(20, 595, 10, 10, WHITE);
+                    DrawTextEx(menu->font_ttf, "JOUER", (Vector2) {52, 256}, 150, 8, ORANGE);
+                    DrawTextEx(menu->font_ttf, "JOUER", (Vector2) {57, 255}, 146, 10, WHITE);
+                    DrawTextEx(menu->font_ttf, "REGLES", (Vector2 ) {50, 486}, 150, 8, ORANGE);
+                    DrawTextEx(menu->font_ttf, "REGLES", (Vector2 ) {57, 485}, 146, 10, WHITE);
+                    DrawTextEx(menu->font_ttf, "CREDITS",(Vector2) {51, 766}, 150,8, ORANGE);
+                    DrawTextEx(menu->font_ttf, "CREDITS",(Vector2) {57, 765}, 146, 10, WHITE);
+
                 }
 
                 if(SourisSurTexte) {
 
-                    if (CheckCollisionPointRec(GetMousePosition(), textBoxJouer)) {
-                        DrawTextEx(menu->font_ttf, "JOUER", (Vector2) {60, 208}, 110, 10, ORANGE);
-                        DrawTextEx(menu->font_ttf, "JOUER", (Vector2) {70, 205}, 105, 10, WHITE);
-                        DrawTextEx(menu->font_ttf, "REGLES", (Vector2) {50, 386}, 88, 8, ORANGE);
-                        DrawTextEx(menu->font_ttf, "REGLES", (Vector2) {57, 385}, 82, 10, WHITE);
-                        DrawTextEx(menu->font_ttf, "CREDITS", (Vector2) {51, 566}, 88, 8, ORANGE);
-                        DrawTextEx(menu->font_ttf, "CREDITS", (Vector2) {57, 565}, 82, 10, WHITE);
-                        DrawRectangle(18, 237, 12, 12, ORANGE);
-                        DrawRectangle(20, 235, 10, 10, WHITE);
-                        DrawRectangle(18, 417, 12, 12, ORANGE);
-                        DrawRectangle(20, 415, 10, 10, WHITE);
-                        DrawRectangle(18, 597, 12, 12, ORANGE);
-                        DrawRectangle(20, 595, 10, 10, WHITE);
+                    if (CheckCollisionPointRec(GetMousePosition(), menu->textBoxJouer)) {
+                        DrawTextEx(menu->font_ttf, "JOUER", (Vector2) {45, 260}, 190, 10, ORANGE);
+                        DrawTextEx(menu->font_ttf, "JOUER", (Vector2) {57, 255}, 190, 10, WHITE);
+                        DrawTextEx(menu->font_ttf, "REGLES", (Vector2) {50, 486}, 150, 8, ORANGE);
+                        DrawTextEx(menu->font_ttf, "REGLES", (Vector2) {57, 485}, 146, 10, WHITE);
+                        DrawTextEx(menu->font_ttf, "CREDITS", (Vector2) {51, 766}, 150, 8, ORANGE);
+                        DrawTextEx(menu->font_ttf, "CREDITS", (Vector2) {57, 765}, 146, 10, WHITE);
                     }
-                    if (CheckCollisionPointRec(GetMousePosition(), textBoxRegles)) {
-                        DrawTextEx(menu->font_ttf, "REGLES", (Vector2) {60, 388}, 92, 10, ORANGE);
-                        DrawTextEx(menu->font_ttf, "REGLES", (Vector2) {70, 385}, 92, 10, WHITE);
-                        DrawTextEx(menu->font_ttf, "JOUER", (Vector2) {52, 206}, 88, 8, ORANGE);
-                        DrawTextEx(menu->font_ttf, "JOUER", (Vector2) {57, 205}, 82, 10, WHITE);
-                        DrawTextEx(menu->font_ttf, "CREDITS", (Vector2) {51, 566}, 88, 8, ORANGE);
-                        DrawTextEx(menu->font_ttf, "CREDITS", (Vector2) {57, 565}, 82, 10, WHITE);;
-                        DrawRectangle(18, 417, 12, 12, ORANGE);
-                        DrawRectangle(20, 415, 10, 10, WHITE);
-                        DrawRectangle(18, 597, 12, 12, ORANGE);
-                        DrawRectangle(20, 595, 10, 10, WHITE);
-                        DrawRectangle(18, 237, 12, 12, ORANGE);
-                        DrawRectangle(20, 235, 10, 10, WHITE);
+                    if (CheckCollisionPointRec(GetMousePosition(), menu->textBoxRegles)) {
+                        DrawTextEx(menu->font_ttf, "REGLES", (Vector2) {47, 490}, 190, 10, ORANGE);
+                        DrawTextEx(menu->font_ttf, "REGLES", (Vector2) {57, 485}, 190, 10, WHITE);
+                        DrawTextEx(menu->font_ttf, "JOUER", (Vector2) {52, 256}, 150, 8, ORANGE);
+                        DrawTextEx(menu->font_ttf, "JOUER", (Vector2) {57, 255}, 146, 10, WHITE);
+                        DrawTextEx(menu->font_ttf, "CREDITS", (Vector2) {51, 766}, 150, 8, ORANGE);
+                        DrawTextEx(menu->font_ttf, "CREDITS", (Vector2) {57, 765}, 146, 10, WHITE);;
+
                     }
-                    if (CheckCollisionPointRec(GetMousePosition(), textBoxCredits)) {
-                        DrawTextEx(menu->font_ttf, "CREDITS", (Vector2) {60, 568}, 92, 10, ORANGE);
-                        DrawTextEx(menu->font_ttf, "CREDITS", (Vector2) {70, 565}, 92, 10, WHITE);
-                        DrawTextEx(menu->font_ttf, "JOUER", (Vector2) {52, 206}, 88, 8, ORANGE);
-                        DrawTextEx(menu->font_ttf, "JOUER", (Vector2) {57, 205}, 82, 10, WHITE);
-                        DrawTextEx(menu->font_ttf, "REGLES", (Vector2) {50, 386}, 88, 8, ORANGE);
-                        DrawTextEx(menu->font_ttf, "REGLES", (Vector2) {57, 385}, 82, 10, WHITE);
-                        DrawRectangle(18, 597, 12, 12, ORANGE);
-                        DrawRectangle(20, 595, 10, 10, WHITE);
-                        DrawRectangle(18, 237, 12, 12, ORANGE);
-                        DrawRectangle(20, 235, 10, 10, WHITE);
-                        DrawRectangle(18, 417, 12, 12, ORANGE);
-                        DrawRectangle(20, 415, 10, 10, WHITE);
+                    if (CheckCollisionPointRec(GetMousePosition(), menu->textBoxCredits)) {
+                        DrawTextEx(menu->font_ttf, "CREDITS", (Vector2) {47, 770}, 190, 10, ORANGE);
+                        DrawTextEx(menu->font_ttf, "CREDITS", (Vector2) {57, 765}, 190, 10, WHITE);
+                        DrawTextEx(menu->font_ttf, "JOUER", (Vector2) {52, 256}, 150, 8, ORANGE);
+                        DrawTextEx(menu->font_ttf, "JOUER", (Vector2) {57, 255}, 146, 10, WHITE);
+                        DrawTextEx(menu->font_ttf, "REGLES", (Vector2) {50, 486}, 150, 8, ORANGE);
+                        DrawTextEx(menu->font_ttf, "REGLES", (Vector2) {57, 485}, 146, 10, WHITE);
                     }
                 }
                 break;
 
             case 1:
-                DrawTexture(menu->texture_fond, 0, 0, WHITE);
-                DrawRectangle(15, 710, 165, 50, LIGHTGRAY);
-                DrawTextEx(menu->font_ttf, "CHOISIR LE MODE", (Vector2) {210, 520}, 92, 10, ORANGE);
-                DrawTextEx(menu->font_ttf, "CHOISIR LE MODE", (Vector2) {220, 520}, 92, 10, WHITE);
-                DrawTextEx(menu->font_ttf, "Retour", (Vector2){30, 720}, 45, 5, GRAY);
-                DrawRectangle(100, 200, 300, 150, SKYBLUE);
-                DrawRectangle(650, 200, 300, 150, SKYBLUE);
-                DrawTextEx(menu->font_ttf, "COMMUNISTE", (Vector2){120, 250}, 50, 5, WHITE);
-                DrawTextEx(menu->font_ttf, "CAPITALISTE", (Vector2){670, 250}, 50, 5, WHITE);
+                DrawTextEx(menu->font_ttf, "NOUVELLE PARTIE", (Vector2){650, 260}, 80, 8, ORANGE);
+                DrawTextEx(menu->font_ttf, "NOUVELLE PARTIE", (Vector2){655, 255}, 80, 8, WHITE);
+                DrawTextEx(menu->font_ttf, "CHARGER PARTIE", (Vector2){650, 350}, 80, 8, ORANGE);
+                DrawTextEx(menu->font_ttf, "CHARGER PARTIE", (Vector2){655, 345}, 80, 8, WHITE);
+                DrawCircle(628, 285, 5, ORANGE);
+                DrawCircle(628, 382, 5, ORANGE);
+                DrawCircle(630, 284, 5, WHITE);
+                DrawCircle(630, 381, 5, WHITE);
+                DrawTextEx(menu->font_ttf, "JOUER", (Vector2) {52, 256}, 150, 8, ORANGE);
+                DrawTextEx(menu->font_ttf, "JOUER", (Vector2) {57, 255}, 146, 10, WHITE);
+                DrawTextEx(menu->font_ttf, "REGLES", (Vector2) {50, 486}, 150, 8, ORANGE);
+                DrawTextEx(menu->font_ttf, "REGLES", (Vector2) {57, 485}, 146, 10, WHITE);
+                DrawTextEx(menu->font_ttf, "CREDITS", (Vector2) {51, 766}, 150, 8, ORANGE);
+                DrawTextEx(menu->font_ttf, "CREDITS", (Vector2) {57, 765}, 146, 10, WHITE);
 
-            if (CheckCollisionPointRec(GetMousePosition(), textBoxRetour)){
-                    DrawRectangle(10, 695, 185, 70, DARKGRAY);
-                    DrawRectangle(15, 700 ,175, 60, LIGHTGRAY);
-                    DrawTextEx(menu->font_ttf, "Retour", (Vector2){30, 712}, 50, 5, GRAY);
-                }
-            if (CheckCollisionPointRec(GetMousePosition(), boxCommuniste)){
-                DrawRectangle(100, 200, 300, 150, BLUE);
-                DrawTextEx(menu->font_ttf, "COMMUNISTE", (Vector2){120, 250}, 50, 5, WHITE);
+            if (CheckCollisionPointRec(GetMousePosition(), menu->textBoxRetour)){
+                    DrawRectangle(10, 915, 220, 90, DARKGRAY);
+                    DrawRectangle(15, 920,210, 80, LIGHTGRAY);
+                    DrawTextEx(menu->font_ttf, "Retour", (Vector2){25, 935}, 65, 5, GRAY);
             }
-            if(CheckCollisionPointRec(GetMousePosition(), boxCapitaliste)){
-                DrawRectangle(650, 200, 300, 150, BLUE);
-                DrawTextEx(menu->font_ttf, "CAPITALISTE", (Vector2){670, 250}, 50, 5, WHITE);
+            if (CheckCollisionPointRec(GetMousePosition(), menu->textBoxRegles) && IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
+                DrawTextEx(menu->font_ttf, "REGLES", (Vector2) {47, 490}, 190, 10, ORANGE);
+                DrawTextEx(menu->font_ttf, "REGLES", (Vector2) {57, 485}, 190, 10, WHITE);
+            }
+            if (CheckCollisionPointRec(GetMousePosition(), menu->textBoxCredits) && IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
+                menu->nbClique = 3;
             }
             break;
 
             case 2:
-                DrawRectangle(30, 10, 964, 628, SKYBLUE);
-                DrawTextEx(menu->font_ttf, "LES REGLES DU JEU :", (Vector2){275, 20}, 60, 5, WHITE);
-            DrawTextEx(menu->font_ttf, "\tDans ce jeu vous etes le maire de la ville ECE-city en charge\ndu bien-etre de ses citoyens."
+                DrawRectangle(30, 10, 1540, 900, SKYBLUE);
+                DrawTextEx(menu->font_ttf, "LES REGLES DU JEU :", (Vector2){430, 20}, 90, 5, WHITE);
+                DrawTextEx(menu->font_ttf, "\tDans ce jeu vous etes le maire de la ville ECE-city en charge\ndu bien-etre de ses citoyens."
                                        " Vous avez le pouvoir de construire \ndes infrastructures (routes lignes electriques"
                                        " canalisation) et \ndes batiments (centrales electriques,\n"
-                                       "caserne de pompiers...).\n\n"
+                                       "caserne de pompiers...).\n"
                                        "\tToutes ces taches seront a realiser en gerant un budget serre \nqui doit equilibrer les"
-                                       " depenses liees a ces constructions et\nles recettes liees aux impots et taxes.\n\n"
-                                       "\tPour une partie deux modes sont disponibles : communiste\net capitaliste.", (Vector2){70, 100}, 30, 3, WHITE);
-                DrawRectangle(15, 710, 165, 50, LIGHTGRAY);
-                DrawTextEx(menu->font_ttf, "Retour", (Vector2){30, 720}, 45, 5, GRAY);
-                if (CheckCollisionPointRec(GetMousePosition(), textBoxRetour)){
-                    DrawRectangle(10, 695, 185, 70, DARKGRAY);
-                    DrawRectangle(15, 700 ,175, 60, LIGHTGRAY);
-                    DrawTextEx(menu->font_ttf, "Retour", (Vector2){30, 712}, 50, 5, GRAY);
+                                       " depenses liees a ces constructions et\nles recettes liees aux impots et taxes.\n"
+                                        "\tPour une partie deux modes sont disponibles : communiste\net capitaliste.", (Vector2){50, 110}, 50, 5, WHITE);
+                DrawRectangle(15, 930, 205, 70, LIGHTGRAY);
+                DrawTextEx(menu->font_ttf, "Retour", (Vector2){25, 940}, 65, 5, GRAY);
+                if (CheckCollisionPointRec(GetMousePosition(), menu->textBoxRetour)){
+                    DrawRectangle(10, 915, 220, 90, DARKGRAY);
+                    DrawRectangle(15, 920,210, 80, LIGHTGRAY);
+                    DrawTextEx(menu->font_ttf, "Retour", (Vector2){25, 935}, 65, 5, GRAY);
                 }
             break;
 
             case 3:
-                DrawRectangle(30, 10, 964, 628, SKYBLUE);
-                DrawTextEx(menu->font_ttf, "LUCAS ARRIESSE", (Vector2){60, 220}, 50, 5, WHITE);
-                DrawTextEx(menu->font_ttf, "EMMA BATHEROSSE", (Vector2){570, 220}, 50, 5, WHITE);
-                DrawTextEx(menu->font_ttf, "LUCA SOLER", (Vector2){110, 580}, 50, 5, WHITE);
-                DrawTextEx(menu->font_ttf, "JULES FEDIT", (Vector2){640, 580}, 50, 5, WHITE);
-                DrawRectangle(15, 710, 165, 50, LIGHTGRAY);
-                DrawTextEx(menu->font_ttf, "Retour", (Vector2){30, 720}, 45, 5, GRAY);
-                if (CheckCollisionPointRec(GetMousePosition(), textBoxRetour)){
-                    DrawRectangle(10, 695, 185, 70, DARKGRAY);
-                    DrawRectangle(15, 700 ,175, 60, LIGHTGRAY);
-                    DrawTextEx(menu->font_ttf, "Retour", (Vector2){30, 712}, 50, 5, GRAY);
+                DrawRectangle(30, 10, 1540, 900, SKYBLUE);
+                DrawTextEx(menu->font_ttf, "CREDITS :", (Vector2){630, 20}, 90, 5, WHITE);
+                DrawTextEx(menu->font_ttf, "\n\tCe jeu a ete realise dans le cadre du projet informatique du \npremier semestre de deuxieme annee"
+                                           " d'ecole d'ingenieur a l'ECE.\nL'entierete de ce jeu a ete concu et implemente par l'equipe \n"
+                                           "3G qui est composee de :\n", (Vector2){45, 110}, 50, 5, WHITE);
+                DrawTextEx(menu->font_ttf, "- LUCAS ARRIESSE\n- LUCA SOLER\n- EMMA BATHEROSSE\n- JULES FEDIT", (Vector2){650, 500}, 50, 5, WHITE);
+                DrawRectangle(15, 930, 205, 70, LIGHTGRAY);
+                DrawTextEx(menu->font_ttf, "Retour", (Vector2){25, 940}, 65, 5, GRAY);
+                if (CheckCollisionPointRec(GetMousePosition(), menu->textBoxRetour)){
+                    DrawRectangle(10, 915, 220, 90, DARKGRAY);
+                    DrawRectangle(15, 920,210, 80, LIGHTGRAY);
+                    DrawTextEx(menu->font_ttf, "Retour", (Vector2){25, 935}, 65, 5, GRAY);
                 }
             break;
 
             case 4:
-                DrawRectangle(0, 0, 1024, 768, BLACK);
+                DrawRectangle(0, 0, 1600, 1024, BLACK);
             break;
             case 5:
-                DrawRectangle(0, 0, 1024, 768, BLACK);
+                DrawRectangle(0, 0, 1600, 1024, BLACK);
+            break;
+            case 6:
+                DrawRectangle(15, 930, 205, 70, LIGHTGRAY);
+                DrawTextEx(menu->font_ttf, "CHOISIR LE MODE", (Vector2) {457, 700}, 92, 10, ORANGE);
+                DrawTextEx(menu->font_ttf, "CHOISIR LE MODE", (Vector2) {460, 690}, 92, 10, WHITE);
+                DrawTextEx(menu->font_ttf, "Retour", (Vector2){25, 940}, 65, 5, GRAY);
+                DrawRectangle(200, 400, 450, 200, SKYBLUE);
+                DrawRectangle(950, 400, 450, 200, SKYBLUE);
+                DrawTextEx(menu->font_ttf, "CAPITALISTE", (Vector2){220, 465}, 85, 5, WHITE);
+                DrawTextEx(menu->font_ttf, "COMMUNISTE", (Vector2){970, 465}, 85, 5, WHITE);
+                if (CheckCollisionPointRec(GetMousePosition(), menu->textBoxRetour)){
+                    DrawRectangle(10, 915, 220, 90, DARKGRAY);
+                    DrawRectangle(15, 920,210, 80, LIGHTGRAY);
+                    DrawTextEx(menu->font_ttf, "Retour", (Vector2){25, 935}, 65, 5, GRAY);
+                }
+                if (CheckCollisionPointRec(GetMousePosition(), menu->boxCapitaliste)){
+                    DrawRectangle(200, 400, 450, 200, DARKBLUE);
+                    DrawTextEx(menu->font_ttf, "CAPITALISTE", (Vector2){220, 465}, 85, 5, WHITE);
+                }
+                if (CheckCollisionPointRec(GetMousePosition(), menu->boxCommuniste)){
+                    DrawRectangle(950, 400, 450, 200, DARKBLUE);
+                    DrawTextEx(menu->font_ttf, "COMMUNISTE", (Vector2){970, 465}, 85, 5, WHITE);
+                }
+            break;
+            case 7:
+                DrawRectangle(0, 0, 1600, 1024, BLACK);
             break;
             default:
                 break;
@@ -168,16 +166,46 @@ void menu_principal_draw(Jeu_t* jeu, MenuPrincipal_t* menu) {
     }
 
 void menu_principal_update(Jeu_t* jeu, MenuPrincipal_t* menu) {
+    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(GetMousePosition(), menu->textBoxJouer)){
+        menu->nbClique = 1;
+    }
+    else if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(GetMousePosition(), menu->textBoxRegles)){
+        menu->nbClique = 2;
+    }
+    else if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(GetMousePosition(), menu->textBoxCredits)){
+        menu->nbClique = 3;
+    }
+    else if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(GetMousePosition(), menu->boxCapitaliste)){
+        menu->nbClique = 4;
+    }
+    else if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(GetMousePosition(), menu->boxCommuniste)){
+        menu->nbClique = 5;
+    }
+    else if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(GetMousePosition(), menu->textBoxRetour)){
+        menu->nbClique = 0;
+    }
+    else if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(GetMousePosition(), menu->boxNouvellePartie)){
+        menu->nbClique = 6;
+    }
+    else if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(GetMousePosition(), menu->boxChargerPartie)){
+        menu->nbClique = 7;
+    }
+
 }
 
 // les trucs a charger au lancement du jeu vont la
 void menu_principal_enter(Jeu_t* jeu, MenuPrincipal_t* menu) {
     menu->nbClique = 0;
+    menu->boxNouvellePartie = (Rectangle){655, 255, 570, 65};
+    menu->boxChargerPartie = (Rectangle){650, 350, 545, 65};
+    menu->textBoxJouer = (Rectangle){52, 256, 330, 100};
+    menu->textBoxRegles = (Rectangle){50, 486, 390, 100};
+    menu->textBoxCredits = (Rectangle){50, 766, 440, 100};
+    menu->textBoxRetour = (Rectangle){15, 930, 205, 70};
+    menu->boxCommuniste = (Rectangle){950, 400, 450, 200};
+    menu->boxCapitaliste = (Rectangle){200, 400, 450, 200};
     menu->font_ttf = LoadFontEx("../assets/font/daddy-day.ttf", 36, NULL, 0);
-    menu->texture_fond = LoadTexture("../assets/texture/Mon projet.png");
-    menu->texture_logo = LoadTexture("../assets/texture/logo_simcity (1).png");
-    menu->texture_EA = LoadTexture("../assets/texture/Electronic-Arts-Logo.png");
-    menu->texture_loading = LoadTexture("../assets/texture/fond_loading.png");
+    menu->texture_fond = LoadTexture("../assets/textures/menu/fond_menu.png");
 }
 
 // les trucs a supprimer a la fermeture du jeu vont la
