@@ -31,7 +31,7 @@ typedef struct GameplayScreen_t {
 } GameplayScreen_t;
 
 /// Crée un écran de gameplay prêt à être utilisé.
-GameplayScreen_t* gameplay_create_screen();
+GameplayScreen_t* gameplay_create_screen(SimWorld_t* world);
 
 void gameplay_on_enter(Jeu_t* jeu, GameplayScreen_t *gameplay);
 

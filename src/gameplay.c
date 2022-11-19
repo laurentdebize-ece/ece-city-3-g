@@ -11,7 +11,7 @@ void draw_debug_info(GameplayScreen_t *gameplay);
 void update_debug_info(GameplayScreen_t *gameplay);
 
 
-GameplayScreen_t *gameplay_create_screen() {
+GameplayScreen_t *gameplay_create_screen(SimWorld_t* world) {
     GameplayScreen_t *gameplay = malloc(sizeof(GameplayScreen_t));
     gameplay->screen_info = (ScreenInfo_t) {
             .draw_callback = gameplay_draw,
@@ -20,11 +20,11 @@ GameplayScreen_t *gameplay_create_screen() {
             .on_exit_callback = gameplay_on_exit,
             .screen_name = "GAMEPLAY"
     };
+    gameplay->world = world;
     return gameplay;
 }
 
 void gameplay_on_enter(Jeu_t *jeu, GameplayScreen_t *gameplay) {
-    gameplay->world = sim_world_create(Capitaliste_t, 500000);
     ui_charger_textures(&gameplay->state);
     sprite_sheet_load(&gameplay->spriteSheet);
     gameplay->state.currentBuildMode = BUILD_MODE_NONE;

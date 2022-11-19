@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <assert.h>
 
+#define SAVE_FILENAME "save.txt"
+
 /// Sauvegarde la partie dans un fichier.
 void sim_sauvegarder(SimWorld_t* world, const char* nomFichier);
 
