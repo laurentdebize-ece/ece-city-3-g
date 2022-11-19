@@ -93,7 +93,7 @@ void sim_reset_flow_distribution(SimWorld_t* world) {
 }
 
 /// Place une entité dans la carte de la simulation aux coordonnées données.
-void sim_place_entity(SimWorld_t* world, CaseKind_t type, int x, int y) {
+void sim_place_entity(SimWorld_t* world, CaseKind_t type, int x, int y, bool reload) {
     switch (type) {
         case KIND_HABITATION:
         {
@@ -149,7 +149,9 @@ void sim_place_entity(SimWorld_t* world, CaseKind_t type, int x, int y) {
         default:
             break;
     }
-    sim_update_voisins(world);
+
+    if (reload)
+        sim_update_voisins(world);
 }
 
 bool sim_check_can_place(SimWorld_t* world, bool isBat, int x, int y, int w, int h) {

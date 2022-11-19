@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "ui.h"
 #include "jeu.h"
+#include "sim/sauvegarde.h"
 
 const char* timeToDate(SimWorld_t* s) {
     const char* months[] = { "JAN", "FEV", "MAR", "AVR", "MAI", "JUN", "JUL", "AOU", "SEP", "OCT", "NOV", "DEC" };
@@ -86,7 +87,7 @@ void ui_update_toolbar(UIState* textures, SimWorld_t* sim) {
 
         if (CheckCollisionPointRec(mousePos, (Rectangle) {109, 954, textures->toolbarIcons[ICON_SAVE].width,
                                                           textures->toolbarIcons[ICON_SAVE].height})) {
-            printf("Save\n");
+            sim_sauvegarder(sim, "save.txt");
         }
 
         if (CheckCollisionPointRec(mousePos, (Rectangle) {211, 954, textures->toolbarIcons[ICON_PEOPLE].width,
