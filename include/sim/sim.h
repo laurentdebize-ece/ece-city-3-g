@@ -6,6 +6,7 @@
 #include <sim/habitation.h>
 #include <sim/centrale.h>
 #include <sim/chateau.h>
+#include <utils/vector.h>
 
 #define SIM_MAP_LARGEUR 45
 #define SIM_MAP_HAUTEUR 35
@@ -33,8 +34,8 @@ typedef struct Case_t {
     void* donnees;
     /// Le type de la case.
     CaseKind_t type;
-    /// Permet d'indiquer dans le cas d'une construction multi-case à quelle construction la case appartient.
-    int discriminant;
+    /// Permet d'indiquer si la case est connexe au réseau électrique / d'eau.
+    bool connexe;
 } Case_t;
 
 /// Le monde de simulation du jeu.
@@ -53,6 +54,10 @@ typedef struct SimWorld_t {
     int monnaie;
     /// Nombre d'habitants dans le monde.
     int nb_total_habitants;
+    /// Quantité totale d'eau disponible (mìse à dispo par les châteaux d'eau).
+    int qte_totale_eau;
+    /// Quantité totale d'électricité disponible (mise à dispo par les centrales électriques).
+    int qte_totale_electricite;
     /// Les règles d'évolution pour la simulation.
     SimRules_t rules;
     /// Le temps écoulé depuis le début de la simulation (en ticks).
@@ -76,5 +81,8 @@ void sim_place_entity(SimWorld_t* world, CaseKind_t type, int x, int y);
 
 /// Vérifie si un bâtiment de dimensions précisés peut être placé à une position donnée.
 bool sim_check_can_place(SimWorld_t* world, bool isBat, int x, int y, int w, int h);
+
+/// Recalcule les voisins de chacunes des centrales & châteaux.
+void sim_update_voisins(SimWorld_t* world);
 
 #endif //ECECITY_SIM_H

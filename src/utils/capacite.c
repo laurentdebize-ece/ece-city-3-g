@@ -2,6 +2,7 @@
 #include "sim/sim.h"
 #include "affichage.h"
 #include "screens/gameplay.h"
+#include <math.h>
 
 
 ///afficher les capacités des centrales et chateaux
@@ -64,5 +65,55 @@ void afficher_level(SpriteSheet_t* sheet, SimWorld_t* world, GameplayScreen_t *g
     }
     if (CheckCollisionPointRec(GetMousePosition(), textBoxElec)) {
         afficher_level_elec(&gameplay->spriteSheet, gameplay->world);
+    }
+}
+
+void afficher_etat_alim_eau(SpriteSheet_t* sheet, SimWorld_t* world) {
+    struct Maillon_t* maison = world->habitations->premier;
+    while (maison) {
+        Habitation_t * hab = (Habitation_t*) maison->data;
+        if(!hab->alimentee_en_eau)
+        {
+            int oX = (ORIGINEX * SPRITELARGEUR) + hab->position.x * (SPRITELARGEUR/2) - hab->position.y * (SPRITELARGEUR/2);
+            int oY = (ORIGINEY * SPRITEHAUTEUR) + hab->position.y * (SPRITEHAUTEUR/2) + hab->position.x * (SPRITEHAUTEUR/2) + 16;
+
+            DrawTextureRec(sheet->spritesheetEtatsHabitations, (Rectangle) {
+                .x = 32,
+                .y = 0,
+                .width = 32,
+                .height = 32
+            }, (Vector2) {
+                .x = oX,
+                .y = oY
+            }, WHITE);
+        }
+        maison = maison->next;
+    }
+}
+
+void afficher_etat_alim_elec(SpriteSheet_t* sheet, SimWorld_t* world) {
+    struct Maillon_t* maison = world->habitations->premier;
+    while (maison) {
+        Habitation_t * hab = (Habitation_t*) maison->data;
+
+        if (!hab->alimentee_en_electricite) {
+
+            int oX = (ORIGINEX * SPRITELARGEUR) + hab->position.x * (SPRITELARGEUR / 2) -
+                     hab->position.y * (SPRITELARGEUR / 2) + 16;
+            int oY = (ORIGINEY * SPRITEHAUTEUR) + hab->position.y * (SPRITEHAUTEUR / 2) +
+                     hab->position.x * (SPRITEHAUTEUR / 2) + 16;
+
+            DrawTextureRec(sheet->spritesheetEtatsHabitations, (Rectangle) {
+                    .x = 0,
+                    .y = 0,
+                    .width = 32,
+                    .height = 32
+            }, (Vector2) {
+                    .x = oX,
+                    .y = oY
+            }, WHITE);
+        }
+
+        maison = maison->next;
     }
 }

@@ -249,6 +249,8 @@ void sprite_sheet_load(SpriteSheet_t* spriteSheet) {
     spriteSheet->sprites[SPRITE_EAU_6X4].rectangle.y = 0;
     spriteSheet->sprites[SPRITE_EAU_6X4].decalageXDecor = -60;
     spriteSheet->sprites[SPRITE_EAU_6X4].decalageYDecor = -22;
+
+    spriteSheet->spritesheetEtatsHabitations = LoadTexture("../assets/textures/icones/icones.png");
 }
 
 void sprite_sheet_draw_sprite(SpriteSheet_t* spriteSheet, enum SPRITE_MAP sprite, Color teinte, int x, int y) {

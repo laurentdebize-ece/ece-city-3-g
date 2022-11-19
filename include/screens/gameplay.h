@@ -9,6 +9,7 @@
 #include "spritesheet.h"
 #include "utils/grille.h"
 #include "affichage.h"
+#include "bfs.h"
 
 typedef struct GameplayScreen_t {
     ScreenInfo_t screen_info;
@@ -22,6 +23,11 @@ typedef struct GameplayScreen_t {
     Vector2I mousePos;
     /// Temps écoulé depuis la dernière seconde.
     float elapsedTime;
+
+
+    /// Débogage
+    int dbgDisplayChateauNeighbors;
+    int dbgDisplayCentraleNeighbors;
 } GameplayScreen_t;
 
 /// Crée un écran de gameplay prêt à être utilisé.

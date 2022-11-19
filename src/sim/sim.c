@@ -1,7 +1,11 @@
 
+#include <stdio.h>
 #include "sim/sim.h"
+#include "bfs.h"
 
 void sim_reset_flow_distribution(SimWorld_t* world);
+void sim_update_voisins_chateaux(SimWorld_t* world);
+void sim_update_voisins_centrales(SimWorld_t* world);
 
 /// Crée un monde de simulation vide.
 SimWorld_t* sim_world_create(SimRules_t rules, int monnaie) {
@@ -17,13 +21,15 @@ SimWorld_t* sim_world_create(SimRules_t rules, int monnaie) {
         for (int j = 0; j < SIM_MAP_HAUTEUR; j++) {
             world->map[i][j].donnees = NULL;
             world->map[i][j].type = KIND_VIDE;
-            world->map[i][j].discriminant = 0;
+            world->map[i][j].connexe = 0;
         }
     }
 
     world->monnaie = monnaie;
     world->rules = rules;
     world->n_ticks = 0;
+    world->qte_totale_eau = 0;
+    world->qte_totale_electricite = 0;
 }
 
 /// Détruit un monde de simulation.
@@ -39,6 +45,11 @@ void sim_world_step(SimWorld_t* world) {
     world->nb_total_habitants = 0;
     sim_reset_flow_distribution(world);
 
+    world->qte_totale_eau = 0;
+    world->qte_totale_electricite = 0;
+
+
+    /// évolution et récolte des impôts des habitations
     struct Maillon_t *maisons = world->habitations->premier;
     while (maisons) {
         Habitation_t *hab = (Habitation_t *) maisons->data;
@@ -46,6 +57,20 @@ void sim_world_step(SimWorld_t* world) {
         world->nb_total_habitants += habitation_get_nb_habitants(hab);
         maisons = maisons->next;
     }
+
+    /// maj des qte d'eau et d'électricité
+    struct Maillon_t* chateaux = world->chateaux->premier;
+    while (chateaux) {
+        world->qte_totale_eau += ((ChateauEau_t*)chateaux->data)->capacite;
+        chateaux = chateaux->next;
+    }
+
+    struct Maillon_t* centrales = world->centrales->premier;
+    while (centrales) {
+        world->qte_totale_electricite += ((CentraleElectrique_t*)centrales->data)->capacite;
+        centrales = centrales->next;
+    }
+
 
     /// seconde étape: répartition de la capacité d'eau pour les bâtiments (BFS + tri de l'ordre).
     /// troisième étape: répartition de l'électricité pour les bâtiments. (BFS + tri de l'ordre).
@@ -124,6 +149,7 @@ void sim_place_entity(SimWorld_t* world, CaseKind_t type, int x, int y) {
         default:
             break;
     }
+    sim_update_voisins(world);
 }
 
 bool sim_check_can_place(SimWorld_t* world, bool isBat, int x, int y, int w, int h) {
@@ -214,5 +240,75 @@ void sim_destroy_entity(SimWorld_t* world, int x, int y) {
             default:
                 break;
         }
+
+        sim_update_voisins(world);
+    }
+}
+
+void sim_update_voisins(SimWorld_t* world) {
+    struct Maillon_t* habs = world->habitations->premier;
+    while (habs) {
+        ((Habitation_t*)habs->data)->alimentee_en_eau = false;
+        ((Habitation_t*)habs->data)->alimentee_en_electricite = false;
+        habs = habs->next;
+    }
+
+    for (int i = 0; i < SIM_MAP_LARGEUR; ++i) {
+        for (int j = 0; j < SIM_MAP_HAUTEUR; ++j) {
+            world->map[i][j].connexe = false;
+        }
+    }
+
+    sim_update_voisins_chateaux(world);
+    sim_update_voisins_centrales(world);
+}
+
+void sim_update_voisins_chateaux(SimWorld_t* world) {
+    Vector_t* chemins = vector_alloc(world->chateaux->taille);
+    struct Maillon_t* chateaux = world->chateaux->premier;
+    while (chateaux) {
+        ChateauEau_t* chateau = chateaux->data;
+
+        /// on vide la liste des chemins calculés.
+        vector_clear(chemins);
+
+        /// on vide la liste des habitations voisines
+        liste_vider(chateau->habitations);
+
+        /// on fait le BFS depuis le point mentionné
+        bfs(world, chateau->position, chateau, chemins);
+
+        /// on ajoute les chemins
+        for (int i = 0; i < chemins->taille; ++i) {
+            HabitationNode_t* node = chemins->data[i];
+            /// on ajoute le bâtiment à la liste d'habitations voisines du château.
+            liste_ajouter_fin(chateau->habitations, node->habitation);
+            /// on marque que l'habitation est connectée au réseau éléctrique.
+            node->habitation->alimentee_en_eau = true;
+        }
+
+        chateaux = chateaux->next;
+    }
+}
+
+void sim_update_voisins_centrales(SimWorld_t* world) {
+    Vector_t* chemins = vector_alloc(world->centrales->taille);
+    struct Maillon_t* centrales = world->centrales->premier;
+    while (centrales) {
+        CentraleElectrique_t* centrale = centrales->data;
+
+        vector_clear(chemins);
+
+        liste_vider(centrale->habitations);
+
+        bfs(world, centrale->position, centrale, chemins);
+
+        for (int i = 0; i < chemins->taille; ++i) {
+            HabitationNode_t* node = chemins->data[i];
+            liste_ajouter_fin(centrale->habitations, node->habitation);
+            node->habitation->alimentee_en_electricite = true;
+        }
+
+        centrales = centrales->next;
     }
 }

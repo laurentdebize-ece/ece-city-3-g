@@ -52,7 +52,20 @@ void vector_set(Vector_t* vector, size_t index, void* data) {
     vector->data[index] = data;
 }
 
-/// Trie le tableau dynamique avec la fonction de comparaison donnée.
 void vector_sort(Vector_t* vector, int (*compar)(const void*, const void*)) {
-    qsort(vector->data, vector->taille, sizeof(void*), compar);
+    // tri par insertion.
+    for (size_t i = 1; i < vector->taille; i++) {
+        void *tmp = vector->data[i];
+        size_t j = i;
+        while (j > 0 && compar(vector->data[j - 1], tmp) > 0) {
+            vector->data[j] = vector->data[j - 1];
+            j--;
+        }
+        vector->data[j] = tmp;
+    }
+}
+
+/// Vide le tableau dynamique
+void vector_clear(Vector_t* vector) {
+    vector->taille = 0;
 }
