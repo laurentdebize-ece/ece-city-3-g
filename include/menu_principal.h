@@ -21,6 +21,7 @@ typedef struct MenuPrincipal_t {
     Rectangle textBoxRetour;
     Rectangle boxCommuniste ;
     Rectangle boxCapitaliste;
+    bool peutChargerPartie;
 } MenuPrincipal_t;
 
 MenuPrincipal_t* menu_principal_alloc();

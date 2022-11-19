@@ -1,6 +1,7 @@
 #include "menu_principal.h"
 #include <stdio.h>
 #include "screens/gameplay.h"
+#include "sim/sauvegarde.h"
 
 MenuPrincipal_t* menu_principal_alloc() {
     MenuPrincipal_t* test = malloc(sizeof(MenuPrincipal_t));
@@ -66,12 +67,16 @@ void menu_principal_draw(Jeu_t* jeu, MenuPrincipal_t* menu) {
             case 1:
                 DrawTextEx(menu->font_ttf, "NOUVELLE PARTIE", (Vector2){650, 260}, 80, 8, ORANGE);
                 DrawTextEx(menu->font_ttf, "NOUVELLE PARTIE", (Vector2){655, 255}, 80, 8, WHITE);
-                DrawTextEx(menu->font_ttf, "CHARGER PARTIE", (Vector2){650, 350}, 80, 8, ORANGE);
-                DrawTextEx(menu->font_ttf, "CHARGER PARTIE", (Vector2){655, 345}, 80, 8, WHITE);
+                if (menu->peutChargerPartie) {
+                    DrawTextEx(menu->font_ttf, "CHARGER PARTIE", (Vector2) {650, 350}, 80, 8, ORANGE);
+                    DrawTextEx(menu->font_ttf, "CHARGER PARTIE", (Vector2) {655, 345}, 80, 8, WHITE);
+                    DrawCircle(630, 381, 5, WHITE);
+                    DrawCircle(628, 382, 5, ORANGE);
+                }
                 DrawCircle(628, 285, 5, ORANGE);
-                DrawCircle(628, 382, 5, ORANGE);
+//                DrawCircle(628, 382, 5, ORANGE);
                 DrawCircle(630, 284, 5, WHITE);
-                DrawCircle(630, 381, 5, WHITE);
+//                DrawCircle(630, 381, 5, WHITE);
                 DrawTextEx(menu->font_ttf, "JOUER", (Vector2) {52, 256}, 150, 8, ORANGE);
                 DrawTextEx(menu->font_ttf, "JOUER", (Vector2) {57, 255}, 146, 10, WHITE);
                 DrawTextEx(menu->font_ttf, "REGLES", (Vector2) {50, 486}, 150, 8, ORANGE);
@@ -178,19 +183,23 @@ void menu_principal_update(Jeu_t* jeu, MenuPrincipal_t* menu) {
     }
     else if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(GetMousePosition(), menu->boxCapitaliste)){
         menu->nbClique = 4;
+        jeu_switch_screen(jeu, gameplay_create_screen(sim_world_create(Capitaliste_t, 500000)));
     }
     else if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(GetMousePosition(), menu->boxCommuniste)){
         menu->nbClique = 5;
+        jeu_switch_screen(jeu, gameplay_create_screen(sim_world_create(Communiste_t, 500000)));
     }
     else if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(GetMousePosition(), menu->textBoxRetour)){
         menu->nbClique = 0;
     }
     else if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(GetMousePosition(), menu->boxNouvellePartie)){
         menu->nbClique = 6;
-        jeu_switch_screen(jeu, gameplay_create_screen());
     }
-    else if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(GetMousePosition(), menu->boxChargerPartie)){
+    else if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(GetMousePosition(), menu->boxChargerPartie) && menu->peutChargerPartie){
         menu->nbClique = 7;
+        SimWorld_t* world = sim_world_create(Capitaliste_t, 500000);
+        sim_charger(world, SAVE_FILENAME);
+        jeu_switch_screen(jeu, gameplay_create_screen(world));
     }
 
 }
@@ -208,6 +217,7 @@ void menu_principal_enter(Jeu_t* jeu, MenuPrincipal_t* menu) {
     menu->boxCapitaliste = (Rectangle){200, 400, 450, 200};
     menu->font_ttf = LoadFontEx("../assets/font/daddy-day.ttf", 36, NULL, 0);
     menu->texture_fond = LoadTexture("../assets/textures/menu/fond_menu.png");
+    menu->peutChargerPartie = FileExists(SAVE_FILENAME);
 }
 
 // les trucs a supprimer a la fermeture du jeu vont la
