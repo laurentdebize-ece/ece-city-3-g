@@ -1,5 +1,6 @@
 #include "menu_principal.h"
 #include <stdio.h>
+#include "screens/gameplay.h"
 
 MenuPrincipal_t* menu_principal_alloc() {
     MenuPrincipal_t* test = malloc(sizeof(MenuPrincipal_t));
@@ -186,6 +187,7 @@ void menu_principal_update(Jeu_t* jeu, MenuPrincipal_t* menu) {
     }
     else if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(GetMousePosition(), menu->boxNouvellePartie)){
         menu->nbClique = 6;
+        jeu_switch_screen(jeu, gameplay_create_screen());
     }
     else if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(GetMousePosition(), menu->boxChargerPartie)){
         menu->nbClique = 7;
