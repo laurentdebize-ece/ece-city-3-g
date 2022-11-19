@@ -9,6 +9,7 @@ void jeu_run(Jeu_t* jeu, ScreenInfo_t* ecran_depart)
     jeu->should_exit = false;
     jeu->screen = ecran_depart;
 
+
     DBG_LOG("Lancement du jeu sur l'ecran: %s", ecran_depart->screen_name);
 
     if (ecran_depart->on_enter_callback != NULL)
@@ -46,7 +47,7 @@ void jeu_switch_screen(Jeu_t* game, ScreenInfo_t* ecran) {
     if (game->screen)
     {
         if (game->screen->on_enter_callback)
-            game->screen->on_exit_callback(game, game->screen);
+            game->screen->on_enter_callback(game, game->screen);
     }
 }
 

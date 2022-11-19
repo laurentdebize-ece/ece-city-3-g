@@ -30,7 +30,6 @@ void gameplay_on_enter(Jeu_t *jeu, GameplayScreen_t *gameplay) {
     gameplay->state.timeScale = 1.0f;
     gameplay->elapsedTime = 0.f;
 
-
     gameplay->dbgDisplayChateauNeighbors = 0;
     gameplay->dbgDisplayCentraleNeighbors = 0;
 }

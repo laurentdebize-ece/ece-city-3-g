@@ -1,7 +1,6 @@
-cmake_minimum_required(VERSION 3.23)
+cmake_minimum_required(VERSION 3.20)
 project(ECECity C)
 set(CMAKE_C_STANDARD 99)
-
 # Projet principal
 file(GLOB_RECURSE SOURCES "src/*.c")
 include_directories("include")
