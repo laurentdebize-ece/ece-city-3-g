@@ -198,10 +198,9 @@ void menu_principal_update(Jeu_t* jeu, MenuPrincipal_t* menu) {
     else if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(GetMousePosition(), menu->boxChargerPartie) && menu->peutChargerPartie){
         menu->nbClique = 7;
         SimWorld_t* world = sim_world_create(Capitaliste_t, 500000);
-        sim_charger(world, "../assets/txt/auto.txt");
+        sim_charger(world, SAVE_AUTO_SAVE_FILENAME);
         jeu_switch_screen(jeu, gameplay_create_screen(world));
     }
-
 }
 
 // les trucs a charger au lancement du jeu vont la
@@ -217,7 +216,7 @@ void menu_principal_enter(Jeu_t* jeu, MenuPrincipal_t* menu) {
     menu->boxCapitaliste = (Rectangle){200, 400, 450, 200};
     menu->font_ttf = LoadFontEx("../assets/font/daddy-day.ttf", 36, NULL, 0);
     menu->texture_fond = LoadTexture("../assets/textures/menu/fond_menu.png");
-    menu->peutChargerPartie = FileExists("../assets/txt/auto.txt");
+    menu->peutChargerPartie = FileExists(SAVE_AUTO_SAVE_FILENAME);
 }
 
 // les trucs a supprimer a la fermeture du jeu vont la
