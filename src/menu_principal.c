@@ -1,7 +1,6 @@
 #include "menu_principal.h"
 #include <stdio.h>
 #include "screens/gameplay.h"
-#include "sim/sauvegarde.h"
 
 MenuPrincipal_t* menu_principal_alloc() {
     MenuPrincipal_t* test = malloc(sizeof(MenuPrincipal_t));
@@ -198,7 +197,7 @@ void menu_principal_update(Jeu_t* jeu, MenuPrincipal_t* menu) {
     else if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(GetMousePosition(), menu->boxChargerPartie) && menu->peutChargerPartie){
         menu->nbClique = 7;
         SimWorld_t* world = sim_world_create(Capitaliste_t, 500000);
-        sim_charger(world, SAVE_FILENAME);
+        //sim_charger(world, SAVE_FILENAME);
         jeu_switch_screen(jeu, gameplay_create_screen(world));
     }
 
@@ -217,7 +216,7 @@ void menu_principal_enter(Jeu_t* jeu, MenuPrincipal_t* menu) {
     menu->boxCapitaliste = (Rectangle){200, 400, 450, 200};
     menu->font_ttf = LoadFontEx("../assets/font/daddy-day.ttf", 36, NULL, 0);
     menu->texture_fond = LoadTexture("../assets/textures/menu/fond_menu.png");
-    menu->peutChargerPartie = FileExists(SAVE_FILENAME);
+    //menu->peutChargerPartie = FileExists(SAVE_FILENAME);
 }
 
 // les trucs a supprimer a la fermeture du jeu vont la
