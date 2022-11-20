@@ -15,11 +15,11 @@ void get_time_sauvegarde(GameplayScreen_t* gameplay){
 
 int nombredeSauvegardes(GameplayScreen_t* gameplay) {
     int nbSauvegarde = 0, compteur = 0, i;
-    gameplay->loader.directory = opendir("../assets/txt");
+    gameplay->loader.directory = opendir("../saves/txt");
 
     struct dirent *dir;
     // opendir() renvoie un pointeur de type DIR.
-    DIR *d = opendir("../assets/txt");
+    DIR *d = opendir("../saves/txt");
     if (d)
     {
         while ((dir = readdir(d)) != NULL)
@@ -46,14 +46,14 @@ void update_nom_nb_sauvegardes(GameplayScreen_t* gameplay){
 void ouvrirFichier(GameplayScreen_t* gameplayScreen) {
     char chemin[100];
     char extension[7] = ".txt";
-    sprintf(chemin, "../assets/txt/%s", gameplayScreen->state.stateToolbar.stateMenuSave.nomFichierOuverture, extension);
+    sprintf(chemin, "../saves/txt/%s", gameplayScreen->state.stateToolbar.stateMenuSave.nomFichierOuverture, extension);
     gameplayScreen->loader.fichierTxt = fopen(chemin, "r+");
 }
 
 void ouvrirFichierEcriture(GameplayScreen_t* gameplayScreen) {
     char chemin[100];
     char extension[7] = ".txt";
-    sprintf(chemin, "../assets/txt/%s%s", gameplayScreen->state.stateToolbar.stateMenuSave.nomFichier, extension);
+    sprintf(chemin, "../saves/txt/%s%s", gameplayScreen->state.stateToolbar.stateMenuSave.nomFichier, extension);
     gameplayScreen->loader.fichierTxtWrite = fopen(chemin, "w+");
 }
 
@@ -563,7 +563,7 @@ void update_menu_sauvegarde(GameplayScreen_t* gameplay){
                     sim_world_destroy(gameplay->world);
                     gameplay->world = sim_world_create(1, 500000);
                     char chemin[100];
-                    sprintf(chemin, "../assets/txt/%s", gameplay->state.stateToolbar.stateMenuSave.nomFichierOuverture);
+                    sprintf(chemin, "../saves/txt/%s", gameplay->state.stateToolbar.stateMenuSave.nomFichierOuverture);
                     sim_charger(gameplay->world, chemin);
                     gameplay->state.stateToolbar.modeSave = false;
                 }

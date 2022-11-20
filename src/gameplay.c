@@ -87,7 +87,7 @@ void gameplay_update(Jeu_t *jeu, GameplayScreen_t *gameplay) {
     update_debug_info(gameplay);
 
     if(gameplay->state.stateToolbar.relaod_carte){
-        sim_sauvegarder(gameplay->world, "../assets/txt/auto.txt");
+        sim_sauvegarder(gameplay->world, "../saves/txt/auto.txt");
     }
 }
 
