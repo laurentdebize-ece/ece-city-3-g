@@ -45,7 +45,7 @@ void update_nom_nb_sauvegardes(GameplayScreen_t* gameplay){
 void ouvrirFichier(GameplayScreen_t* gameplayScreen) {
     char chemin[100];
     char extension[7] = ".txt";
-    sprintf(chemin, "../assets/txt/%s%s", gameplayScreen->state.stateToolbar.stateMenuSave.nomFichierOuverture, extension);
+    sprintf(chemin, "../assets/txt/%s", gameplayScreen->state.stateToolbar.stateMenuSave.nomFichierOuverture, extension);
     gameplayScreen->loader.fichierTxt = fopen(chemin, "r+");
 }
 
@@ -197,10 +197,12 @@ void lireFichier(GameplayScreen_t* gameplayScreen){
                         liste_ajouter_fin(gameplayScreen->world->chateaux, chateau);
                         break;
                     }
-                    case 'R':
+                    case 'R':{
                         gameplayScreen->world->map[i][j].type = KIND_ROUTE;
                         gameplayScreen->world->map[i][j].donnees = NULL;
                         break;
+                    }
+
                     default:
                         break;
                 }
@@ -459,7 +461,7 @@ void update_menu_sauvegarde(GameplayScreen_t* gameplay){
                 /// On charge la partie sélectionnée
                 gameplay->state.stateToolbar.stateMenuSave.clickSel = true;
                 if(gameplay->state.stateToolbar.stateMenuSave.num_component_select != -1 && gameplay->state.stateToolbar.stateMenuSave.select_component){
-                    strcpy(gameplay->state.stateToolbar.stateMenuSave.nomFichierOuverture,gameplay->loader.nom_sauvegardes[gameplay->state.stateToolbar.stateMenuSave.num_component_select - 1]);
+                    strcpy(gameplay->state.stateToolbar.stateMenuSave.nomFichierOuverture,gameplay->loader.nom_sauvegardes[gameplay->state.stateToolbar.stateMenuSave.num_component_select]);
                     lireFichier(gameplay);
                     gameplay->state.stateToolbar.modeSave = false;
                 }
