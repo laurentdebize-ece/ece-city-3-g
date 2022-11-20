@@ -31,6 +31,30 @@ void ui_charger_textures(UIState* textures) {
     textures->toolbarIcons[ICON_ADD] = LoadTexture("../assets/textures/icones/add.png");
 }
 
+void draw_affichage_niveaux(UIState* textures){
+    DrawRectangleRounded((Rectangle) {15, 830, 300, 75}, 0.2f, 8, (Color) { 0, 194, 255, 191 });
+    if (textures->stateToolbar.hoverNiveauNormal) {
+        DrawCircle(58, 868, 30, (Color) { 0, 0, 0, 20 });
+    } else if (textures->stateToolbar.niveauNormal) {
+        DrawCircle(58, 868, 30, (Color) { 0, 0, 0, 45 });
+    }
+    DrawTexture(textures->toolbarIcons[ICON_GRID], 40, 851, textures->stateToolbar.niveauNormal ? YELLOW : WHITE);
+    if (textures->stateToolbar.hoverNiveauElectricite) {
+        DrawCircle(168, 868, 30, (Color) { 0, 0, 0, 20 });
+    } else if (textures->stateToolbar.niveauElectricite) {
+        DrawCircle(168, 868, 30, (Color) { 0, 0, 0, 45 });
+    }
+    DrawTexture(textures->toolbarIcons[ICON_ELECTRICITY_GRID], 150, 851, textures->stateToolbar.niveauElectricite ? YELLOW : WHITE);
+    if (textures->stateToolbar.hoverNiveauEau) {
+        DrawCircle(283, 868, 30, (Color) { 0, 0, 0, 20 });
+    } else if (textures->stateToolbar.niveauEau) {
+        DrawCircle(283, 868, 30, (Color) { 0, 0, 0, 45 });
+    }
+    DrawTexture(textures->toolbarIcons[ICON_WATER_GRID], 265, 851, textures->stateToolbar.niveauEau ? YELLOW : WHITE);
+
+}
+
+
 void ui_draw_toolbar(UIState* textures, SimWorld_t* sim) {
     DrawRectangle(0, 924, FENETRE_JEU_LARGEUR, 100, (Color) { 0, 194, 255, 191 });
 
@@ -60,7 +84,7 @@ void ui_draw_toolbar(UIState* textures, SimWorld_t* sim) {
         DrawCircle(50, 975, 35 , (Color) { 0, 0, 0, 20 });
     } else if (textures->stateToolbar.modeMenu) {
         DrawCircle(50, 975, 35 , (Color) { 0, 0, 0, 45 });
-        ///draw_affichage_niveaux(textures);
+        draw_affichage_niveaux(textures);
     }
     DrawTexture(textures->toolbarIcons[ICON_HAMBURGER], 26, 954, textures->stateToolbar.modeMenu ? YELLOW : WHITE);
     if (textures->stateToolbar.hoverSave) {
@@ -142,21 +166,23 @@ void ui_update_toolbar(UIState* textures, SimWorld_t* sim) {
     textures->stateToolbar.hoverCentrale = false;
     textures->stateToolbar.hoverChateau = false;
     textures->stateToolbar.hoverChangementNiveau = false;
+    textures->stateToolbar.hoverNiveauElectricite = false;
+    textures->stateToolbar.hoverNiveauEau = false;
+    textures->stateToolbar.hoverNiveauNormal = false;
 
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
 
-        if (textures->stateToolbar.modeChangementNiveau) {
-            if (CheckCollisionPointRec(mousePos, (Rectangle) {40, 851, textures->toolbarIcons[ICON_GRID].width,
-                                                              textures->toolbarIcons[ICON_GRID].height})) {
+        if (textures->stateToolbar.modeMenu) {
+            if (CheckCollisionPointRec(mousePos, (Rectangle) {40, 851, 40, 40})) {
                 textures->stateToolbar.niveauNormal = true;
+                printf("Normal");
                 textures->stateToolbar.niveauEau = false;
                 textures->stateToolbar.niveauElectricite = false;
             }
 
             if (CheckCollisionPointRec(mousePos,
-                                       (Rectangle) {150, 851, textures->toolbarIcons[ICON_ELECTRICITY_GRID].width,
-                                                    textures->toolbarIcons[ICON_ELECTRICITY_GRID].height})) {
-                textures->stateToolbar.niveauElectricite = !textures->stateToolbar.niveauElectricite;
+                                       (Rectangle) {150, 851, 40, 40})) {
+                textures->stateToolbar.niveauElectricite = true;
                 if (textures->stateToolbar.niveauElectricite == false) {
                     textures->stateToolbar.niveauEau = false;
                     textures->stateToolbar.niveauNormal = true;
@@ -166,9 +192,9 @@ void ui_update_toolbar(UIState* textures, SimWorld_t* sim) {
                 }
             }
 
-            if (CheckCollisionPointRec(mousePos, (Rectangle) {265, 851, textures->toolbarIcons[ICON_WATER_GRID].width,
-                                                              textures->toolbarIcons[ICON_WATER_GRID].height})) {
-                textures->stateToolbar.niveauEau = !textures->stateToolbar.niveauEau;
+            if (CheckCollisionPointRec(mousePos, (Rectangle) {265, 851, 40, 40})) {
+                textures->stateToolbar.niveauEau = true;
+                printf("Eau");
                 if (textures->stateToolbar.niveauEau == false) {
                     textures->stateToolbar.niveauElectricite = false;
                     textures->stateToolbar.niveauNormal = true;
@@ -231,6 +257,7 @@ void ui_update_toolbar(UIState* textures, SimWorld_t* sim) {
             textures->stateToolbar.modePlacementCentrale = false;
             textures->stateToolbar.modePlacementChateau = false;
             textures->stateToolbar.modeDestruction = false;
+            textures->stateToolbar.niveauNormal = true;
         }
 
         if (CheckCollisionPointRec(mousePos, (Rectangle) {1376, 954, textures->toolbarIcons[ICON_DESTROY].width,

@@ -49,6 +49,12 @@ void gameplay_on_enter(Jeu_t *jeu, GameplayScreen_t *gameplay) {
     gameplay->state.stateToolbar.stateMenuSave.num_component_select = -1;
     gameplay->state.stateToolbar.stateMenuSave.num_component_hover = -1;
     gameplay->state.stateToolbar.relaod_carte = false;
+    gameplay->state.stateToolbar.hoverNiveauNormal = false;
+    gameplay->state.stateToolbar.hoverNiveauEau = false;
+    gameplay->state.stateToolbar.hoverNiveauElectricite = false;
+    gameplay->state.stateToolbar.niveauEau = false;
+    gameplay->state.stateToolbar.niveauElectricite = false;
+    gameplay->state.stateToolbar.niveauNormal = true;
 
 }
 
@@ -106,10 +112,18 @@ void gameplay_draw(Jeu_t *jeu, GameplayScreen_t *gameplay) {
 
     affichage_menu_sauvegarde(gameplay);
 
-    draw_debug_info(gameplay);
+    //draw_debug_info(gameplay);
 
 
     ui_draw_toolbar(&gameplay->state, gameplay->world);
+
+    if (gameplay->state.stateToolbar.niveauEau) {
+        afficher_level_eau(&gameplay->spriteSheet, gameplay->world);
+        afficher_capacite(gameplay->world);
+    } else if (gameplay->state.stateToolbar.niveauElectricite) {
+        afficher_level_elec(&gameplay->spriteSheet, gameplay->world, gameplay);
+        afficher_capacite(gameplay->world);
+    }
 
     afficher_etat_alim_eau(&gameplay->spriteSheet, gameplay->world);
     afficher_etat_alim_elec(&gameplay->spriteSheet, gameplay->world);
