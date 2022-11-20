@@ -9,6 +9,7 @@
 void try_place_building(GameplayScreen_t *gameplay);
 void draw_debug_info(GameplayScreen_t *gameplay);
 void update_debug_info(GameplayScreen_t *gameplay);
+void draw_niveaux(GameplayScreen_t *gameplay);
 
 
 GameplayScreen_t *gameplay_create_screen(SimWorld_t* world) {
@@ -31,7 +32,6 @@ void gameplay_on_enter(Jeu_t *jeu, GameplayScreen_t *gameplay) {
     gameplay->state.timeScale = 1.0f;
     gameplay->elapsedTime = 0.f;
 
-
     gameplay->dbgDisplayChateauNeighbors = 0;
     gameplay->dbgDisplayCentraleNeighbors = 0;
 
@@ -42,14 +42,10 @@ void gameplay_on_enter(Jeu_t *jeu, GameplayScreen_t *gameplay) {
     gameplay->state.stateToolbar.saveHistory.nb_sauvegardes = 0;
     gameplay->state.stateToolbar.stateMenuSave.num_component_select = -1;
     gameplay->state.stateToolbar.stateMenuSave.num_component_hover = -1;
-//    gameplay->state.stateToolbar.relaod_carte = false;
-//    gameplay->state.stateToolbar.hoverNiveauNormal = false;
-//    gameplay->state.stateToolbar.hoverNiveauEau = false;
-//    gameplay->state.stateToolbar.hoverNiveauElectricite = false;
-//    gameplay->state.stateToolbar.niveauEau = false;
-//    gameplay->state.stateToolbar.niveauElectricite = false;
-//    gameplay->state.stateToolbar.niveauNormal = true;
-
+    gameplay->state.stateToolbar.hoverNiveauNormal = false;
+    gameplay->state.stateToolbar.hoverNiveauEau = false;
+    gameplay->state.stateToolbar.hoverNiveauElectricite = false;
+    gameplay->state.affichageNiveau = AFFICHAGE_NIVEAU_NONE;
 }
 
 void gameplay_on_exit(Jeu_t *jeu, GameplayScreen_t *gameplay) {
@@ -89,7 +85,7 @@ void gameplay_update(Jeu_t *jeu, GameplayScreen_t *gameplay) {
 
 void gameplay_draw(Jeu_t *jeu, GameplayScreen_t *gameplay) {
 
-    affichage_draw_terrain_background(&gameplay->spriteSheet, gameplay->world);
+    affichage_draw_terrain_background(&gameplay->spriteSheet, gameplay->world, gameplay->state.affichageNiveau == AFFICHAGE_NIVEAU_EAU, gameplay->state.affichageNiveau == AFFICHAGE_NIVEAU_ELEC);
     affichage_draw_entities(&gameplay->spriteSheet, gameplay->world,
                             gameplay->state.currentBuildMode == BUILD_MODE_ROUTE ? LAYER_ROUTES : LAYER_ALL);
 
@@ -99,20 +95,11 @@ void gameplay_draw(Jeu_t *jeu, GameplayScreen_t *gameplay) {
         affichage_draw_build_preview(&gameplay->spriteSheet, gameplay->world, v,
                                      ui_buildmode_to_casekind(gameplay->state.currentBuildMode));
 
+    draw_niveaux(gameplay);
+
     draw_debug_info(gameplay);
 
     ui_draw_toolbar(&gameplay->state, gameplay->world);
-
-//    if (gameplay->state.stateToolbar.niveauEau) {
-//        afficher_level_eau(&gameplay->spriteSheet, gameplay->world);
-//        afficher_capacite(gameplay->world);
-//    } else if (gameplay->state.stateToolbar.niveauElectricite) {
-//        afficher_level_elec(&gameplay->spriteSheet, gameplay->world, gameplay);
-//        afficher_capacite(gameplay->world);
-//    }
-
-    afficher_etat_alim_eau(&gameplay->spriteSheet, gameplay->world);
-    afficher_etat_alim_elec(&gameplay->spriteSheet, gameplay->world);
 
     affichage_menu_sauvegarde(gameplay);
 }
@@ -209,5 +196,24 @@ void draw_debug_info(GameplayScreen_t *gameplay) {
             n++;
             centrales = centrales->next;
         }
+    }
+}
+
+void draw_niveaux(GameplayScreen_t* scr) {
+    switch (scr->state.affichageNiveau) {
+        case AFFICHAGE_NIVEAU_NONE:
+            break;
+
+        case AFFICHAGE_NIVEAU_EAU:
+            afficher_level_eau(&scr->spriteSheet, scr->world);
+            afficher_etat_alim_eau(&scr->spriteSheet, scr->world);
+            afficher_capacite(scr->world, true);
+            break;
+
+        case AFFICHAGE_NIVEAU_ELEC:
+            afficher_level_elec(&scr->spriteSheet, scr->world, scr);
+            afficher_etat_alim_elec(&scr->spriteSheet, scr->world);
+            afficher_capacite(scr->world, false);
+            break;
     }
 }

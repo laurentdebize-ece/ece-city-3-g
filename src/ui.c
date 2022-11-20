@@ -10,6 +10,29 @@ const char* timeToDate(SimWorld_t* s) {
     return TextFormat("%s %d", months[month], 2000 + year);
 }
 
+void draw_affichage_niveaux(UIState* textures){
+    DrawRectangleRounded((Rectangle) {15, 830, 300, 75}, 0.2f, 8, (Color) { 0, 194, 255, 191 });
+    if (textures->stateToolbar.hoverNiveauNormal) {
+        DrawCircle(58, 868, 30, (Color) { 0, 0, 0, 20 });
+    } else if (textures->affichageNiveau == AFFICHAGE_NIVEAU_NONE) {
+        DrawCircle(58, 868, 30, (Color) { 0, 0, 0, 45 });
+    }
+    DrawTexture(textures->toolbarIcons[ICON_GRID], 40, 851, textures->affichageNiveau == AFFICHAGE_NIVEAU_NONE ? YELLOW : WHITE);
+    if (textures->stateToolbar.hoverNiveauElectricite) {
+        DrawCircle(168, 868, 30, (Color) { 0, 0, 0, 20 });
+    } else if (textures->affichageNiveau == AFFICHAGE_NIVEAU_ELEC) {
+        DrawCircle(168, 868, 30, (Color) { 0, 0, 0, 45 });
+    }
+    DrawTexture(textures->toolbarIcons[ICON_ELECTRICITY_GRID], 150, 851, textures->affichageNiveau == AFFICHAGE_NIVEAU_ELEC ? YELLOW : WHITE);
+    if (textures->stateToolbar.hoverNiveauEau) {
+        DrawCircle(283, 868, 30, (Color) { 0, 0, 0, 20 });
+    } else if (textures->affichageNiveau == AFFICHAGE_NIVEAU_EAU) {
+        DrawCircle(283, 868, 30, (Color) { 0, 0, 0, 45 });
+    }
+    DrawTexture(textures->toolbarIcons[ICON_WATER_GRID], 265, 851, textures->affichageNiveau == AFFICHAGE_NIVEAU_EAU ? YELLOW : WHITE);
+
+}
+
 void ui_charger_textures(UIState* textures) {
     textures->toolbarIcons[ICON_HAMBURGER] = LoadTexture("../assets/textures/icones/hamburger.png");
     textures->toolbarIcons[ICON_SAVE] = LoadTexture("../assets/textures/icones/save.png");
@@ -103,6 +126,9 @@ void ui_draw_toolbar(UIState* states, SimWorld_t* sim) {
             .height = 50
     }, 0.2f, 8, (Color) { 0, 194, 255, 191 });
     DrawText(TextFormat("%d £", sim->monnaie), FENETRE_JEU_LARGEUR - 190, 10, 24, WHITE);
+
+    if (states->stateToolbar.stateMenuSave.modeMenu)
+        draw_affichage_niveaux(states);
 }
 
 void ui_update_toolbar(UIState* textures, SimWorld_t* sim) {
@@ -190,6 +216,20 @@ void ui_update_toolbar(UIState* textures, SimWorld_t* sim) {
             textures->stateToolbar.stateMenuSave.modeMenu = false;
             textures->currentBuildMode = (textures->currentBuildMode == BUILD_MODE_CHATEAU ? BUILD_MODE_NONE
                                                                                            : BUILD_MODE_CHATEAU);
+        }
+        if (textures->stateToolbar.stateMenuSave.modeMenu) {
+            if (CheckCollisionPointRec(mousePos, (Rectangle) {40, 851, textures->toolbarIcons[ICON_GRID].width,
+                                                              textures->toolbarIcons[ICON_GRID].height})) {
+                textures->affichageNiveau = AFFICHAGE_NIVEAU_NONE;
+            }
+            if (CheckCollisionPointRec(mousePos, (Rectangle) {150, 851, textures->toolbarIcons[ICON_ELECTRICITY_GRID].width,
+                                                              textures->toolbarIcons[ICON_ELECTRICITY_GRID].height})) {
+                textures->affichageNiveau = AFFICHAGE_NIVEAU_ELEC;
+            }
+            if (CheckCollisionPointRec(mousePos, (Rectangle) {265, 851, textures->toolbarIcons[ICON_WATER_GRID].width,
+                                                              textures->toolbarIcons[ICON_WATER_GRID].height})) {
+                textures->affichageNiveau = AFFICHAGE_NIVEAU_EAU;
+            }
         }
     }
 }

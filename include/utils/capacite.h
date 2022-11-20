@@ -6,7 +6,7 @@
 #ifndef ECECITY_CAPACITE_H
 #define ECECITY_CAPACITE_H
 
-void afficher_capacite(SimWorld_t* world);
+void afficher_capacite(SimWorld_t* world, bool eau);
 
 void afficher_level_eau(SpriteSheet_t* sheet, SimWorld_t* world);
 
