@@ -4,6 +4,7 @@
 #include "stdlib.h"
 #include <dirent.h>
 #include "time.h"
+#include "assert.h"
 
 void get_time_sauvegarde(GameplayScreen_t* gameplay){
     time_t t;
@@ -56,16 +57,153 @@ void ouvrirFichierEcriture(GameplayScreen_t* gameplayScreen) {
     gameplayScreen->loader.fichierTxtWrite = fopen(chemin, "w+");
 }
 
+
+char hab2char(Habitation_t *hab) {
+    switch (hab->niveau) {
+        case NIVEAU_RUINE:
+            return 'R';
+        case NIVEAU_TERRAIN_VAGUE:
+            return 'V';
+        case NIVEAU_CABANE:
+            return 'C';
+        case NIVEAU_GRATTE_CIEL:
+            return 'G';
+        case NIVEAU_MAISON:
+            return 'M';
+        case NIVEAU_IMMEUBLE:
+            return 'I';
+    }
+}
+
+NiveauHabitation_t char2hab(char c) {
+    switch (c) {
+        case 'R':
+            return NIVEAU_RUINE;
+        case 'V':
+            return NIVEAU_TERRAIN_VAGUE;
+        case 'C':
+            return NIVEAU_CABANE;
+        case 'G':
+            return NIVEAU_GRATTE_CIEL;
+        case 'M':
+            return NIVEAU_MAISON;
+        case 'I':
+            return NIVEAU_IMMEUBLE;
+        default:
+            break;
+    }
+}
+
+struct bat_data {
+    CaseKind_t type;
+    int extra; // données supplémentaires
+};
+
 /// Load depuis un fichier une partie
 void lireFichier(GameplayScreen_t* gameplayScreen){
 
     ouvrirFichier(gameplayScreen);
 
-    sim_world_destroy(gameplayScreen->world);
-    gameplayScreen->world = sim_world_create(Capitaliste_t, 500000);
+    //sim_world_destroy(gameplayScreen->world);
+    //gameplayScreen->world = sim_world_create(Capitaliste_t, 500000);
+
+    struct bat_data data[SIM_MAP_LARGEUR][SIM_MAP_HAUTEUR] = {0};
+
+    /// on charge depuis le fichier texte les positions des batiments dans une matrice
+    /// on écrit directement dans le monde les routes.
+    for (int i = 0; i < SIM_MAP_HAUTEUR;) {
+        for (int j = 0; j < SIM_MAP_LARGEUR;) {
+            char cs = fgetc(gameplayScreen->loader.fichierTxt);
+            switch (cs) {
+                case '0':
+                    gameplayScreen->world->map[j][i].type = KIND_VIDE;
+                    ++j;
+                    break;
+
+                case 'r':
+                    gameplayScreen->world->map[j][i].type = KIND_ROUTE;
+                    ++j;
+                    break;
+
+                case 'J':
+                    data[j][i].type = KIND_CENTRALE;
+                    ++j;
+                    break;
+
+                case 'W':
+                    data[j][i].type = KIND_CHATEAU;
+                    ++j;
+                    break;
+
+                case 'R':
+                case 'V':
+                case 'C':
+                case 'G':
+                case 'M':
+                case 'I': {
+                    data[j][i].type = KIND_HABITATION;
+                    data[j][i].extra = char2hab(cs);
+                    ++j;
+                }
+                    break;
+
+                default:
+                    break;
+            }
+        }
+        i++;
+    }
+
+    fscanf(gameplayScreen->loader.fichierTxt, "%d", &gameplayScreen->world->monnaie);
+    fscanf(gameplayScreen->loader.fichierTxt, "%d", &gameplayScreen->world->n_ticks);
+    fscanf(gameplayScreen->loader.fichierTxt, "%d", &gameplayScreen->world->rules);
+
+    bool visited[SIM_MAP_LARGEUR][SIM_MAP_HAUTEUR] = {false};
+
+    for (int i = 0; i < SIM_MAP_HAUTEUR; ++i) {
+        for (int j = 0; j < SIM_MAP_LARGEUR; ++j) {
+            if (!visited[j][i]) {
+                switch (data[j][i].type) {
+                    case KIND_HABITATION: {
+                        for (int k = 0; k < 3; ++k) {
+                            for (int l = 0; l < 3; ++l) {
+                                visited[j + k][i + l] = true;
+                            }
+                        }
+                        sim_place_entity(gameplayScreen->world, KIND_HABITATION, j, i, false);
+                        ((Habitation_t*)gameplayScreen->world->map[j][i].donnees)->niveau = data[j][i].extra;
+                    }
+                        break;
+                    case KIND_CENTRALE: {
+                        for (int k = 0; k < 6; ++k) {
+                            for (int l = 0; l < 4; ++l) {
+                                visited[j + k][i + l] = true;
+                            }
+                        }
+                        sim_place_entity(gameplayScreen->world, KIND_CENTRALE, j, i, false);
+                    }
+                        break;
+                    case KIND_CHATEAU: {
+                        for (int k = 0; k < 4; ++k) {
+                            for (int l = 0; l < 6; ++l) {
+                                visited[j + k][i + l] = true;
+                            }
+                        }
+                        sim_place_entity(gameplayScreen->world, KIND_CHATEAU, j, i, false);
+                    }
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+
+    sim_update_voisins(gameplayScreen->world);
 
 
-    if (gameplayScreen->loader.fichierTxt != NULL) {
+    /*if (gameplayScreen->loader.fichierTxt != NULL) {
 
         char matrice[SIM_MAP_LARGEUR][SIM_MAP_HAUTEUR];
 
@@ -215,7 +353,7 @@ void lireFichier(GameplayScreen_t* gameplayScreen){
 
         fscanf(gameplayScreen->loader.fichierTxt, "%d", &gameplayScreen->world->n_ticks);
 
-    }
+    }*/
 }
 
 /// Sauvegarder la partie actuelle
@@ -485,7 +623,7 @@ void affichage_composant_sauvegarde(GameplayScreen_t* gameplay, int i){
         color = (Color) {60, 60, 60, 200};
     }
     DrawRectangleRounded((Rectangle) {150,  186 + 100 * (float) i, 1300, 80}, 0.1f, 8, color);
-    DrawText(TextFormat("%#d - %s - %s",i, gameplay->loader.nom_sauvegardes[i], gameplay->loader.sauvegardes_time[i]), 160, 196 + 100 * i, 48, BLACK);
+    DrawText(TextFormat("%#d - %s -",i, gameplay->loader.nom_sauvegardes[i]), 160, 196 + 100 * i, 48, BLACK);
 }
 
 void affichage_menu_sauvegarde(GameplayScreen_t* gameplay){

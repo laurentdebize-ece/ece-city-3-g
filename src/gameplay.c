@@ -112,7 +112,7 @@ void try_place_building(GameplayScreen_t *gameplay) {
             case BUILD_MODE_ROUTE:
                 if (sim_check_can_place(gameplay->world, false, gameplay->mousePos.x, gameplay->mousePos.y, 1, 1) &&
                     gameplay->world->monnaie >= ROUTE_PRIX_CONSTRUCTION) {
-                    sim_place_entity(gameplay->world, KIND_ROUTE, gameplay->mousePos.x, gameplay->mousePos.y);
+                    sim_place_entity(gameplay->world, KIND_ROUTE, gameplay->mousePos.x, gameplay->mousePos.y, true);
                     gameplay->world->monnaie -= ROUTE_PRIX_CONSTRUCTION;
                 }
                 break;
@@ -121,7 +121,7 @@ void try_place_building(GameplayScreen_t *gameplay) {
                 if (sim_check_can_place(gameplay->world, true, gameplay->mousePos.x, gameplay->mousePos.y, 3,
                                         3) && gameplay->world->monnaie >= HABITATION_PRIX_CONSTRUCTION) {
                     sim_place_entity(gameplay->world, KIND_HABITATION, gameplay->mousePos.x,
-                                     gameplay->mousePos.y);
+                                     gameplay->mousePos.y, true);
                     gameplay->world->monnaie -= HABITATION_PRIX_CONSTRUCTION;
                 }
                 break;
@@ -130,7 +130,7 @@ void try_place_building(GameplayScreen_t *gameplay) {
                 if (sim_check_can_place(gameplay->world, true, gameplay->mousePos.x, gameplay->mousePos.y, 6,
                                         4) && gameplay->world->monnaie >= CENTRALE_PRIX_CONSTRUCTION) {
                     sim_place_entity(gameplay->world, KIND_CENTRALE, gameplay->mousePos.x,
-                                     gameplay->mousePos.y);
+                                     gameplay->mousePos.y, true);
                     gameplay->world->monnaie -= CENTRALE_PRIX_CONSTRUCTION;
                 }
                 break;
@@ -138,7 +138,7 @@ void try_place_building(GameplayScreen_t *gameplay) {
             case BUILD_MODE_CHATEAU:
                 if (sim_check_can_place(gameplay->world, true, gameplay->mousePos.x, gameplay->mousePos.y, 4,
                                         6) && gameplay->world->monnaie >= CHATEAU_PRIX_CONSTRUCTION) {
-                    sim_place_entity(gameplay->world, KIND_CHATEAU, gameplay->mousePos.x, gameplay->mousePos.y);
+                    sim_place_entity(gameplay->world, KIND_CHATEAU, gameplay->mousePos.x, gameplay->mousePos.y, true);
                     gameplay->world->monnaie -= CHATEAU_PRIX_CONSTRUCTION;
                 }
                 break;
