@@ -25,7 +25,6 @@ GameplayScreen_t *gameplay_create_screen(SimWorld_t* world) {
 }
 
 void gameplay_on_enter(Jeu_t *jeu, GameplayScreen_t *gameplay) {
-    gameplay->world = sim_world_create(Capitaliste_t, 500000);
     ui_charger_textures(&gameplay->state);
     sprite_sheet_load(&gameplay->spriteSheet);
     gameplay->state.currentBuildMode = BUILD_MODE_NONE;
@@ -49,6 +48,7 @@ void gameplay_on_enter(Jeu_t *jeu, GameplayScreen_t *gameplay) {
     gameplay->loader.nb_sauvegardes = 0;
     gameplay->state.stateToolbar.stateMenuSave.num_component_select = -1;
     gameplay->state.stateToolbar.stateMenuSave.num_component_hover = -1;
+    gameplay->state.stateToolbar.relaod_carte = false;
 
 }
 
@@ -85,6 +85,10 @@ void gameplay_update(Jeu_t *jeu, GameplayScreen_t *gameplay) {
 
     /// menus de débogage.
     update_debug_info(gameplay);
+
+    if(gameplay->state.stateToolbar.relaod_carte){
+        sim_sauvegarder(gameplay->world, "../assets/txt/auto.txt");
+    }
 }
 
 void gameplay_draw(Jeu_t *jeu, GameplayScreen_t *gameplay) {
@@ -118,6 +122,7 @@ void try_place_building(GameplayScreen_t *gameplay) {
                     gameplay->world->monnaie >= ROUTE_PRIX_CONSTRUCTION) {
                     sim_place_entity(gameplay->world, KIND_ROUTE, gameplay->mousePos.x, gameplay->mousePos.y, true);
                     gameplay->world->monnaie -= ROUTE_PRIX_CONSTRUCTION;
+                    gameplay->state.stateToolbar.relaod_carte = true;
                 }
                 break;
 
@@ -127,6 +132,7 @@ void try_place_building(GameplayScreen_t *gameplay) {
                     sim_place_entity(gameplay->world, KIND_HABITATION, gameplay->mousePos.x,
                                      gameplay->mousePos.y, true);
                     gameplay->world->monnaie -= HABITATION_PRIX_CONSTRUCTION;
+                    gameplay->state.stateToolbar.relaod_carte = true;
                 }
                 break;
 
@@ -136,6 +142,7 @@ void try_place_building(GameplayScreen_t *gameplay) {
                     sim_place_entity(gameplay->world, KIND_CENTRALE, gameplay->mousePos.x,
                                      gameplay->mousePos.y, true);
                     gameplay->world->monnaie -= CENTRALE_PRIX_CONSTRUCTION;
+                    gameplay->state.stateToolbar.relaod_carte = true;
                 }
                 break;
 
@@ -144,11 +151,13 @@ void try_place_building(GameplayScreen_t *gameplay) {
                                         6) && gameplay->world->monnaie >= CHATEAU_PRIX_CONSTRUCTION) {
                     sim_place_entity(gameplay->world, KIND_CHATEAU, gameplay->mousePos.x, gameplay->mousePos.y, true);
                     gameplay->world->monnaie -= CHATEAU_PRIX_CONSTRUCTION;
+                    gameplay->state.stateToolbar.relaod_carte = true;
                 }
                 break;
 
             case BUILD_MODE_DESTROY:
                 sim_destroy_entity(gameplay->world, gameplay->mousePos.x, gameplay->mousePos.y);
+                gameplay->state.stateToolbar.relaod_carte = true;
                 break;
 
             default:

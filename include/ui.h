@@ -85,6 +85,7 @@ typedef struct StateToolbar_t {
     bool rotationChateau;
     bool hoverDestruction;
     bool modeDestruction;
+    bool relaod_carte;
 } StateToolbar_t;
 
 

@@ -198,7 +198,7 @@ void menu_principal_update(Jeu_t* jeu, MenuPrincipal_t* menu) {
     else if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(GetMousePosition(), menu->boxChargerPartie) && menu->peutChargerPartie){
         menu->nbClique = 7;
         SimWorld_t* world = sim_world_create(Capitaliste_t, 500000);
-        sim_sauvegarder(world, "../assets/txt/auto.txt");
+        sim_charger(world, "../assets/txt/auto.txt");
         jeu_switch_screen(jeu, gameplay_create_screen(world));
     }
 
