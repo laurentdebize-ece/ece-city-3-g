@@ -361,68 +361,38 @@ void ecrireFichier(GameplayScreen_t* gameplayScreen){
 
     ouvrirFichierEcriture(gameplayScreen);
 
-    char matrice[SIM_MAP_LARGEUR][SIM_MAP_HAUTEUR];
-
-    for (int i = 0; i < SIM_MAP_LARGEUR; i++) {
-        for (int j = 0; j < SIM_MAP_HAUTEUR; j++) {
-
-            switch (gameplayScreen->world->map[i][j].type) {
+    for (int i = 0; i < SIM_MAP_HAUTEUR; ++i) {
+        for (int j = 0; j < SIM_MAP_LARGEUR; ++j) {
+            switch (gameplayScreen->world->map[j][i].type) {
                 case KIND_VIDE:
-                    matrice[i][j] = '0';
-                    break;
-                case KIND_HABITATION:
-                    switch ((NiveauHabitation_t) ((Habitation_t*) gameplayScreen->world->map[i][j].donnees)->niveau) {
-                        case NIVEAU_RUINE:
-                            matrice[i][j] = 'Y';
-                            break;
-                        case NIVEAU_TERRAIN_VAGUE:
-                            matrice[i][j] = 'T';
-                            break;
-                        case NIVEAU_CABANE:
-                            matrice[i][j] = 'C';
-                            break;
-                        case NIVEAU_MAISON:
-                            matrice[i][j] = 'M';
-                            break;
-                        case NIVEAU_IMMEUBLE:
-                            matrice[i][j] = 'I';
-                            break;
-                        case NIVEAU_GRATTE_CIEL:
-                            matrice[i][j] = 'S';
-                            break;
-                    }
-                    break;
-                case KIND_CENTRALE:
-                    matrice[i][j] = 'Z';
-                    break;
-                case KIND_CHATEAU:
-                    matrice[i][j] = 'E';
+                    fprintf(gameplayScreen->loader.fichierTxtWrite, "0");
                     break;
                 case KIND_ROUTE:
-                    matrice[i][j] = 'R';
+                    fprintf(gameplayScreen->loader.fichierTxtWrite, "r");
+                    break;
+                case KIND_HABITATION: {
+                    Habitation_t *hab = gameplayScreen->world->map[j][i].donnees;
+                    fprintf(gameplayScreen->loader.fichierTxtWrite, "%c", hab2char(hab));
+                }
+                    break;
+                case KIND_CENTRALE:
+                    fprintf(gameplayScreen->loader.fichierTxtWrite, "J");
+                    break;
+                case KIND_CHATEAU:
+                    fprintf(gameplayScreen->loader.fichierTxtWrite, "W");
                     break;
                 default:
                     break;
             }
         }
+        fprintf(gameplayScreen->loader.fichierTxtWrite, "\n");
     }
-
-    if (gameplayScreen->loader.fichierTxtWrite != NULL) {
-
-        for (int y = 0; y < SIM_MAP_LARGEUR; y++) {
-            for (int x = 0; x < SIM_MAP_HAUTEUR; x++) {
-                fprintf(gameplayScreen->loader.fichierTxtWrite, "%c ", matrice[y][x]);
-            }
-            fprintf(gameplayScreen->loader.fichierTxtWrite, "\n");
-        }
-
-        fprintf(gameplayScreen->loader.fichierTxtWrite, "\n%d\n", gameplayScreen->world->rules);
-
-        fprintf(gameplayScreen->loader.fichierTxtWrite, "%d\n", gameplayScreen->world->monnaie);
-
-        fprintf(gameplayScreen->loader.fichierTxtWrite, "%d\n", gameplayScreen->world->n_ticks);
-
-    }
+    /// monnaie
+    fprintf(gameplayScreen->loader.fichierTxtWrite, "%d\n", gameplayScreen->world->monnaie);
+    /// temps ecoule
+    fprintf(gameplayScreen->loader.fichierTxtWrite, "%d\n", gameplayScreen->world->n_ticks);
+    /// mode de jeu
+    fprintf(gameplayScreen->loader.fichierTxtWrite, "%d\n", gameplayScreen->world->rules);
 
     fclose(gameplayScreen->loader.fichierTxtWrite);
 
