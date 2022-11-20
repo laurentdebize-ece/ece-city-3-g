@@ -23,6 +23,12 @@ void ui_charger_textures(UIState* textures) {
     textures->toolbarIcons[ICON_HABITATION] = LoadTexture("../assets/textures/icones/house.png");
     textures->toolbarIcons[ICON_CENTRALE] = LoadTexture("../assets/textures/icones/industry.png");
     textures->toolbarIcons[ICON_CHATEAU] = LoadTexture("../assets/textures/icones/valve.png");
+    textures->toolbarIcons[ICON_GRID] = LoadTexture("../assets/textures/icones/grid.png");
+    textures->toolbarIcons[ICON_WATER_GRID] = LoadTexture("../assets/textures/icones/water_grid.png");
+    textures->toolbarIcons[ICON_ELECTRICITY_GRID] = LoadTexture("../assets/textures/icones/electricity_grid.png");
+    textures->toolbarIcons[ICON_CHECK] = LoadTexture("../assets/textures/icones/check.png");
+    textures->toolbarIcons[ICON_CANCEL] = LoadTexture("../assets/textures/icones/cancel.png");
+    textures->toolbarIcons[ICON_ADD] = LoadTexture("../assets/textures/icones/add.png");
 }
 
 void ui_draw_toolbar(UIState* textures, SimWorld_t* sim) {
@@ -50,10 +56,61 @@ void ui_draw_toolbar(UIState* textures, SimWorld_t* sim) {
 
     DrawTexture(textures->toolbarIcons[ICON_TIME], 1466, 954, timeColor);
     DrawText(TextFormat("x%d", (int)textures->timeScale), 1486, 994, 16, timeColor);
-    DrawTexture(textures->toolbarIcons[ICON_ROAD], 1012, 954, textures->currentBuildMode == BUILD_MODE_ROUTE ? YELLOW : WHITE);
-    DrawTexture(textures->toolbarIcons[ICON_HABITATION], 1082, 954, textures->currentBuildMode == BUILD_MODE_HABITATION ? YELLOW : WHITE);
-    DrawTexture(textures->toolbarIcons[ICON_CENTRALE], 1159, 954, textures->currentBuildMode == BUILD_MODE_CENTRALE ? YELLOW : WHITE);
-    DrawTexture(textures->toolbarIcons[ICON_CHATEAU], 1229, 954, textures->currentBuildMode == BUILD_MODE_CHATEAU ? YELLOW : WHITE);
+    if (textures->stateToolbar.hoverMenu) {
+        DrawCircle(50, 975, 35 , (Color) { 0, 0, 0, 20 });
+    } else if (textures->stateToolbar.modeMenu) {
+        DrawCircle(50, 975, 35 , (Color) { 0, 0, 0, 45 });
+        ///draw_affichage_niveaux(textures);
+    }
+    DrawTexture(textures->toolbarIcons[ICON_HAMBURGER], 26, 954, textures->stateToolbar.modeMenu ? YELLOW : WHITE);
+    if (textures->stateToolbar.hoverSave) {
+        DrawCircle(128, 975, 35 , (Color) { 0, 0, 0, 20 });
+    } else if (textures->stateToolbar.modeSave) {
+        DrawCircle(128, 975, 35 , (Color) { 0, 0, 0, 45 });
+    }
+    DrawTexture(textures->toolbarIcons[ICON_SAVE], 109, 954, textures->stateToolbar.modeSave ? YELLOW : WHITE);
+    DrawTexture(textures->toolbarIcons[ICON_PEOPLE], 211, 954, WHITE);
+    DrawTexture(textures->toolbarIcons[ICON_ENERGY], 446, 954, WHITE);
+    DrawTexture(textures->toolbarIcons[ICON_WATER], 668, 954, WHITE);
+    if (textures->stateToolbar.hoverChangementNiveau) {
+        DrawCircle(910, 975, 30 , (Color) { 0, 0, 0, 20 });
+    } else if (textures->stateToolbar.modeChangementNiveau) {
+        DrawCircle(910, 975, 30 , (Color) { 0, 0, 0, 45 });
+    }
+    DrawTexture(textures->toolbarIcons[ICON_BUILD], 892, 954, textures->stateToolbar.modeChangementNiveau ? YELLOW : WHITE);
+    if (textures->stateToolbar.hoverDestruction) {
+        DrawCircle(1395, 975, 30 , (Color) { 0, 0, 0, 20 });
+    } else if (textures->stateToolbar.modeDestruction) {
+        DrawCircle(1395, 975, 30 , (Color) { 0, 0, 0, 45 });
+    }
+    DrawTexture(textures->toolbarIcons[ICON_DESTROY], 1376, 954, textures->stateToolbar.modeDestruction ? YELLOW : WHITE);
+    if (textures->stateToolbar.hoverRoute) {
+        DrawCircle(1030, 970, 30 , (Color) { 0, 0, 0, 20 });
+    } else if (textures->stateToolbar.modePlacementRoute) {
+        DrawCircle(1030, 970, 30 , (Color) { 0, 0, 0, 45 });
+    }
+    DrawTexture(textures->toolbarIcons[ICON_ROAD], 1012, 954, textures->stateToolbar.modePlacementRoute ? YELLOW : WHITE);
+
+    if (textures->stateToolbar.hoverHabitation) {
+        DrawCircle(1105, 975, 30 , (Color) { 0, 0, 0, 20 });
+    } else if (textures->stateToolbar.modePlacementHabitation) {
+        DrawCircle(1105, 975, 30 , (Color) { 0, 0, 0, 45 });
+    }
+    DrawTexture(textures->toolbarIcons[ICON_HABITATION], 1082, 954, textures->stateToolbar.modePlacementHabitation ? YELLOW : WHITE);
+
+    if (textures->stateToolbar.hoverCentrale) {
+        DrawCircle(1180, 975, 30 , (Color) { 0, 0, 0, 20 });
+    } else if (textures->stateToolbar.modePlacementCentrale) {
+        DrawCircle(1180, 975, 30 , (Color) { 0, 0, 0, 45 });
+    }
+    DrawTexture(textures->toolbarIcons[ICON_CENTRALE], 1159, 954, textures->stateToolbar.modePlacementCentrale ? YELLOW : WHITE);
+
+    if (textures->stateToolbar.hoverChateau) {
+        DrawCircle(1247, 975, 30 , (Color) { 0, 0, 0, 20 });
+    } else if (textures->stateToolbar.modePlacementChateau) {
+        DrawCircle(1247, 975, 30 , (Color) { 0, 0, 0, 45 });
+    }
+    DrawTexture(textures->toolbarIcons[ICON_CHATEAU], 1229, 954, textures->stateToolbar.modePlacementChateau ? YELLOW : WHITE);
 
     // dessin du temps actuel
     DrawRectangleRounded((Rectangle) {
@@ -77,16 +134,76 @@ void ui_draw_toolbar(UIState* textures, SimWorld_t* sim) {
 void ui_update_toolbar(UIState* textures, SimWorld_t* sim) {
     Vector2 mousePos = GetMousePosition();
 
+    textures->stateToolbar.hoverMenu = false;
+    textures->stateToolbar.hoverSave = false;
+    textures->stateToolbar.hoverDestruction = false;
+    textures->stateToolbar.hoverRoute = false;
+    textures->stateToolbar.hoverHabitation = false;
+    textures->stateToolbar.hoverCentrale = false;
+    textures->stateToolbar.hoverChateau = false;
+    textures->stateToolbar.hoverChangementNiveau = false;
+
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+
+        if (textures->stateToolbar.modeChangementNiveau) {
+            if (CheckCollisionPointRec(mousePos, (Rectangle) {40, 851, textures->toolbarIcons[ICON_GRID].width,
+                                                              textures->toolbarIcons[ICON_GRID].height})) {
+                textures->stateToolbar.niveauNormal = true;
+                textures->stateToolbar.niveauEau = false;
+                textures->stateToolbar.niveauElectricite = false;
+            }
+
+            if (CheckCollisionPointRec(mousePos,
+                                       (Rectangle) {150, 851, textures->toolbarIcons[ICON_ELECTRICITY_GRID].width,
+                                                    textures->toolbarIcons[ICON_ELECTRICITY_GRID].height})) {
+                textures->stateToolbar.niveauElectricite = !textures->stateToolbar.niveauElectricite;
+                if (textures->stateToolbar.niveauElectricite == false) {
+                    textures->stateToolbar.niveauEau = false;
+                    textures->stateToolbar.niveauNormal = true;
+                } else {
+                    textures->stateToolbar.niveauEau = false;
+                    textures->stateToolbar.niveauNormal = false;
+                }
+            }
+
+            if (CheckCollisionPointRec(mousePos, (Rectangle) {265, 851, textures->toolbarIcons[ICON_WATER_GRID].width,
+                                                              textures->toolbarIcons[ICON_WATER_GRID].height})) {
+                textures->stateToolbar.niveauEau = !textures->stateToolbar.niveauEau;
+                if (textures->stateToolbar.niveauEau == false) {
+                    textures->stateToolbar.niveauElectricite = false;
+                    textures->stateToolbar.niveauNormal = true;
+                } else {
+                    textures->stateToolbar.niveauElectricite = false;
+                    textures->stateToolbar.niveauNormal = false;
+                }
+            }
+        }
 
         if (CheckCollisionPointRec(mousePos, (Rectangle) {26, 954, textures->toolbarIcons[ICON_HAMBURGER].width,
                                                           textures->toolbarIcons[ICON_HAMBURGER].height})) {
-            printf("Hamburger\n");
+            textures->stateToolbar.modeMenu = !textures->stateToolbar.modeMenu;
+            textures->stateToolbar.modeChangementNiveau = false;
+            textures->stateToolbar.modeSave = false;
+            textures->stateToolbar.modePlacementRoute = false;
+            textures->stateToolbar.modePlacementHabitation = false;
+            textures->stateToolbar.modePlacementCentrale = false;
+            textures->stateToolbar.modePlacementChateau = false;
+            textures->stateToolbar.modeDestruction = false;
         }
 
         if (CheckCollisionPointRec(mousePos, (Rectangle) {109, 954, textures->toolbarIcons[ICON_SAVE].width,
                                                           textures->toolbarIcons[ICON_SAVE].height})) {
-            printf("Save\n");
+            textures->stateToolbar.modeSave = !textures->stateToolbar.modeSave;
+            if(textures->stateToolbar.modeSave){
+                textures->stateToolbar.stateMenuSave.resetNbSauvegardes = true;
+            }
+            textures->stateToolbar.modeMenu = false;
+            textures->stateToolbar.modeChangementNiveau = false;
+            textures->stateToolbar.modePlacementRoute = false;
+            textures->stateToolbar.modePlacementHabitation = false;
+            textures->stateToolbar.modePlacementCentrale = false;
+            textures->stateToolbar.modePlacementChateau = false;
+            textures->stateToolbar.modeDestruction = false;
         }
 
         if (CheckCollisionPointRec(mousePos, (Rectangle) {211, 954, textures->toolbarIcons[ICON_PEOPLE].width,
@@ -106,11 +223,27 @@ void ui_update_toolbar(UIState* textures, SimWorld_t* sim) {
 
         if (CheckCollisionPointRec(mousePos, (Rectangle) {892, 954, textures->toolbarIcons[ICON_BUILD].width,
                                                           textures->toolbarIcons[ICON_BUILD].height})) {
+            textures->stateToolbar.modeChangementNiveau = !textures->stateToolbar.modeChangementNiveau;
+            textures->stateToolbar.modeMenu = false;
+            textures->stateToolbar.modeSave = false;
+            textures->stateToolbar.modePlacementRoute = false;
+            textures->stateToolbar.modePlacementHabitation = false;
+            textures->stateToolbar.modePlacementCentrale = false;
+            textures->stateToolbar.modePlacementChateau = false;
+            textures->stateToolbar.modeDestruction = false;
         }
 
         if (CheckCollisionPointRec(mousePos, (Rectangle) {1376, 954, textures->toolbarIcons[ICON_DESTROY].width,
                                                           textures->toolbarIcons[ICON_DESTROY].height})) {
             textures->currentBuildMode = (textures->currentBuildMode == BUILD_MODE_DESTROY ? BUILD_MODE_NONE : BUILD_MODE_DESTROY);
+            textures->stateToolbar.modeDestruction = !textures->stateToolbar.modeDestruction;
+            textures->stateToolbar.modeMenu = false;
+            textures->stateToolbar.modeSave = false;
+            textures->stateToolbar.modePlacementRoute = false;
+            textures->stateToolbar.modePlacementHabitation = false;
+            textures->stateToolbar.modePlacementCentrale = false;
+            textures->stateToolbar.modePlacementChateau = false;
+            textures->stateToolbar.modeChangementNiveau = false;
         }
 
         if (CheckCollisionPointRec(mousePos, (Rectangle) {1466, 954, textures->toolbarIcons[ICON_TIME].width,
@@ -122,22 +255,118 @@ void ui_update_toolbar(UIState* textures, SimWorld_t* sim) {
         }
 
         if (CheckCollisionPointRec(mousePos, (Rectangle) {1012, 954, textures->toolbarIcons[ICON_ROAD].width,
-                                                          textures->toolbarIcons[ICON_ROAD].height}))
+                                                          textures->toolbarIcons[ICON_ROAD].height})){
             textures->currentBuildMode = (textures->currentBuildMode == BUILD_MODE_ROUTE ? BUILD_MODE_NONE : BUILD_MODE_ROUTE);
+            textures->stateToolbar.modePlacementRoute = !textures->stateToolbar.modePlacementRoute;
+            textures->stateToolbar.modeMenu = false;
+            textures->stateToolbar.modeSave = false;
+            textures->stateToolbar.modeDestruction = false;
+            textures->stateToolbar.modePlacementHabitation = false;
+            textures->stateToolbar.modePlacementCentrale = false;
+            textures->stateToolbar.modePlacementChateau = false;
+            textures->stateToolbar.modeChangementNiveau = false;
+        }
 
         if (CheckCollisionPointRec(mousePos, (Rectangle) {1082, 954, textures->toolbarIcons[ICON_HABITATION].width,
-                                                          textures->toolbarIcons[ICON_HABITATION].height}))
-           textures->currentBuildMode = (textures->currentBuildMode == BUILD_MODE_HABITATION ? BUILD_MODE_NONE : BUILD_MODE_HABITATION);
+                                                          textures->toolbarIcons[ICON_HABITATION].height})){
+            textures->stateToolbar.modePlacementHabitation = !textures->stateToolbar.modePlacementHabitation;
+            textures->stateToolbar.modeMenu = false;
+            textures->stateToolbar.modeSave = false;
+            textures->stateToolbar.modeDestruction = false;
+            textures->stateToolbar.modePlacementRoute = false;
+            textures->stateToolbar.modePlacementCentrale = false;
+            textures->stateToolbar.modePlacementChateau = false;
+            textures->stateToolbar.modeChangementNiveau = false;
+            textures->currentBuildMode = (textures->currentBuildMode == BUILD_MODE_HABITATION ? BUILD_MODE_NONE : BUILD_MODE_HABITATION);
+        }
 
         if (CheckCollisionPointRec(mousePos, (Rectangle) {1159, 954, textures->toolbarIcons[ICON_CENTRALE].width,
-                                                          textures->toolbarIcons[ICON_CENTRALE].height}))
+                                                          textures->toolbarIcons[ICON_CENTRALE].height})){
+            textures->stateToolbar.modePlacementCentrale = !textures->stateToolbar.modePlacementCentrale;
             textures->currentBuildMode = (textures->currentBuildMode == BUILD_MODE_CENTRALE ? BUILD_MODE_NONE : BUILD_MODE_CENTRALE);
-
-
+            textures->stateToolbar.modeMenu = false;
+            textures->stateToolbar.modeSave = false;
+            textures->stateToolbar.modeDestruction = false;
+            textures->stateToolbar.modePlacementRoute = false;
+            textures->stateToolbar.modePlacementHabitation = false;
+            textures->stateToolbar.modePlacementChateau = false;
+            textures->stateToolbar.modeChangementNiveau = false;
+        }
         if (CheckCollisionPointRec(mousePos, (Rectangle) {1229, 954, textures->toolbarIcons[ICON_CHATEAU].width,
-                                                          textures->toolbarIcons[ICON_CHATEAU].height}))
-            textures->currentBuildMode = (textures->currentBuildMode == BUILD_MODE_CHATEAU ? BUILD_MODE_NONE : BUILD_MODE_CHATEAU);
+                                                          textures->toolbarIcons[ICON_CHATEAU].height})) {
+            textures->stateToolbar.modePlacementChateau = !textures->stateToolbar.modePlacementChateau;
+            textures->stateToolbar.modeMenu = false;
+            textures->stateToolbar.modeSave = false;
+            textures->stateToolbar.modeDestruction = false;
+            textures->stateToolbar.modePlacementRoute = false;
+            textures->stateToolbar.modePlacementCentrale = false;
+            textures->stateToolbar.modePlacementHabitation = false;
+            textures->stateToolbar.modeChangementNiveau = false;
+            textures->currentBuildMode = (textures->currentBuildMode == BUILD_MODE_CHATEAU ? BUILD_MODE_NONE
+                                                                                           : BUILD_MODE_CHATEAU);
+        }
+    } else {
+        if (CheckCollisionPointRec(mousePos, (Rectangle) {40, 851, textures->toolbarIcons[ICON_GRID].width,
+                                                          textures->toolbarIcons[ICON_GRID].height})) {
+            textures->stateToolbar.hoverNiveauNormal = true;
+        }
+        if (CheckCollisionPointRec(mousePos, (Rectangle) {150, 851, textures->toolbarIcons[ICON_ELECTRICITY_GRID].width,
+                                                          textures->toolbarIcons[ICON_ELECTRICITY_GRID].height})) {
+            textures->stateToolbar.hoverNiveauElectricite = true;
+        }
+        if (CheckCollisionPointRec(mousePos, (Rectangle) {265, 851, textures->toolbarIcons[ICON_WATER_GRID].width,
+                                                          textures->toolbarIcons[ICON_WATER_GRID].height})) {
+            textures->stateToolbar.hoverNiveauEau = true;
+        }
+        if (CheckCollisionPointRec(mousePos, (Rectangle) {26, 954, textures->toolbarIcons[ICON_HAMBURGER].width,
+                                                          textures->toolbarIcons[ICON_HAMBURGER].height})) {
+            textures->stateToolbar.hoverMenu = true;
+        }
+        if (CheckCollisionPointRec(mousePos, (Rectangle) {109, 954, textures->toolbarIcons[ICON_SAVE].width,
+                                                          textures->toolbarIcons[ICON_SAVE].height})) {
+            textures->stateToolbar.hoverSave = true;
+        }
+        if (CheckCollisionPointRec(mousePos, (Rectangle) {211, 954, textures->toolbarIcons[ICON_PEOPLE].width,
+                                                          textures->toolbarIcons[ICON_PEOPLE].height})) {
+        }
+        if (CheckCollisionPointRec(mousePos, (Rectangle) {446, 954, textures->toolbarIcons[ICON_ENERGY].width,
+                                                          textures->toolbarIcons[ICON_ENERGY].height})) {
+        }
+        if (CheckCollisionPointRec(mousePos, (Rectangle) {668, 954, textures->toolbarIcons[ICON_WATER].width,
+                                                          textures->toolbarIcons[ICON_WATER].height})) {
+        }
+        if (CheckCollisionPointRec(mousePos, (Rectangle) {892, 954, textures->toolbarIcons[ICON_BUILD].width,
+                                                          textures->toolbarIcons[ICON_BUILD].height})) {
+            textures->stateToolbar.hoverChangementNiveau = true;
+        }
+        if (CheckCollisionPointRec(mousePos, (Rectangle) {1376, 954, textures->toolbarIcons[ICON_DESTROY].width,
+                                                          textures->toolbarIcons[ICON_DESTROY].height})) {
+            textures->stateToolbar.hoverDestruction = true;
+        }
+        if (CheckCollisionPointRec(mousePos, (Rectangle) {1466, 954, textures->toolbarIcons[ICON_TIME].width,
+                                                          textures->toolbarIcons[ICON_TIME].height})) {
+        }
+        if (CheckCollisionPointRec(mousePos, (Rectangle) {1012, 954, textures->toolbarIcons[ICON_ROAD].width,
+                                                          textures->toolbarIcons[ICON_ROAD].height})) {
+            textures->stateToolbar.hoverRoute = true;
+        }
+        if (CheckCollisionPointRec(mousePos, (Rectangle) {1082, 954, textures->toolbarIcons[ICON_HABITATION].width,
+                                                          textures->toolbarIcons[ICON_HABITATION].height})) {
+            textures->stateToolbar.hoverHabitation = true;
+        }
+        if (CheckCollisionPointRec(mousePos, (Rectangle) {1159, 954, textures->toolbarIcons[ICON_CENTRALE].width,
+                                                          textures->toolbarIcons[ICON_CENTRALE].height})) {
+            textures->stateToolbar.hoverCentrale = true;
+        }
+        if (CheckCollisionPointRec(mousePos, (Rectangle) {1229, 954, textures->toolbarIcons[ICON_CHATEAU].width,
+                                                          textures->toolbarIcons[ICON_CHATEAU].height})) {
+            textures->stateToolbar.hoverChateau = true;
+        }
     }
+
+
+
+
 }
 
 CaseKind_t ui_buildmode_to_casekind(BuildMode mode) {

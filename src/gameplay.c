@@ -1,7 +1,7 @@
-
 #include <stdio.h>
 #include "screens/gameplay.h"
 #include "utils/capacite.h"
+#include "sauvegarde.h"
 
 #define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
 
@@ -33,6 +33,21 @@ void gameplay_on_enter(Jeu_t *jeu, GameplayScreen_t *gameplay) {
 
     gameplay->dbgDisplayChateauNeighbors = 0;
     gameplay->dbgDisplayCentraleNeighbors = 0;
+
+    gameplay->state.stateToolbar.modePlacementChateau = false;
+    gameplay->state.stateToolbar.modeMenu = false;
+    gameplay->state.stateToolbar.modeSave = false;
+    gameplay->state.stateToolbar.modeDestruction = false;
+    gameplay->state.stateToolbar.modePlacementRoute = false;
+    gameplay->state.stateToolbar.modePlacementCentrale = false;
+    gameplay->state.stateToolbar.modePlacementHabitation = false;
+    gameplay->state.stateToolbar.modeChangementNiveau = false;
+    gameplay->state.stateToolbar.stateMenuSave.modeAjout = false;
+    gameplay->state.stateToolbar.stateMenuSave.resetNbSauvegardes = false;
+    gameplay->loader.nb_sauvegardes = 0;
+    gameplay->state.stateToolbar.stateMenuSave.num_component_select = -1;
+    gameplay->state.stateToolbar.stateMenuSave.num_component_hover = -1;
+
 }
 
 void gameplay_on_exit(Jeu_t *jeu, GameplayScreen_t *gameplay) {
@@ -62,6 +77,8 @@ void gameplay_update(Jeu_t *jeu, GameplayScreen_t *gameplay) {
         try_place_building(gameplay);
 
 
+    update_menu_sauvegarde(gameplay);
+
     /// menus de débogage.
     update_debug_info(gameplay);
 }
@@ -78,6 +95,8 @@ void gameplay_draw(Jeu_t *jeu, GameplayScreen_t *gameplay) {
         affichage_draw_build_preview(&gameplay->spriteSheet, gameplay->world, v,
                                      ui_buildmode_to_casekind(gameplay->state.currentBuildMode));
 
+
+    affichage_menu_sauvegarde(gameplay);
 
     draw_debug_info(gameplay);
 

@@ -1,6 +1,6 @@
-
 #include "affichage.h"
 #include "sim/chateau.h"
+#include "raylib.h"
 
 enum SPRITE_MAP get_route_sprite_variant(SimWorld_t *eceCity, int x, int y) {
     if (eceCity->map[x][y + 1].type == KIND_ROUTE &&
@@ -60,10 +60,11 @@ void affichage_draw_terrain_background(SpriteSheet_t *sheet, SimWorld_t *world) 
         for (int j = 0; j < 35; ++j) {
             switch (world->map[i][j].type) {
 
-                case KIND_ROUTE:
+                case KIND_ROUTE:{
                     Color col = (world->map[i][j].connexe) ? PINK : WHITE;
                     sprite_sheet_draw_sprite(sheet, get_route_sprite_variant(world, i, j), col, i, j);
                     break;
+                }
 
                 default:
                     sprite_sheet_draw_sprite(sheet, SPRITE_TERRAIN_0, WHITE, i, j);
@@ -116,7 +117,7 @@ void affichage_draw_build_preview(SpriteSheet_t *sheet, SimWorld_t *world, Vecto
         case KIND_HABITATION:
             w = 3;
             h = 3;
-            bat = SPRITE_MAISON_3X3;
+            bat = SPRITE_TERRAIN_VAGUE_3X3;
             break;
 
         case KIND_CENTRALE:
