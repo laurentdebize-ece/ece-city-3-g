@@ -100,7 +100,7 @@ struct bat_data {
 };
 
 void sim_charger(SimWorld_t *world, const char *nomFichier) {
-    FILE *fichier = fopen(nomFichier, "r");
+    FILE *fichier = fopen(nomFichier, "r+");
     assert(fichier != NULL && "Impossible d'ouvrir le fichier de sauvegarde pour lecture.");
 
     struct bat_data data[SIM_MAP_LARGEUR][SIM_MAP_HAUTEUR] = {0};
@@ -240,7 +240,6 @@ void sim_sauvegarder(SimWorld_t *world, const char *nomFichier) {
     fflush(fichier);
     fclose(fichier);
 }
-
 
 /// Load depuis un fichier une partie
 void lireFichier(GameplayScreen_t* gameplayScreen){
@@ -561,7 +560,11 @@ void update_menu_sauvegarde(GameplayScreen_t* gameplay){
                 gameplay->state.stateToolbar.stateMenuSave.clickSel = true;
                 if(gameplay->state.stateToolbar.stateMenuSave.num_component_select != -1 && gameplay->state.stateToolbar.stateMenuSave.select_component){
                     strcpy(gameplay->state.stateToolbar.stateMenuSave.nomFichierOuverture,gameplay->loader.nom_sauvegardes[gameplay->state.stateToolbar.stateMenuSave.num_component_select]);
-                    lireFichier(gameplay);
+                    sim_world_destroy(gameplay->world);
+                    gameplay->world = sim_world_create(1, 500000);
+                    char chemin[100];
+                    sprintf(chemin, "../assets/txt/%s", gameplay->state.stateToolbar.stateMenuSave.nomFichierOuverture);
+                    sim_charger(gameplay->world, chemin);
                     gameplay->state.stateToolbar.modeSave = false;
                 }
 
