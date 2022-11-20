@@ -35,26 +35,20 @@ void gameplay_on_enter(Jeu_t *jeu, GameplayScreen_t *gameplay) {
     gameplay->dbgDisplayChateauNeighbors = 0;
     gameplay->dbgDisplayCentraleNeighbors = 0;
 
-    gameplay->state.stateToolbar.modePlacementChateau = false;
-    gameplay->state.stateToolbar.modeMenu = false;
-    gameplay->state.stateToolbar.modeSave = false;
-    gameplay->state.stateToolbar.modeDestruction = false;
-    gameplay->state.stateToolbar.modePlacementRoute = false;
-    gameplay->state.stateToolbar.modePlacementCentrale = false;
-    gameplay->state.stateToolbar.modePlacementHabitation = false;
-    gameplay->state.stateToolbar.modeChangementNiveau = false;
+    gameplay->state.stateToolbar.stateMenuSave.modeMenu = false;
+    gameplay->state.stateToolbar.stateMenuSave.modeSave = false;
     gameplay->state.stateToolbar.stateMenuSave.modeAjout = false;
     gameplay->state.stateToolbar.stateMenuSave.resetNbSauvegardes = false;
-    gameplay->loader.nb_sauvegardes = 0;
+    gameplay->state.stateToolbar.saveHistory.nb_sauvegardes = 0;
     gameplay->state.stateToolbar.stateMenuSave.num_component_select = -1;
     gameplay->state.stateToolbar.stateMenuSave.num_component_hover = -1;
-    gameplay->state.stateToolbar.relaod_carte = false;
-    gameplay->state.stateToolbar.hoverNiveauNormal = false;
-    gameplay->state.stateToolbar.hoverNiveauEau = false;
-    gameplay->state.stateToolbar.hoverNiveauElectricite = false;
-    gameplay->state.stateToolbar.niveauEau = false;
-    gameplay->state.stateToolbar.niveauElectricite = false;
-    gameplay->state.stateToolbar.niveauNormal = true;
+//    gameplay->state.stateToolbar.relaod_carte = false;
+//    gameplay->state.stateToolbar.hoverNiveauNormal = false;
+//    gameplay->state.stateToolbar.hoverNiveauEau = false;
+//    gameplay->state.stateToolbar.hoverNiveauElectricite = false;
+//    gameplay->state.stateToolbar.niveauEau = false;
+//    gameplay->state.stateToolbar.niveauElectricite = false;
+//    gameplay->state.stateToolbar.niveauNormal = true;
 
 }
 
@@ -91,10 +85,6 @@ void gameplay_update(Jeu_t *jeu, GameplayScreen_t *gameplay) {
 
     /// menus de débogage.
     update_debug_info(gameplay);
-
-    if(gameplay->state.stateToolbar.relaod_carte){
-        sim_sauvegarder(gameplay->world, "../saves/txt/auto.txt");
-    }
 }
 
 void gameplay_draw(Jeu_t *jeu, GameplayScreen_t *gameplay) {
@@ -109,33 +99,33 @@ void gameplay_draw(Jeu_t *jeu, GameplayScreen_t *gameplay) {
         affichage_draw_build_preview(&gameplay->spriteSheet, gameplay->world, v,
                                      ui_buildmode_to_casekind(gameplay->state.currentBuildMode));
 
-
-    affichage_menu_sauvegarde(gameplay);
-
     draw_debug_info(gameplay);
 
     ui_draw_toolbar(&gameplay->state, gameplay->world);
 
-    if (gameplay->state.stateToolbar.niveauEau) {
-        afficher_level_eau(&gameplay->spriteSheet, gameplay->world);
-        afficher_capacite(gameplay->world);
-    } else if (gameplay->state.stateToolbar.niveauElectricite) {
-        afficher_level_elec(&gameplay->spriteSheet, gameplay->world, gameplay);
-        afficher_capacite(gameplay->world);
-    }
+//    if (gameplay->state.stateToolbar.niveauEau) {
+//        afficher_level_eau(&gameplay->spriteSheet, gameplay->world);
+//        afficher_capacite(gameplay->world);
+//    } else if (gameplay->state.stateToolbar.niveauElectricite) {
+//        afficher_level_elec(&gameplay->spriteSheet, gameplay->world, gameplay);
+//        afficher_capacite(gameplay->world);
+//    }
 
     afficher_etat_alim_eau(&gameplay->spriteSheet, gameplay->world);
     afficher_etat_alim_elec(&gameplay->spriteSheet, gameplay->world);
+
+    affichage_menu_sauvegarde(gameplay);
 }
 
 void try_place_building(GameplayScreen_t *gameplay) {
+    if (!gameplay->state.stateToolbar.stateMenuSave.modeSave) {
         switch (gameplay->state.currentBuildMode) {
             case BUILD_MODE_ROUTE:
                 if (sim_check_can_place(gameplay->world, false, gameplay->mousePos.x, gameplay->mousePos.y, 1, 1) &&
                     gameplay->world->monnaie >= ROUTE_PRIX_CONSTRUCTION) {
                     sim_place_entity(gameplay->world, KIND_ROUTE, gameplay->mousePos.x, gameplay->mousePos.y, true);
                     gameplay->world->monnaie -= ROUTE_PRIX_CONSTRUCTION;
-                    gameplay->state.stateToolbar.relaod_carte = true;
+                    sim_sauvegarder(gameplay->world, SAVE_AUTO_SAVE_FILENAME);
                 }
                 break;
 
@@ -145,7 +135,7 @@ void try_place_building(GameplayScreen_t *gameplay) {
                     sim_place_entity(gameplay->world, KIND_HABITATION, gameplay->mousePos.x,
                                      gameplay->mousePos.y, true);
                     gameplay->world->monnaie -= HABITATION_PRIX_CONSTRUCTION;
-                    gameplay->state.stateToolbar.relaod_carte = true;
+                    sim_sauvegarder(gameplay->world, SAVE_AUTO_SAVE_FILENAME);
                 }
                 break;
 
@@ -155,7 +145,7 @@ void try_place_building(GameplayScreen_t *gameplay) {
                     sim_place_entity(gameplay->world, KIND_CENTRALE, gameplay->mousePos.x,
                                      gameplay->mousePos.y, true);
                     gameplay->world->monnaie -= CENTRALE_PRIX_CONSTRUCTION;
-                    gameplay->state.stateToolbar.relaod_carte = true;
+                    sim_sauvegarder(gameplay->world, SAVE_AUTO_SAVE_FILENAME);
                 }
                 break;
 
@@ -164,18 +154,18 @@ void try_place_building(GameplayScreen_t *gameplay) {
                                         6) && gameplay->world->monnaie >= CHATEAU_PRIX_CONSTRUCTION) {
                     sim_place_entity(gameplay->world, KIND_CHATEAU, gameplay->mousePos.x, gameplay->mousePos.y, true);
                     gameplay->world->monnaie -= CHATEAU_PRIX_CONSTRUCTION;
-                    gameplay->state.stateToolbar.relaod_carte = true;
+                    sim_sauvegarder(gameplay->world, SAVE_AUTO_SAVE_FILENAME);
                 }
                 break;
 
             case BUILD_MODE_DESTROY:
                 sim_destroy_entity(gameplay->world, gameplay->mousePos.x, gameplay->mousePos.y);
-                gameplay->state.stateToolbar.relaod_carte = true;
                 break;
 
             default:
                 break;
         }
+    }
 }
 
 

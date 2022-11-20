@@ -5,7 +5,6 @@
 #include <raylib.h>
 #include "sim/sim.h"
 
-
 typedef enum BuildMode {
     BUILD_MODE_NONE,
     BUILD_MODE_ROUTE,
@@ -56,37 +55,20 @@ typedef struct {
     char nomFichierOuverture[10];
     int indice;
     bool resetNbSauvegardes;
+    bool modeMenu;
+    bool modeSave;
 } StateMenuSave_t;
 
+typedef struct {
+    int nb_sauvegardes;
+    char nom_sauvegardes[10][260];
+    char* sauvegardes_time[10];
+} SaveHistory_t;
+
 typedef struct StateToolbar_t {
-    bool hoverNiveauEau;
-    bool hoverNiveauElectricite;
-    bool hoverNiveauNormal;
-    bool niveauEau;
-    bool niveauElectricite;
-    bool niveauNormal;
-    bool hoverChangementNiveau;
-    bool modeChangementNiveau;
-    bool hoverMenu;
-    bool modeMenu;
-    bool hoverSave;
-    bool modeSave;
     StateMenuSave_t stateMenuSave;
-    bool hoverRoute;
-    bool modePlacementRoute;
-    bool rotationRoute;
-    bool hoverHabitation;
-    bool modePlacementHabitation;
-    bool hoverCentrale;
-    bool modePlacementCentrale;
-    bool rotationCentraleElec;
-    bool hoverChateau;
-    bool modePlacementChateau;
-    bool rotationChateau;
-    bool hoverDestruction;
-    bool modeDestruction;
-    bool relaod_carte;
-} StateToolbar_t;
+    SaveHistory_t saveHistory;
+} ToolbarHoverState_t;
 
 
 /// Contient l'état de l'interface utilisateur.
@@ -96,13 +78,13 @@ typedef struct UIState {
     enum BuildMode currentBuildMode;
     /// Multiplicateur de vitesse de jeu
     float timeScale;
-    /// Informations sur l'état de la toolbar.
-    StateToolbar_t stateToolbar;
+    /// Informations sur l'état de hover des trucs de la toolbar.
+    ToolbarHoverState_t stateToolbar;
 } UIState;
 
 void ui_charger_textures(UIState* textures);
 
-void ui_draw_toolbar(UIState* textures, SimWorld_t* sim);
+void ui_draw_toolbar(UIState* states, SimWorld_t* sim);
 
 void ui_update_toolbar(UIState* textures, SimWorld_t* sim);
 

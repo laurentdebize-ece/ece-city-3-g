@@ -120,7 +120,4 @@ void bfs(SimWorld_t* world, Vector2I start, void* batId, Vector_t* chemins) {
     // on trie les résultats par distance
     vector_sort(chemins, trier_habitations_par_distance);
 
-
-    for (int i = 0; i < chemins->taille; ++i)
-        printf("Chemin de d %d vers %x \n\r", ((HabitationNode_t*)chemins->data[i])->distance, chemins->data[i]);
 }
