@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "screens/gameplay.h"
 #include "utils/capacite.h"
-#include "sim/sauvegarde.h"
+#include "sauvegarde.h"
 
 #define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
 
@@ -25,14 +25,31 @@ GameplayScreen_t *gameplay_create_screen(SimWorld_t* world) {
 }
 
 void gameplay_on_enter(Jeu_t *jeu, GameplayScreen_t *gameplay) {
+    gameplay->world = sim_world_create(Capitaliste_t, 500000);
     ui_charger_textures(&gameplay->state);
     sprite_sheet_load(&gameplay->spriteSheet);
     gameplay->state.currentBuildMode = BUILD_MODE_NONE;
     gameplay->state.timeScale = 1.0f;
     gameplay->elapsedTime = 0.f;
 
+
     gameplay->dbgDisplayChateauNeighbors = 0;
     gameplay->dbgDisplayCentraleNeighbors = 0;
+
+    gameplay->state.stateToolbar.modePlacementChateau = false;
+    gameplay->state.stateToolbar.modeMenu = false;
+    gameplay->state.stateToolbar.modeSave = false;
+    gameplay->state.stateToolbar.modeDestruction = false;
+    gameplay->state.stateToolbar.modePlacementRoute = false;
+    gameplay->state.stateToolbar.modePlacementCentrale = false;
+    gameplay->state.stateToolbar.modePlacementHabitation = false;
+    gameplay->state.stateToolbar.modeChangementNiveau = false;
+    gameplay->state.stateToolbar.stateMenuSave.modeAjout = false;
+    gameplay->state.stateToolbar.stateMenuSave.resetNbSauvegardes = false;
+    gameplay->loader.nb_sauvegardes = 0;
+    gameplay->state.stateToolbar.stateMenuSave.num_component_select = -1;
+    gameplay->state.stateToolbar.stateMenuSave.num_component_hover = -1;
+
 }
 
 void gameplay_on_exit(Jeu_t *jeu, GameplayScreen_t *gameplay) {
@@ -63,10 +80,8 @@ void gameplay_update(Jeu_t *jeu, GameplayScreen_t *gameplay) {
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
         try_place_building(gameplay);
 
-    if (IsKeyPressed(KEY_J)) {
-        sim_charger(gameplay->world, "save.txt");
-    }
 
+    update_menu_sauvegarde(gameplay);
 
     /// menus de débogage.
     update_debug_info(gameplay);
@@ -84,6 +99,8 @@ void gameplay_draw(Jeu_t *jeu, GameplayScreen_t *gameplay) {
         affichage_draw_build_preview(&gameplay->spriteSheet, gameplay->world, v,
                                      ui_buildmode_to_casekind(gameplay->state.currentBuildMode));
 
+
+    affichage_menu_sauvegarde(gameplay);
 
     draw_debug_info(gameplay);
 

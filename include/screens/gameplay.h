@@ -10,6 +10,24 @@
 #include "utils/grille.h"
 #include "affichage.h"
 #include "bfs.h"
+#include "stdio.h"
+#include "dirent.h"
+#include "dir.h"
+
+typedef struct {
+
+    FILE* fichierTxt;
+    FILE* fichierTxtWrite;
+    FILE* autoTxt;
+    FILE* autoTxtWrite;
+    int nb_sauvegardes;
+    char nom_sauvegardes[10][260];
+    DIR* directory;
+    char* sauvegardes_time[10];
+
+} Loader_t;
+
+
 
 typedef struct GameplayScreen_t {
     ScreenInfo_t screen_info;
@@ -23,7 +41,8 @@ typedef struct GameplayScreen_t {
     Vector2I mousePos;
     /// Temps écoulé depuis la dernière seconde.
     float elapsedTime;
-
+    /// Les fichiers pour le chargement de la carte.
+    Loader_t loader;
 
     /// Débogage
     int dbgDisplayChateauNeighbors;

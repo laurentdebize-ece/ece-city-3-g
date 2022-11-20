@@ -30,9 +30,62 @@ enum TOOLBAR_ICON {
     ICON_HABITATION,
     ICON_CENTRALE,
     ICON_CHATEAU,
+    ICON_GRID,
+    ICON_WATER_GRID,
+    ICON_ELECTRICITY_GRID,
+    ICON_CHECK,
+    ICON_CANCEL,
+    ICON_ADD,
     ICON_DOLLAR,
     ICON_NB_LOGOS_TOOLBAR
 };
+
+typedef struct {
+    bool hoverAdd;
+    bool hoverSel;
+    bool hoverCancel;
+    bool hoverComponent;
+    bool select_component;
+    int num_component_hover;
+    int num_component_select;
+    bool clickAdd;
+    bool modeAjout;
+    bool clickSel;
+    bool clickCancel;
+    char nomFichier[10];
+    char nomFichierOuverture[10];
+    int indice;
+    bool resetNbSauvegardes;
+} StateMenuSave_t;
+
+typedef struct StateToolbar_t {
+    bool hoverNiveauEau;
+    bool hoverNiveauElectricite;
+    bool hoverNiveauNormal;
+    bool niveauEau;
+    bool niveauElectricite;
+    bool niveauNormal;
+    bool hoverChangementNiveau;
+    bool modeChangementNiveau;
+    bool hoverMenu;
+    bool modeMenu;
+    bool hoverSave;
+    bool modeSave;
+    StateMenuSave_t stateMenuSave;
+    bool hoverRoute;
+    bool modePlacementRoute;
+    bool rotationRoute;
+    bool hoverHabitation;
+    bool modePlacementHabitation;
+    bool hoverCentrale;
+    bool modePlacementCentrale;
+    bool rotationCentraleElec;
+    bool hoverChateau;
+    bool modePlacementChateau;
+    bool rotationChateau;
+    bool hoverDestruction;
+    bool modeDestruction;
+} StateToolbar_t;
 
 
 /// Contient l'état de l'interface utilisateur.
@@ -42,6 +95,8 @@ typedef struct UIState {
     enum BuildMode currentBuildMode;
     /// Multiplicateur de vitesse de jeu
     float timeScale;
+    /// Informations sur l'état de la toolbar.
+    StateToolbar_t stateToolbar;
 } UIState;
 
 void ui_charger_textures(UIState* textures);
