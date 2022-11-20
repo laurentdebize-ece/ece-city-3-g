@@ -12,13 +12,11 @@ enum RenderLayer {
     LAYER_CENTRALES = 1 << 1,
     LAYER_CHATEAUX = 1 << 2,
     LAYER_ROUTES = 1 << 3,
-    LAYER_RESEAU_ELECTRIQUE = LAYER_HABITATIONS | LAYER_CENTRALES,
-    LAYER_CANALISATIONS_EAU = LAYER_HABITATIONS | LAYER_CHATEAUX,
     LAYER_ALL = LAYER_HABITATIONS | LAYER_CENTRALES | LAYER_CHATEAUX
 };
 
 /// Dessine le fond de la carte.
-void affichage_draw_terrain_background(SpriteSheet_t* sheet, SimWorld_t* world);
+void affichage_draw_terrain_background(SpriteSheet_t* sheet, SimWorld_t* world, bool eau, bool elec);
 
 /// Dessine les tuiles de la carte.
 void affichage_draw_entities(SpriteSheet_t* sheet, SimWorld_t* world, enum RenderLayer layers);

@@ -14,6 +14,12 @@ typedef enum BuildMode {
     BUILD_MODE_DESTROY,
 } BuildMode;
 
+typedef enum AffichageNiveau {
+    AFFICHAGE_NIVEAU_NONE,
+    AFFICHAGE_NIVEAU_ELEC,
+    AFFICHAGE_NIVEAU_EAU
+} AffichageNiveau_t;
+
 /// Le mode de construction actuel.
 
 enum TOOLBAR_ICON {
@@ -68,6 +74,9 @@ typedef struct {
 typedef struct StateToolbar_t {
     StateMenuSave_t stateMenuSave;
     SaveHistory_t saveHistory;
+    bool hoverNiveauNormal;
+    bool hoverNiveauEau;
+    bool hoverNiveauElectricite;
 } ToolbarHoverState_t;
 
 
@@ -76,6 +85,8 @@ typedef struct UIState {
     Texture2D toolbarIcons[ICON_NB_LOGOS_TOOLBAR];
     /// Mode de construction actuel
     enum BuildMode currentBuildMode;
+    /// Mode d'affichage actuel
+    enum AffichageNiveau affichageNiveau;
     /// Multiplicateur de vitesse de jeu
     float timeScale;
     /// Informations sur l'état de hover des trucs de la toolbar.
