@@ -112,8 +112,7 @@ void gameplay_draw(Jeu_t *jeu, GameplayScreen_t *gameplay) {
 
     affichage_menu_sauvegarde(gameplay);
 
-    //draw_debug_info(gameplay);
-
+    draw_debug_info(gameplay);
 
     ui_draw_toolbar(&gameplay->state, gameplay->world);
 

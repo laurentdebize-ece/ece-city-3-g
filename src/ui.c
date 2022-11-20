@@ -175,14 +175,13 @@ void ui_update_toolbar(UIState* textures, SimWorld_t* sim) {
         if (textures->stateToolbar.modeMenu) {
             if (CheckCollisionPointRec(mousePos, (Rectangle) {40, 851, 40, 40})) {
                 textures->stateToolbar.niveauNormal = true;
-                printf("Normal");
                 textures->stateToolbar.niveauEau = false;
                 textures->stateToolbar.niveauElectricite = false;
             }
 
             if (CheckCollisionPointRec(mousePos,
                                        (Rectangle) {150, 851, 40, 40})) {
-                textures->stateToolbar.niveauElectricite = true;
+                textures->stateToolbar.niveauElectricite = !textures->stateToolbar.niveauElectricite;
                 if (textures->stateToolbar.niveauElectricite == false) {
                     textures->stateToolbar.niveauEau = false;
                     textures->stateToolbar.niveauNormal = true;
@@ -193,8 +192,7 @@ void ui_update_toolbar(UIState* textures, SimWorld_t* sim) {
             }
 
             if (CheckCollisionPointRec(mousePos, (Rectangle) {265, 851, 40, 40})) {
-                textures->stateToolbar.niveauEau = true;
-                printf("Eau");
+                textures->stateToolbar.niveauEau = !textures->stateToolbar.niveauEau;
                 if (textures->stateToolbar.niveauEau == false) {
                     textures->stateToolbar.niveauElectricite = false;
                     textures->stateToolbar.niveauNormal = true;
