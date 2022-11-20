@@ -99,6 +99,47 @@ struct bat_data {
     int extra; // données supplémentaires
 };
 
+void sim_sauvegarder(SimWorld_t *world, const char *nomFichier) {
+    FILE *fichier = fopen(nomFichier, "w");
+    assert(fichier != NULL && "Impossible d'ouvrir le fichier de sauvegarde pour écriture.");
+    for (int i = 0; i < SIM_MAP_HAUTEUR; ++i) {
+        for (int j = 0; j < SIM_MAP_LARGEUR; ++j) {
+            switch (world->map[j][i].type) {
+                case KIND_VIDE:
+                    fprintf(fichier, "0");
+                    break;
+                case KIND_ROUTE:
+                    fprintf(fichier, "r");
+                    break;
+                case KIND_HABITATION: {
+                    Habitation_t *hab = world->map[j][i].donnees;
+                    fprintf(fichier, "%c", hab2char(hab));
+                }
+                    break;
+                case KIND_CENTRALE:
+                    fprintf(fichier, "J");
+                    break;
+                case KIND_CHATEAU:
+                    fprintf(fichier, "W");
+                    break;
+                default:
+                    break;
+            }
+        }
+        fprintf(fichier, "\n");
+    }
+    /// monnaie
+    fprintf(fichier, "%d\n", world->monnaie);
+    /// temps ecoule
+    fprintf(fichier, "%d\n", world->n_ticks);
+    /// mode de jeu
+    fprintf(fichier, "%d\n", world->rules);
+
+    fflush(fichier);
+    fclose(fichier);
+}
+
+
 /// Load depuis un fichier une partie
 void lireFichier(GameplayScreen_t* gameplayScreen){
 
