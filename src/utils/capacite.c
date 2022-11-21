@@ -18,6 +18,17 @@ void afficher_capacite(SimWorld_t* world, bool eau) {
                      (ORIGINEY * SPRITEHAUTEUR) + centraleElectrique->position.y * (SPRITEHAUTEUR / 2) +
                      centraleElectrique->position.x * (SPRITEHAUTEUR / 2), 20, WHITE);
             centrales = centrales->next;
+
+            struct Maillon_t* maisons = world->habitations->premier;
+            while (maisons) {
+                Habitation_t* habitation = (Habitation_t*) maisons->data;
+                DrawText(TextFormat("%d / %d", habitation->electricite, habitation_get_required_energy(habitation, world->rules)),
+                         (ORIGINEX * SPRITELARGEUR) + habitation->position.x * (SPRITELARGEUR / 2) -
+                         habitation->position.y * (SPRITELARGEUR / 2),
+                         (ORIGINEY * SPRITEHAUTEUR) + habitation->position.y * (SPRITEHAUTEUR / 2) +
+                         habitation->position.x * (SPRITEHAUTEUR / 2), 20, WHITE);
+                maisons = maisons->next;
+            }
         }
     }else {
         struct Maillon_t *chateaux = world->chateaux->premier;
@@ -29,6 +40,17 @@ void afficher_capacite(SimWorld_t* world, bool eau) {
                      (ORIGINEY * SPRITEHAUTEUR) + chateauEau->position.y * (SPRITEHAUTEUR / 2) +
                      chateauEau->position.x * (SPRITEHAUTEUR / 2), 20, WHITE);
             chateaux = chateaux->next;
+        }
+
+        struct Maillon_t* maisons = world->habitations->premier;
+        while (maisons) {
+            Habitation_t* habitation = (Habitation_t*) maisons->data;
+            DrawText(TextFormat("%d / %d", habitation->eau, habitation_get_required_water(habitation, world->rules)),
+                     (ORIGINEX * SPRITELARGEUR) + habitation->position.x * (SPRITELARGEUR / 2) -
+                             habitation->position.y * (SPRITELARGEUR / 2),
+                     (ORIGINEY * SPRITEHAUTEUR) + habitation->position.y * (SPRITEHAUTEUR / 2) +
+                             habitation->position.x * (SPRITEHAUTEUR / 2), 20, WHITE);
+            maisons = maisons->next;
         }
     }
 }

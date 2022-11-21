@@ -1,11 +1,12 @@
 
 #include "sim/centrale.h"
+#include "bfs.h"
 
 /// Crée une centrale électrique.
 CentraleElectrique_t* centrale_alloc() {
     CentraleElectrique_t* centrale = malloc(sizeof(CentraleElectrique_t));
     centrale->capacite = CAPACITE_CENTRALE_ELECTRIQUE;
-    centrale->habitations = liste_alloc();
+    centrale->habitations = vector_alloc(10);
     return centrale;
 }
 
@@ -15,17 +16,19 @@ void centrale_free(CentraleElectrique_t* centrale) {
 }
 
 /// Incrémente d'un tick la simulation d'une centrale électrique.
-void centrale_step(CentraleElectrique_t* centrale) {
+void centrale_step(CentraleElectrique_t* centrale, SimRules_t rules) {
     centrale->capacite = CAPACITE_CENTRALE_ELECTRIQUE;
-}
 
-/// Tente de délivrer de l'électricité à une habitation, si la centrale peut encore alimenter l'habitation.
-/// Retourne si la centrale a pu délivrer l'électricité demandée.
-bool centrale_deliver_power(CentraleElectrique_t* centrale, int qte) {
-    if (centrale->capacite >= qte) {
-        centrale->capacite -= qte;
-        return true;
+    for (int i = 0; i < centrale->habitations->taille; i++) {
+        HabitationNode_t* habitation = centrale->habitations->data[i];
+        habitation->habitation->electricite += centrale_dispense(centrale, habitation_get_remaining_required_energy(habitation->habitation, rules));
     }
-    return false;
 }
 
+int centrale_dispense(CentraleElectrique_t* centrale, int quantite) {
+    if (centrale->capacite >= quantite) {
+        centrale->capacite -= quantite;
+        return quantite;
+    } else
+        return 0;
+}

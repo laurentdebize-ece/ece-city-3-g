@@ -36,4 +36,6 @@ void vector_sort(Vector_t* vector, int (*compar)(const void*, const void*));
 /// Vide le tableau
 void vector_clear(Vector_t* vector);
 
+void vector_free_clear(Vector_t* vector);
+
 #endif //ECECITY_VECTOR_H

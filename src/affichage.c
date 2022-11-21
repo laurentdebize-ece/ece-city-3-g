@@ -1,6 +1,7 @@
 #include "affichage.h"
 #include "sim/chateau.h"
 #include "raylib.h"
+#include "bfs.h"
 
 enum SPRITE_MAP get_route_sprite_variant(SimWorld_t *eceCity, int x, int y) {
     if (eceCity->map[x][y + 1].type == KIND_ROUTE &&
@@ -178,30 +179,22 @@ void affichage_draw_habitation(SpriteSheet_t *sheet, Habitation_t *habitation, C
 void affichage_debug_draw_voisins_chateau(SpriteSheet_t* sheet, ChateauEau_t* chateau, Color teinte) {
     sprite_sheet_draw_sprite(sheet, SPRITE_EAU_4X6, teinte, chateau->position.x, chateau->position.y);
 
-    struct Maillon_t* voisins = chateau->habitations->premier;
-    int no = 0;
-    while (voisins) {
-        Habitation_t* hab = (Habitation_t*) voisins->data;
+   for (int i = 0; i < chateau->habitations->taille; ++i) {
+        Habitation_t* hab = ((HabitationNode_t*) chateau->habitations->data[i])->habitation;
         affichage_draw_habitation(sheet, hab, teinte);
         int oX = (ORIGINEX * SPRITELARGEUR) + hab->position.x * (SPRITELARGEUR/2) - hab->position.y * (SPRITELARGEUR/2);
         int oY = (ORIGINEY * SPRITEHAUTEUR) + hab->position.y * (SPRITEHAUTEUR/2) + hab->position.x * (SPRITEHAUTEUR/2);
-        DrawText(TextFormat("#%d", no), oX, oY, 20, WHITE);
-        voisins = voisins->next;
-        no++;
+        DrawText(TextFormat("#%d", i), oX, oY, 20, WHITE);
     }
 }
 
 void affichage_debug_draw_voisins_centrale(SpriteSheet_t* sheet, CentraleElectrique_t* centrale, Color teinte) {
     sprite_sheet_draw_sprite(sheet, SPRITE_ENERGY_6X4, teinte, centrale->position.x, centrale->position.y);
-    struct Maillon_t* voisins = centrale->habitations->premier;
-    int no = 0;
-    while (voisins) {
-        Habitation_t* hab = (Habitation_t*) voisins->data;
+    for (int i = 0; i < centrale->habitations->taille; ++i) {
+        Habitation_t* hab = ((HabitationNode_t*) centrale->habitations->data[i])->habitation;
         affichage_draw_habitation(sheet, hab, teinte);
         int oX = (ORIGINEX * SPRITELARGEUR) + hab->position.x * (SPRITELARGEUR/2) - hab->position.y * (SPRITELARGEUR/2);
         int oY = (ORIGINEY * SPRITEHAUTEUR) + hab->position.y * (SPRITEHAUTEUR/2) + hab->position.x * (SPRITEHAUTEUR/2);
-        DrawText(TextFormat("#%d", no), oX, oY, 20, WHITE);
-        voisins = voisins->next;
-        no++;
+        DrawText(TextFormat("#%d", i), oX, oY, 20, WHITE);
     }
 }
