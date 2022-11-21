@@ -1,6 +1,9 @@
 
 #include "sim/habitation.h"
 
+NiveauHabitation_t habitation_level_up(NiveauHabitation_t lvl);
+NiveauHabitation_t habitation_level_down(NiveauHabitation_t lvl);
+
 /// Crée une habitation.
 Habitation_t *habitation_alloc(NiveauHabitation_t niveau) {
     Habitation_t *habitation = malloc(sizeof(Habitation_t));
@@ -23,7 +26,7 @@ int habitation_step(Habitation_t *habitation, SimRules_t rules) {
 
     if (habitation->update_ticks >= N_TICKS_EVOLUTION) {
         habitation->update_ticks = 0;
-        habitation_evolve(habitation);
+        habitation_evolve(habitation, rules);
         return habitation_get_nb_habitants(habitation) * IMPOT_PAR_HABITANT;
     }
 
@@ -61,44 +64,17 @@ int habitation_get_remaining_required_energy(Habitation_t* habitation, SimRules_
     return habitation_get_required_energy(habitation, rules) - habitation->electricite;
 }
 
-void habitation_evolve(Habitation_t *habitation) {
-    if (habitation->alimentee_en_eau && habitation->alimentee_en_electricite) {
-        switch (habitation->niveau) {
-            case NIVEAU_TERRAIN_VAGUE:
-                habitation->niveau = NIVEAU_CABANE;
-                break;
-            case NIVEAU_CABANE:
-                habitation->niveau = NIVEAU_MAISON;
-                break;
-            case NIVEAU_MAISON:
-                habitation->niveau = NIVEAU_IMMEUBLE;
-                break;
-            case NIVEAU_IMMEUBLE:
-                habitation->niveau = NIVEAU_GRATTE_CIEL;
-                break;
-            case NIVEAU_RUINE:
-                habitation->niveau = NIVEAU_CABANE;
-                break;
-            default:
-                break;
-        }
+void habitation_evolve(Habitation_t *habitation, SimRules_t rules) {
+    if (rules == Capitaliste_t) {
+        if (habitation->alimentee_en_eau && habitation->alimentee_en_electricite)
+            habitation->niveau = habitation_level_up(habitation->niveau);
+        else
+            habitation->niveau = habitation_level_down(habitation->niveau);
     } else {
-        switch (habitation->niveau) {
-            case NIVEAU_CABANE:
-                habitation->niveau = NIVEAU_RUINE;
-                break;
-            case NIVEAU_MAISON:
-                habitation->niveau = NIVEAU_CABANE;
-                break;
-            case NIVEAU_IMMEUBLE:
-                habitation->niveau = NIVEAU_MAISON;
-                break;
-            case NIVEAU_GRATTE_CIEL:
-                habitation->niveau = NIVEAU_IMMEUBLE;
-                break;
-            default:
-                break;
-        }
+        if (habitation->alimentee_en_eau && habitation->alimentee_en_electricite)
+            habitation->niveau = habitation_level_up(habitation->niveau);
+        else
+            habitation->niveau = habitation_level_down(habitation->niveau);
     }
 }
 
@@ -117,5 +93,37 @@ int habitation_tri_par_distance(Habitation_t *a, Habitation_t *b) {
         } else {
             return 0;
         }
+    }
+}
+
+NiveauHabitation_t habitation_level_up(NiveauHabitation_t lvl) {
+    switch (lvl) {
+        case NIVEAU_TERRAIN_VAGUE:
+            return NIVEAU_CABANE;
+        case NIVEAU_CABANE:
+            return NIVEAU_MAISON;
+        case NIVEAU_MAISON:
+            return NIVEAU_IMMEUBLE;
+        case NIVEAU_IMMEUBLE:
+            return NIVEAU_GRATTE_CIEL;
+        case NIVEAU_RUINE:
+            return NIVEAU_CABANE;
+        default:
+            return lvl;
+    }
+}
+
+NiveauHabitation_t habitation_level_down(NiveauHabitation_t lvl) {
+    switch (lvl) {
+        case NIVEAU_CABANE:
+            return NIVEAU_RUINE;
+        case NIVEAU_MAISON:
+            return NIVEAU_CABANE;
+        case NIVEAU_IMMEUBLE:
+            return NIVEAU_MAISON;
+        case NIVEAU_GRATTE_CIEL:
+            return NIVEAU_IMMEUBLE;
+        default:
+            return lvl;
     }
 }
