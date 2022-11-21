@@ -23,6 +23,7 @@ void ui_charger_textures(UIState* textures) {
     textures->toolbarIcons[ICON_HABITATION] = LoadTexture("../assets/textures/icones/house.png");
     textures->toolbarIcons[ICON_CENTRALE] = LoadTexture("../assets/textures/icones/industry.png");
     textures->toolbarIcons[ICON_CHATEAU] = LoadTexture("../assets/textures/icones/valve.png");
+    textures->toolbarIcons[ICON_CASERNE] = LoadTexture("../assets/textures/icones/caserne-de-pompiers.png");
 }
 
 void ui_draw_toolbar(UIState* textures, SimWorld_t* sim) {
@@ -54,6 +55,7 @@ void ui_draw_toolbar(UIState* textures, SimWorld_t* sim) {
     DrawTexture(textures->toolbarIcons[ICON_HABITATION], 1082, 954, textures->currentBuildMode == BUILD_MODE_HABITATION ? YELLOW : WHITE);
     DrawTexture(textures->toolbarIcons[ICON_CENTRALE], 1159, 954, textures->currentBuildMode == BUILD_MODE_CENTRALE ? YELLOW : WHITE);
     DrawTexture(textures->toolbarIcons[ICON_CHATEAU], 1229, 954, textures->currentBuildMode == BUILD_MODE_CHATEAU ? YELLOW : WHITE);
+    DrawTexture(textures->toolbarIcons[ICON_CASERNE], 1299, 954, textures->currentBuildMode == BUILD_MODE_CASERNE ? YELLOW : WHITE);
 
     // dessin du temps actuel
     DrawRectangleRounded((Rectangle) {
@@ -137,6 +139,10 @@ void ui_update_toolbar(UIState* textures, SimWorld_t* sim) {
         if (CheckCollisionPointRec(mousePos, (Rectangle) {1229, 954, textures->toolbarIcons[ICON_CHATEAU].width,
                                                           textures->toolbarIcons[ICON_CHATEAU].height}))
             textures->currentBuildMode = (textures->currentBuildMode == BUILD_MODE_CHATEAU ? BUILD_MODE_NONE : BUILD_MODE_CHATEAU);
+
+        if (CheckCollisionPointRec(mousePos, (Rectangle){1299, 954, textures->toolbarIcons[ICON_CASERNE].width,
+                                                         textures->toolbarIcons[ICON_CASERNE].height}))
+            textures->currentBuildMode = (textures->currentBuildMode == BUILD_MODE_CASERNE ? BUILD_MODE_NONE : BUILD_MODE_CASERNE);
     }
 }
 

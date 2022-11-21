@@ -13,6 +13,7 @@ typedef enum BuildMode {
     BUILD_MODE_CHATEAU,
     BUILD_MODE_HABITATION,
     BUILD_MODE_DESTROY,
+    BUILD_MODE_CASERNE,
 } BuildMode;
 
 /// Le mode de construction actuel.
@@ -30,8 +31,9 @@ enum TOOLBAR_ICON {
     ICON_HABITATION,
     ICON_CENTRALE,
     ICON_CHATEAU,
+    ICON_CASERNE,
     ICON_DOLLAR,
-    ICON_NB_LOGOS_TOOLBAR
+    ICON_NB_LOGOS_TOOLBAR,
 };
 
 
