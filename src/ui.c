@@ -156,6 +156,8 @@ CaseKind_t ui_buildmode_to_casekind(BuildMode mode) {
             return KIND_CENTRALE;
         case BUILD_MODE_CHATEAU:
             return KIND_CHATEAU;
+        case BUILD_MODE_CASERNE:
+            return KIND_CASERNE;
         default:
             return KIND_VIDE;
     }
