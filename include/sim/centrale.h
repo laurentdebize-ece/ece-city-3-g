@@ -5,17 +5,11 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <utils/grille.h>
-#include <utils/liste.h>
+#include <utils/vector.h>
+#include "habitation.h"
 
 #define CENTRALE_PRIX_CONSTRUCTION 100000
 #define CAPACITE_CENTRALE_ELECTRIQUE 5000
-
-typedef enum ElecConnectionState_t {
-    NOT_CONNECTED = -1, // n'est pas reliée au réseau électrique
-    POWERED, // est reliée au réseau électrique alimentée,
-    UNPOWERED // est reliée au réseau électrique mais n'est pas alimentée
-} ElecConnectionState_t;
-
 
 /// Représente une centrale électrique simulée.
 typedef struct CentraleE_t {
@@ -24,7 +18,7 @@ typedef struct CentraleE_t {
     int capacite;
 
     /// Liste des habitations reliées à la centrale.
-    Liste_t* habitations;
+    Vector_t* habitations;
 
     Vector2I position;
 } CentraleElectrique_t;
@@ -37,10 +31,10 @@ void centrale_free(CentraleElectrique_t* centrale);
 
 /// Réinitialise la capacité de la centrale.
 /// A appeler au début de chaque tick de simulation.
-void centrale_step(CentraleElectrique_t* centrale);
+void centrale_step(CentraleElectrique_t* centrale, SimRules_t rules);
 
-/// Tente de délivrer de l'électricité à une habitation, si la centrale peut encore alimenter l'habitation.
-bool centrale_deliver_power(CentraleElectrique_t* centrale, int qte);
+/// Donne de l'électricité à une habitation.
+int centrale_dispense(CentraleElectrique_t* centrale, int quantite);
 
 
 #endif //ECECITY_CENTRALE_H

@@ -69,3 +69,10 @@ void vector_sort(Vector_t* vector, int (*compar)(const void*, const void*)) {
 void vector_clear(Vector_t* vector) {
     vector->taille = 0;
 }
+
+void vector_free_clear(Vector_t* vector) {
+    for (size_t i = 0; i < vector->taille; i++) {
+        free(vector->data[i]);
+    }
+    vector->taille = 0;
+}

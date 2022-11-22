@@ -13,6 +13,8 @@
 
 #define ROUTE_PRIX_CONSTRUCTION 10
 
+#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
+
 /// Le type de case
 typedef enum CaseKind_t {
     /// case vide

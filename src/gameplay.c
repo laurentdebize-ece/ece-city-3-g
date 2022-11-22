@@ -4,8 +4,6 @@
 #include "utils/capacite.h"
 #include "sauvegarde.h"
 
-#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
-
 void try_place_building(GameplayScreen_t *gameplay);
 void draw_debug_info(GameplayScreen_t *gameplay);
 void update_debug_info(GameplayScreen_t *gameplay);

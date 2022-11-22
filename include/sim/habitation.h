@@ -62,8 +62,16 @@ void habitation_evolve(Habitation_t* habitation);
 /// Retourne le nombre d'habitants dans l'habitation.
 int habitation_get_nb_habitants(Habitation_t* habitation);
 
-/// Compare deux habitations.
-int habitation_cmp(Habitation_t* habitation1, Habitation_t* habitation2);
+/// Retourne la qte d'eau nécessaire pour l'habitation pour qu'elle évolue.
+int habitation_get_required_water(Habitation_t* habitation, SimRules_t rules);
+
+/// Retourne la qte d'eau nécessaire pour l'habitation pour qu'elle évolue.
+int habitation_get_required_energy(Habitation_t* habitation, SimRules_t rules);
+
+/// Retourne la qte d'energie nécessaire pour l'habitation pour qu'elle évolue.
+int habitation_get_remaining_required_energy(Habitation_t* habitation, SimRules_t rules);
+
+int habitation_get_remaining_required_water(Habitation_t* habitation, SimRules_t rules);
 
 int habitation_tri_par_distance(Habitation_t* a, Habitation_t* b);
 

@@ -8,6 +8,8 @@ Habitation_t *habitation_alloc(NiveauHabitation_t niveau) {
     habitation->update_ticks = 0;
     habitation->alimentee_en_eau = false;
     habitation->alimentee_en_electricite = false;
+    habitation->eau = 0;
+    habitation->electricite = 0;
 }
 
 /// Détruit une habitation.
@@ -41,6 +43,22 @@ int habitation_get_nb_habitants(Habitation_t* habitation) {
         default:
             return 0;
     }
+}
+
+int habitation_get_required_water(Habitation_t* habitation, SimRules_t rules) {
+        return habitation_get_nb_habitants(habitation);
+}
+
+int habitation_get_remaining_required_water(Habitation_t* habitation, SimRules_t rules) {
+    return habitation_get_required_water(habitation, rules) - habitation->eau;
+}
+
+int habitation_get_required_energy(Habitation_t* habitation, SimRules_t rules) {
+    return habitation_get_nb_habitants(habitation);
+}
+
+int habitation_get_remaining_required_energy(Habitation_t* habitation, SimRules_t rules) {
+    return habitation_get_required_energy(habitation, rules) - habitation->electricite;
 }
 
 void habitation_evolve(Habitation_t *habitation) {
@@ -82,10 +100,6 @@ void habitation_evolve(Habitation_t *habitation) {
                 break;
         }
     }
-}
-
-int habitation_cmp(Habitation_t *habitation1, Habitation_t *habitation2) {
-    return habitation1->niveau - habitation2->niveau;
 }
 
 int habitation_tri_par_distance(Habitation_t *a, Habitation_t *b) {
