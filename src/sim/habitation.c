@@ -1,8 +1,9 @@
 
+#include <stdio.h>
 #include "sim/habitation.h"
 
-NiveauHabitation_t habitation_level_up(NiveauHabitation_t lvl);
-NiveauHabitation_t habitation_level_down(NiveauHabitation_t lvl);
+NiveauHabitation_t habitation_level_up(NiveauHabitation_t lvl, bool alimentee);
+NiveauHabitation_t habitation_level_down(NiveauHabitation_t lvl, bool alimentee);
 
 /// Crée une habitation.
 Habitation_t *habitation_alloc(NiveauHabitation_t niveau) {
@@ -36,10 +37,13 @@ int habitation_step(Habitation_t *habitation, SimRules_t rules) {
 int habitation_get_nb_habitants(Habitation_t* habitation) {
     switch (habitation->niveau) {
         case NIVEAU_CABANE:
+        case NIVEAU_CABANE_CAP:
             return 10;
         case NIVEAU_MAISON:
+        case NIVEAU_MAISON_CAP:
             return 50;
         case NIVEAU_IMMEUBLE:
+        case NIVEAU_IMMEUBLE_CAP:
             return 100;
         case NIVEAU_GRATTE_CIEL:
             return 1000;
@@ -65,16 +69,25 @@ int habitation_get_remaining_required_energy(Habitation_t* habitation, SimRules_
 }
 
 void habitation_evolve(Habitation_t *habitation, SimRules_t rules) {
+    bool alimentee = habitation->alimentee_en_eau && habitation->alimentee_en_electricite;
     if (rules == Capitaliste_t) {
-        if (habitation->alimentee_en_eau && habitation->alimentee_en_electricite)
-            habitation->niveau = habitation_level_up(habitation->niveau);
-        else
-            habitation->niveau = habitation_level_down(habitation->niveau);
+        if (habitation->niveau >= NIVEAU_TERRAIN_VAGUE_CAP && habitation->niveau <= NIVEAU_IMMEUBLE_CAP)
+        {
+            if (alimentee)
+                habitation->niveau = habitation_level_up(habitation->niveau, alimentee);
+            else
+                habitation->niveau = habitation_level_down(habitation->niveau, alimentee);
+        } else {
+            if (habitation->eau == habitation_get_required_water(habitation, rules) && habitation->electricite == habitation_get_required_energy(habitation, rules) && alimentee)
+                habitation->niveau = habitation_level_up(habitation->niveau, alimentee);
+            else
+                habitation->niveau = habitation_level_down(habitation->niveau, alimentee);
+        }
     } else {
-        if (habitation->alimentee_en_eau && habitation->alimentee_en_electricite)
-            habitation->niveau = habitation_level_up(habitation->niveau);
+        if (alimentee)
+            habitation->niveau = habitation_level_up(habitation->niveau, alimentee);
         else
-            habitation->niveau = habitation_level_down(habitation->niveau);
+            habitation->niveau = habitation_level_down(habitation->niveau, alimentee);
     }
 }
 
@@ -96,7 +109,7 @@ int habitation_tri_par_distance(Habitation_t *a, Habitation_t *b) {
     }
 }
 
-NiveauHabitation_t habitation_level_up(NiveauHabitation_t lvl) {
+NiveauHabitation_t habitation_level_up(NiveauHabitation_t lvl, bool alimentee) {
     switch (lvl) {
         case NIVEAU_TERRAIN_VAGUE:
             return NIVEAU_CABANE;
@@ -108,12 +121,20 @@ NiveauHabitation_t habitation_level_up(NiveauHabitation_t lvl) {
             return NIVEAU_GRATTE_CIEL;
         case NIVEAU_RUINE:
             return NIVEAU_CABANE;
+        case NIVEAU_MAISON_CAP:
+            return NIVEAU_IMMEUBLE_CAP;
+        case NIVEAU_TERRAIN_VAGUE_CAP:
+            return NIVEAU_CABANE_CAP;
+        case NIVEAU_CABANE_CAP:
+            return NIVEAU_MAISON_CAP;
+        case NIVEAU_IMMEUBLE_CAP:
+            return NIVEAU_GRATTE_CIEL; /// on repasse l'immeuble en mode de dev normal.
         default:
             return lvl;
     }
 }
 
-NiveauHabitation_t habitation_level_down(NiveauHabitation_t lvl) {
+NiveauHabitation_t habitation_level_down(NiveauHabitation_t lvl, bool alimentee) {
     switch (lvl) {
         case NIVEAU_CABANE:
             return NIVEAU_RUINE;
@@ -123,6 +144,12 @@ NiveauHabitation_t habitation_level_down(NiveauHabitation_t lvl) {
             return NIVEAU_MAISON;
         case NIVEAU_GRATTE_CIEL:
             return NIVEAU_IMMEUBLE;
+        case NIVEAU_CABANE_CAP:
+            return NIVEAU_RUINE;
+        case NIVEAU_IMMEUBLE_CAP:
+            return NIVEAU_MAISON;
+        case NIVEAU_MAISON_CAP:
+            return NIVEAU_CABANE;
         default:
             return lvl;
     }

@@ -79,6 +79,8 @@ void gameplay_update(Jeu_t *jeu, GameplayScreen_t *gameplay) {
 
     /// menus de débogage.
     update_debug_info(gameplay);
+
+    sim_step_resources(gameplay->world);
 }
 
 void gameplay_draw(Jeu_t *jeu, GameplayScreen_t *gameplay) {

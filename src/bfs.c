@@ -123,9 +123,9 @@ int trier_noeux_habitations_par_distance(HabitationNode_t* node, HabitationNode_
 }
 
 int trier_noeux_habitations_par_niveau(HabitationNode_t* node, HabitationNode_t* node2) {
-    int d = node->habitation->niveau - node2->habitation->niveau;
+    int d = node2->habitation->niveau - node->habitation->niveau;
     if (d == 0)
         return node->distance - node2->distance;
     else
-        return node->habitation->niveau - node2->habitation->niveau;
+        return d;
 }

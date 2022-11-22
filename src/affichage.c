@@ -146,10 +146,12 @@ void affichage_draw_habitation(SpriteSheet_t *sheet, Habitation_t *habitation, C
 
     switch (habitation->niveau) {
         case NIVEAU_CABANE:
+        case NIVEAU_CABANE_CAP:
             habitation_sprite = SPRITE_CABANE_3X3;
             break;
 
         case NIVEAU_MAISON:
+        case NIVEAU_MAISON_CAP:
             habitation_sprite = SPRITE_MAISON_3X3;
             break;
 
@@ -162,10 +164,12 @@ void affichage_draw_habitation(SpriteSheet_t *sheet, Habitation_t *habitation, C
             break;
 
         case NIVEAU_TERRAIN_VAGUE:
+        case NIVEAU_TERRAIN_VAGUE_CAP:
             habitation_sprite = SPRITE_TERRAIN_VAGUE_3X3;
             break;
 
         case NIVEAU_IMMEUBLE:
+        case NIVEAU_IMMEUBLE_CAP:
             habitation_sprite = SPRITE_IMMEUBLE_3X3;
             break;
 

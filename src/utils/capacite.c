@@ -22,11 +22,15 @@ void afficher_capacite(SimWorld_t* world, bool eau) {
             struct Maillon_t* maisons = world->habitations->premier;
             while (maisons) {
                 Habitation_t* habitation = (Habitation_t*) maisons->data;
-                DrawText(TextFormat("%d / %d", habitation->electricite, habitation_get_required_energy(habitation, world->rules)),
-                         (ORIGINEX * SPRITELARGEUR) + habitation->position.x * (SPRITELARGEUR / 2) -
-                         habitation->position.y * (SPRITELARGEUR / 2),
-                         (ORIGINEY * SPRITEHAUTEUR) + habitation->position.y * (SPRITEHAUTEUR / 2) +
-                         habitation->position.x * (SPRITEHAUTEUR / 2), 20, WHITE);
+                bool should_display = habitation_get_required_energy(habitation, world->rules) > 0;
+                if (should_display) {
+                    DrawText(TextFormat("%d / %d", habitation->electricite,
+                                        habitation_get_required_energy(habitation, world->rules)),
+                             (ORIGINEX * SPRITELARGEUR) + habitation->position.x * (SPRITELARGEUR / 2) -
+                             habitation->position.y * (SPRITELARGEUR / 2),
+                             (ORIGINEY * SPRITEHAUTEUR) + habitation->position.y * (SPRITEHAUTEUR / 2) +
+                             habitation->position.x * (SPRITEHAUTEUR / 2), 20, WHITE);
+                }
                 maisons = maisons->next;
             }
         }
@@ -45,11 +49,15 @@ void afficher_capacite(SimWorld_t* world, bool eau) {
         struct Maillon_t* maisons = world->habitations->premier;
         while (maisons) {
             Habitation_t* habitation = (Habitation_t*) maisons->data;
-            DrawText(TextFormat("%d / %d", habitation->eau, habitation_get_required_water(habitation, world->rules)),
-                     (ORIGINEX * SPRITELARGEUR) + habitation->position.x * (SPRITELARGEUR / 2) -
-                             habitation->position.y * (SPRITELARGEUR / 2),
-                     (ORIGINEY * SPRITEHAUTEUR) + habitation->position.y * (SPRITEHAUTEUR / 2) +
-                             habitation->position.x * (SPRITEHAUTEUR / 2), 20, WHITE);
+            bool should_display = habitation_get_required_water(habitation, world->rules) > 0;
+            if (should_display) {
+                DrawText(
+                        TextFormat("%d / %d", habitation->eau, habitation_get_required_water(habitation, world->rules)),
+                        (ORIGINEX * SPRITELARGEUR) + habitation->position.x * (SPRITELARGEUR / 2) -
+                        habitation->position.y * (SPRITELARGEUR / 2),
+                        (ORIGINEY * SPRITEHAUTEUR) + habitation->position.y * (SPRITEHAUTEUR / 2) +
+                        habitation->position.x * (SPRITEHAUTEUR / 2), 20, WHITE);
+            }
             maisons = maisons->next;
         }
     }

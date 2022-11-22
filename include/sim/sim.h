@@ -56,10 +56,13 @@ typedef struct SimWorld_t {
     int monnaie;
     /// Nombre d'habitants dans le monde.
     int nb_total_habitants;
-    /// Quantité totale d'eau disponible (mìse à dispo par les châteaux d'eau).
-    int qte_totale_eau;
-    /// Quantité totale d'électricité disponible (mise à dispo par les centrales électriques).
-    int qte_totale_electricite;
+    /// Quantité d'eau disponible (mìse à dispo par les châteaux d'eau).
+    int qte_dispo_eau;
+    /// Quantité d'électricité disponible (mise à dispo par les centrales électriques).
+    int qte_dispo_elec;
+    /// Quantité max d'eau dispo.
+    int qte_max_eau;
+    int qte_max_elec;
     /// Les règles d'évolution pour la simulation.
     SimRules_t rules;
     /// Le temps écoulé depuis le début de la simulation (en ticks).
@@ -71,6 +74,9 @@ SimWorld_t* sim_world_create(SimRules_t rules, int monnaie);
 
 /// Avance d'une étape la simulation.
 void sim_world_step(SimWorld_t* world);
+
+/// Execute la répartition des ressources.
+void sim_step_resources(SimWorld_t* world);
 
 /// Détruit un monde de simulation.
 void sim_world_destroy(SimWorld_t* world);
