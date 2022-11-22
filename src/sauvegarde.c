@@ -73,6 +73,14 @@ char hab2char(Habitation_t *hab) {
             return 'M';
         case NIVEAU_IMMEUBLE:
             return 'I';
+        case NIVEAU_IMMEUBLE_CAP:
+            return 'i';
+        case NIVEAU_MAISON_CAP:
+            return 'm';
+        case NIVEAU_CABANE_CAP:
+            return 'c';
+        case NIVEAU_TERRAIN_VAGUE_CAP:
+            return 'v';
     }
 }
 
@@ -90,6 +98,14 @@ NiveauHabitation_t char2hab(char c) {
             return NIVEAU_MAISON;
         case 'I':
             return NIVEAU_IMMEUBLE;
+        case 'i':
+            return NIVEAU_IMMEUBLE_CAP;
+        case 'v':
+            return NIVEAU_TERRAIN_VAGUE_CAP;
+        case 'c':
+            return NIVEAU_CABANE_CAP;
+        case 'm':
+            return NIVEAU_MAISON_CAP;
         default:
             break;
     }
@@ -117,7 +133,7 @@ void sim_charger(SimWorld_t *world, const char *nomFichier) {
                     ++j;
                     break;
 
-                case 'r':
+                case 'l':
                     world->map[j][i].type = KIND_ROUTE;
                     ++j;
                     break;
@@ -137,7 +153,11 @@ void sim_charger(SimWorld_t *world, const char *nomFichier) {
                 case 'C':
                 case 'G':
                 case 'M':
-                case 'I': {
+                case 'I':
+                case 'i':
+                case 'm':
+                case 'c':
+                case 'v': {
                     data[j][i].type = KIND_HABITATION;
                     data[j][i].extra = char2hab(cs);
                     ++j;
@@ -214,7 +234,7 @@ void sim_sauvegarder(SimWorld_t *world, const char *nomFichier) {
                     fprintf(fichier, "0");
                     break;
                 case KIND_ROUTE:
-                    fprintf(fichier, "r");
+                    fprintf(fichier, "l");
                     break;
                 case KIND_HABITATION: {
                     Habitation_t *hab = world->map[j][i].donnees;
