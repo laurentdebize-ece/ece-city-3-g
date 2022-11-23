@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "sim/sim.h"
 #include "bfs.h"
+#include "sim/casernes.h"
 
 void sim_reset_flow_distribution(SimWorld_t* world);
 void sim_update_voisins_chateaux(SimWorld_t* world);
@@ -146,7 +147,21 @@ void sim_place_entity(SimWorld_t* world, CaseKind_t type, int x, int y, bool rel
         }
         break;
 
-        case KIND_ROUTE: {
+        case KIND_CASERNE: {
+            CasernePompier_t *casernes = alloc_caserne();
+            casernes->position = (Vector2I) {x, y};
+            for (int i = 0; i < 3; ++i) {
+                for (int j = 0; j < 3; ++j) {
+                    world->map[x + i][y + j].type = KIND_CASERNE;
+                    world->map[x + i][y + j].donnees = casernes;
+                }
+            }
+            liste_ajouter_fin(world->casernes, casernes);
+            break;
+        }
+
+
+            case KIND_ROUTE: {
             world->map[x][y].type = KIND_ROUTE;
             world->map[x][y].donnees = NULL;
         }

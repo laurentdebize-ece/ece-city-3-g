@@ -143,8 +143,8 @@ void affichage_draw_build_preview(SpriteSheet_t *sheet, SimWorld_t *world, Vecto
             break;
 
         case KIND_CASERNE:
-            w = 4;
-            h = 6;
+            w = 6;
+            h = 4;
             bat = SPRITE_CASERNE_4x6;
             break;
 

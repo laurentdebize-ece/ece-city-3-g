@@ -145,9 +145,9 @@ void try_place_building(GameplayScreen_t *gameplay) {
                 break;
 
             case BUILD_MODE_CASERNE:
-                if (sim_check_can_place(gameplay->world, true, gameplay->mousePos.x, gameplay->mousePos.y, 3,
-                                        3) && gameplay->world->monnaie >= CASERNE_PRIX_CONSTRUCTION) {
-                    sim_place_entity(gameplay->world, KIND_CHATEAU, gameplay->mousePos.x, gameplay->mousePos.y, true);
+                if (sim_check_can_place(gameplay->world, true, gameplay->mousePos.x, gameplay->mousePos.y, 6,
+                                        4) && gameplay->world->monnaie >= CASERNE_PRIX_CONSTRUCTION) {
+                    sim_place_entity(gameplay->world, KIND_CASERNE, gameplay->mousePos.x, gameplay->mousePos.y, true);
                     gameplay->world->monnaie -= CASERNE_PRIX_CONSTRUCTION;
                 }
                 break;
