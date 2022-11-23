@@ -254,6 +254,20 @@ void sim_destroy_entity(SimWorld_t* world, int x, int y) {
             }
             break;
 
+            case KIND_CASERNE:
+            {
+                CasernePompier_t* caserne = (CasernePompier_t *) world->map[x][y].donnees;
+                liste_supprimer(world->casernes, caserne);
+                for (int i = 0; i < 6; ++i) {
+                    for (int j = 0; j < 4; ++j) {
+                        world->map[caserne->position.x + i][caserne->position.y + j].type = KIND_VIDE;
+                        world->map[caserne->position.x + i][caserne->position.y + j].donnees = NULL;
+                    }
+                }
+                caserne_free(caserne);
+            }
+                break;
+
             case KIND_ROUTE: {
                 world->map[x][y].type = KIND_VIDE;
                 world->map[x][y].donnees = NULL;

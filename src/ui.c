@@ -229,6 +229,8 @@ void ui_update_toolbar(UIState* textures, SimWorld_t* sim) {
         }
         if (CheckCollisionPointRec(mousePos, (Rectangle) {1297, 954, textures->toolbarIcons[ICON_CASERNE].width,
                                                           textures->toolbarIcons[ICON_CASERNE].height})) {
+            textures->stateToolbar.stateMenuSave.modeMenu = false;
+            textures->stateToolbar.stateMenuSave.modeMenu = false;
             textures->currentBuildMode = (textures->currentBuildMode == BUILD_MODE_CASERNE ? BUILD_MODE_NONE
                                                                                            : BUILD_MODE_CASERNE);
         }
