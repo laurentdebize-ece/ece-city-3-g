@@ -14,6 +14,7 @@ SimWorld_t* sim_world_create(SimRules_t rules, int monnaie) {
     world->centrales = liste_alloc();
     world->chateaux = liste_alloc();
     world->routes = liste_alloc();
+    world->casernes = liste_alloc();
     world->nb_total_habitants = 0;
 
     // mise à zéro de la carte.

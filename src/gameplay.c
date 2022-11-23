@@ -3,6 +3,7 @@
 #include "screens/gameplay.h"
 #include "utils/capacite.h"
 #include "sauvegarde.h"
+#include "sim/casernes.h"
 
 void try_place_building(GameplayScreen_t *gameplay);
 void draw_debug_info(GameplayScreen_t *gameplay);
@@ -142,6 +143,15 @@ void try_place_building(GameplayScreen_t *gameplay) {
                     sim_sauvegarder(gameplay->world, SAVE_AUTO_SAVE_FILENAME);
                 }
                 break;
+
+            case BUILD_MODE_CASERNE:
+                if (sim_check_can_place(gameplay->world, true, gameplay->mousePos.x, gameplay->mousePos.y, 3,
+                                        3) && gameplay->world->monnaie >= CASERNE_PRIX_CONSTRUCTION) {
+                    sim_place_entity(gameplay->world, KIND_CHATEAU, gameplay->mousePos.x, gameplay->mousePos.y, true);
+                    gameplay->world->monnaie -= CASERNE_PRIX_CONSTRUCTION;
+                }
+                break;
+
 
             case BUILD_MODE_DESTROY:
                 sim_destroy_entity(gameplay->world, gameplay->mousePos.x, gameplay->mousePos.y);

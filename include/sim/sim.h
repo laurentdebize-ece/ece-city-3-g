@@ -25,6 +25,8 @@ typedef enum CaseKind_t {
     KIND_CENTRALE,
     /// Château d'eau
     KIND_CHATEAU,
+    /// Casernes
+    KIND_CASERNE,
     /// KIND_ROUTE
     KIND_ROUTE,
     NB_CASE_KIND,
@@ -50,6 +52,8 @@ typedef struct SimWorld_t {
     Liste_t* chateaux;
     /// Liste chaînée des routes du monde, pour un accès "linéaire".
     Liste_t* routes;
+    /// Liste chaînée des casernes du monde, pour un accès "linéaire".
+    Liste_t* casernes;
     /// Carte de la simulation (utilisé pour les parcours en largeur).
     Case_t map[SIM_MAP_LARGEUR][SIM_MAP_HAUTEUR];
     /// La qte de monnaie disponible.

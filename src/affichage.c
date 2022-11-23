@@ -2,6 +2,7 @@
 #include "sim/chateau.h"
 #include "raylib.h"
 #include "bfs.h"
+#include "sim/casernes.h"
 
 enum SPRITE_MAP get_route_sprite_variant(SimWorld_t *eceCity, int x, int y) {
     if (eceCity->map[x][y + 1].type == KIND_ROUTE &&
@@ -102,6 +103,14 @@ void affichage_draw_entities(SpriteSheet_t *sheet, SimWorld_t *world, enum Rende
         affichage_draw_habitation(sheet, hab, routesColor);
         maison = maison->next;
     }
+
+    Color casernesColor = (layers & LAYER_CASERNE) != 0 ? WHITE : ColorAlpha(WHITE, 0.5f);
+    struct Maillon_t *casernes = world->casernes->premier;
+    while (casernes) {
+        CasernePompier_t* caserne= (CasernePompier_t*) casernes->data;
+        sprite_sheet_draw_sprite(sheet, SPRITE_CASERNE_4x6, casernesColor, caserne->position.x, caserne->position.y);
+        casernes = casernes->next;
+    }
 }
 
 void affichage_draw_build_preview(SpriteSheet_t *sheet, SimWorld_t *world, Vector2I v, CaseKind_t type) {
@@ -131,6 +140,12 @@ void affichage_draw_build_preview(SpriteSheet_t *sheet, SimWorld_t *world, Vecto
             w = 4;
             h = 6;
             bat = SPRITE_EAU_4X6;
+            break;
+
+        case KIND_CASERNE:
+            w = 4;
+            h = 6;
+            bat = SPRITE_CASERNE_4x6;
             break;
 
         default:
