@@ -50,8 +50,6 @@ typedef struct SimWorld_t {
     Liste_t* centrales;
     /// Liste chaînée des châteaux d'eau du monde, pour un accès "linéaire".
     Liste_t* chateaux;
-    /// Liste chaînée des routes du monde, pour un accès "linéaire".
-    Liste_t* routes;
     /// Liste chaînée des casernes du monde, pour un accès "linéaire".
     Liste_t* casernes;
     /// Carte de la simulation (utilisé pour les parcours en largeur).

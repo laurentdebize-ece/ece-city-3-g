@@ -16,7 +16,6 @@ SimWorld_t* sim_world_create(SimRules_t rules, int monnaie) {
     world->centrales = liste_alloc();
     world->chateaux = liste_alloc();
     world->casernes = liste_alloc();
-    world->routes = liste_alloc();
     world->casernes = liste_alloc();
     world->nb_total_habitants = 0;
 
@@ -152,8 +151,8 @@ void sim_place_entity(SimWorld_t* world, CaseKind_t type, int x, int y, bool rel
         case KIND_CASERNE: {
             CasernePompier_t *casernes = alloc_caserne();
             casernes->position = (Vector2I) {x, y};
-            for (int i = 0; i < 3; ++i) {
-                for (int j = 0; j < 3; ++j) {
+            for (int i = 0; i < 6; ++i) {
+                for (int j = 0; j < 4; ++j) {
                     world->map[x + i][y + j].type = KIND_CASERNE;
                     world->map[x + i][y + j].donnees = casernes;
                 }

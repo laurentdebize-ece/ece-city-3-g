@@ -149,6 +149,7 @@ void try_place_building(GameplayScreen_t *gameplay) {
                                         4) && gameplay->world->monnaie >= CASERNE_PRIX_CONSTRUCTION) {
                     sim_place_entity(gameplay->world, KIND_CASERNE, gameplay->mousePos.x, gameplay->mousePos.y, true);
                     gameplay->world->monnaie -= CASERNE_PRIX_CONSTRUCTION;
+                    sim_sauvegarder(gameplay->world, SAVE_AUTO_SAVE_FILENAME);
                 }
                 break;
 
