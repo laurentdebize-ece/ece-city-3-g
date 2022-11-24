@@ -30,6 +30,7 @@ SimWorld_t* sim_world_create(SimRules_t rules, int monnaie) {
     world->n_ticks = 0;
     world->qte_totale_eau = 0;
     world->qte_totale_electricite = 0;
+    world->sim_running = true;
 }
 
 /// Détruit un monde de simulation.
@@ -41,6 +42,10 @@ void sim_world_destroy(SimWorld_t* world) {
 }
 
 void sim_world_step(SimWorld_t* world) {
+
+    if (!world->sim_running)
+        return;
+
     world->n_ticks++;
     world->nb_total_habitants = 0;
     sim_reset_flow_distribution(world);
