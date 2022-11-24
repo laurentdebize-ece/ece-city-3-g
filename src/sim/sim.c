@@ -7,6 +7,7 @@
 void sim_reset_flow_distribution(SimWorld_t* world);
 void sim_update_voisins_chateaux(SimWorld_t* world);
 void sim_update_voisins_centrales(SimWorld_t* world);
+void sim_update_voisins_casernes(SimWorld_t* world);
 
 /// Crée un monde de simulation vide.
 SimWorld_t* sim_world_create(SimRules_t rules, int monnaie) {
@@ -14,6 +15,7 @@ SimWorld_t* sim_world_create(SimRules_t rules, int monnaie) {
     world->habitations = liste_alloc();
     world->centrales = liste_alloc();
     world->chateaux = liste_alloc();
+    world->casernes = liste_alloc();
     world->routes = liste_alloc();
     world->casernes = liste_alloc();
     world->nb_total_habitants = 0;
@@ -287,6 +289,7 @@ void sim_update_voisins(SimWorld_t* world) {
     while (habs) {
         ((Habitation_t*)habs->data)->alimentee_en_eau = false;
         ((Habitation_t*)habs->data)->alimentee_en_electricite = false;
+        ((Habitation_t*)habs->data)->relie_caserne = false;
         habs = habs->next;
     }
 
@@ -298,6 +301,7 @@ void sim_update_voisins(SimWorld_t* world) {
 
     sim_update_voisins_chateaux(world);
     sim_update_voisins_centrales(world);
+    sim_update_voisins_casernes(world);
 }
 
 void sim_update_voisins_chateaux(SimWorld_t* world) {
@@ -337,5 +341,23 @@ void sim_update_voisins_centrales(SimWorld_t* world) {
         }
 
         centrales = centrales->next;
+    }
+}
+
+void sim_update_voisins_casernes(SimWorld_t* world) {
+    struct Maillon_t* casernes = world->casernes->premier;
+    while (casernes) {
+        CasernePompier_t* caserne = casernes->data;
+
+        vector_free_clear(caserne->habitations);
+
+        bfs(world, caserne->position, caserne, caserne->habitations);
+
+        for (int i = 0; i < caserne->habitations->taille; ++i) {
+            HabitationNode_t* node = caserne->habitations->data[i];
+            node->habitation->relie_caserne = true;
+        }
+
+        casernes = casernes->next;
     }
 }

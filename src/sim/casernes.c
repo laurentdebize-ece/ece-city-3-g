@@ -9,3 +9,4 @@ CasernePompier_t* alloc_caserne(){
 void caserne_free(CasernePompier_t* caserne) {
     free(caserne);
 }
+

@@ -99,6 +99,7 @@ void bfs(SimWorld_t* world, Vector2I start, void* batId, Vector_t* chemins) {
                             break;
 
                         case KIND_CENTRALE:
+                        case KIND_CASERNE:
                         case KIND_CHATEAU:
                             if (world->map[nextPos.x][nextPos.y].donnees == batId)
                                 liste_ajouter_fin(file, bfs_node_alloc(nextPos, node->distance));

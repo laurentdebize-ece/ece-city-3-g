@@ -44,6 +44,7 @@ typedef struct Habitation_t {
     bool alimentee_en_eau;
     /// L'habitation est-elle reliée au réseau d'électrique?
     bool alimentee_en_electricite;
+    bool relie_caserne;
 } Habitation_t;
 
 /// Crée une habitation.
