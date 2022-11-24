@@ -64,6 +64,8 @@ typedef struct SimWorld_t {
     SimRules_t rules;
     /// Le temps écoulé depuis le début de la simulation (en ticks).
     int n_ticks;
+    /// La simulation tourne-t-elle ?
+    bool sim_running;
 } SimWorld_t;
 
 /// Crée un monde de simulation vide.

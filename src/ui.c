@@ -52,6 +52,7 @@ void ui_charger_textures(UIState* textures) {
     textures->toolbarIcons[ICON_CHECK] = LoadTexture("../assets/textures/icones/check.png");
     textures->toolbarIcons[ICON_CANCEL] = LoadTexture("../assets/textures/icones/cancel.png");
     textures->toolbarIcons[ICON_ADD] = LoadTexture("../assets/textures/icones/add.png");
+    textures->toolbarIcons[ICON_PAUSE] = LoadTexture("../assets/textures/icones/pause.png");
 }
 
 void ui_draw_toolbar(UIState* states, SimWorld_t* sim) {
@@ -70,7 +71,7 @@ void ui_draw_toolbar(UIState* states, SimWorld_t* sim) {
     DrawTexture(states->toolbarIcons[ICON_PEOPLE], 211, 954, WHITE);
     DrawTexture(states->toolbarIcons[ICON_ENERGY], 446, 954, WHITE);
     DrawTexture(states->toolbarIcons[ICON_WATER], 668, 954, WHITE);
-    DrawTexture(states->toolbarIcons[ICON_BUILD], 892, 954, WHITE);
+    DrawTexture(states->toolbarIcons[ICON_PAUSE], 892, 954, sim->sim_running ? WHITE : ORANGE);
     DrawTexture(states->toolbarIcons[ICON_DESTROY], 1376, 954, states->currentBuildMode == BUILD_MODE_DESTROY ? YELLOW : WHITE);
 
     /// icône de l'echelle de temps.
@@ -88,6 +89,7 @@ void ui_draw_toolbar(UIState* states, SimWorld_t* sim) {
     DrawTexture(states->toolbarIcons[ICON_PEOPLE], 211, 954, WHITE);
     DrawTexture(states->toolbarIcons[ICON_ENERGY], 446, 954, WHITE);
     DrawTexture(states->toolbarIcons[ICON_WATER], 668, 954, WHITE);
+
 
     if (states->currentBuildMode == BUILD_MODE_DESTROY)
         DrawCircle(1395, 975, 30 , (Color) { 0, 0, 0, 45 });
@@ -167,6 +169,14 @@ void ui_update_toolbar(UIState* textures, SimWorld_t* sim) {
         if (CheckCollisionPointRec(mousePos, (Rectangle) {668, 954, textures->toolbarIcons[ICON_WATER].width,
                                                           textures->toolbarIcons[ICON_WATER].height})) {
             printf("Water\n");
+        }
+
+        if (CheckCollisionPointRec(mousePos, (Rectangle) {
+                892, 954,
+                .width = textures->toolbarIcons[ICON_PAUSE].width,
+                .height = textures->toolbarIcons[ICON_PAUSE].height
+        })) {
+            sim->sim_running = !sim->sim_running;
         }
 
         if (CheckCollisionPointRec(mousePos, (Rectangle) {892, 954, textures->toolbarIcons[ICON_BUILD].width,
