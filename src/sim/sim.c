@@ -40,6 +40,7 @@ void sim_world_destroy(SimWorld_t* world) {
     liste_free(world->habitations);
     liste_free(world->centrales);
     liste_free(world->chateaux);
+    liste_free(world->casernes);
     free(world);
 }
 

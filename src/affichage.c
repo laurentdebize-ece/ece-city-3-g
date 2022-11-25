@@ -111,6 +111,8 @@ void affichage_draw_entities(SpriteSheet_t *sheet, SimWorld_t *world, enum Rende
         sprite_sheet_draw_sprite(sheet, SPRITE_CASERNE_4x6, casernesColor, caserne->position.x, caserne->position.y);
         casernes = casernes->next;
     }
+    ///////////////////////////
+    ///////////////////////////
 }
 
 void affichage_draw_build_preview(SpriteSheet_t *sheet, SimWorld_t *world, Vector2I v, CaseKind_t type) {

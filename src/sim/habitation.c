@@ -1,5 +1,6 @@
-
+#include "affichage.h"
 #include "sim/habitation.h"
+#include "stdio.h"
 
 /// Crée une habitation.
 Habitation_t *habitation_alloc(NiveauHabitation_t niveau) {
@@ -17,13 +18,37 @@ void habitation_free(Habitation_t *habitation) {
     free(habitation);
 }
 
+void habitation_brule(Habitation_t *habitation){
+    if(habitation->enfeu == true){
+        if(habitation->enfeu_prochain_cycle == true){
+            habitation->niveau = NIVEAU_RUINE;
+        }
+        habitation->enfeu = false;
+    }
+}
+
+void habitation_sauvee(Habitation_t*habitation){
+
+}
+
+void habitation_enfeu(Habitation_t *habitation){
+        int a = rand()%10;
+        if(a == 1) {
+            habitation->enfeu = true;
+            habitation->enfeu_prochain_cycle = true;
+            habitation_brule(habitation);
+        }
+}
+
 /// Incrémente d'un tick la simulation d'un bâtiment.
 int habitation_step(Habitation_t *habitation, SimRules_t rules) {
     habitation->update_ticks++;
 
     if (habitation->update_ticks >= N_TICKS_EVOLUTION) {
         habitation->update_ticks = 0;
+
         habitation_evolve(habitation);
+        habitation_enfeu(habitation);
         return habitation_get_nb_habitants(habitation) * IMPOT_PAR_HABITANT;
     }
 

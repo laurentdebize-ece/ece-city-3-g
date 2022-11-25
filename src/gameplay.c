@@ -4,6 +4,7 @@
 #include "utils/capacite.h"
 #include "sauvegarde.h"
 #include "sim/casernes.h"
+#include "sim/habitation.h"
 
 void try_place_building(GameplayScreen_t *gameplay);
 void draw_debug_info(GameplayScreen_t *gameplay);
@@ -96,10 +97,12 @@ void gameplay_draw(Jeu_t *jeu, GameplayScreen_t *gameplay) {
 
     draw_niveaux(gameplay);
 
+
+
     draw_debug_info(gameplay);
 
     ui_draw_toolbar(&gameplay->state, gameplay->world);
-
+    draw_enfeu(gameplay);
     affichage_menu_sauvegarde(gameplay);
 }
 

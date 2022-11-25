@@ -4,6 +4,7 @@
 
 #include <stdbool.h>
 #include <stdlib.h>
+#include "spritesheet.h"
 
 #include "utils/grille.h"
 
@@ -45,6 +46,10 @@ typedef struct Habitation_t {
     /// L'habitation est-elle reliée au réseau d'électrique?
     bool alimentee_en_electricite;
     bool relie_caserne;
+    /// Le bat a 1/10 d'etre en feu
+    bool enfeu;
+    /// Initialisé à vrai sauf si caserne connexe, il devient faux et au prochain cycle enfeu deviendra faux sinon l'habitation devient une ruine
+    bool enfeu_prochain_cycle;
 } Habitation_t;
 
 /// Crée une habitation.
@@ -75,5 +80,9 @@ int habitation_get_remaining_required_energy(Habitation_t* habitation, SimRules_
 int habitation_get_remaining_required_water(Habitation_t* habitation, SimRules_t rules);
 
 int habitation_tri_par_distance(Habitation_t* a, Habitation_t* b);
+
+void habitation_enfeu(Habitation_t *habitation);
+void habitation_brule(Habitation_t *habitation);
+void habitation_sauvee(Habitation_t*habitation);
 
 #endif //ECECITY_HABITATION_H
