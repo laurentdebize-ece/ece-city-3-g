@@ -7,7 +7,11 @@ void sim_reset_flow_distribution(SimWorld_t* world);
 void sim_update_voisins_chateaux(SimWorld_t* world);
 void sim_update_voisins_centrales(SimWorld_t* world);
 
-bool bfs_visiteur_connexite(Case_t* caseActuelle, int distance, Vector_t* resultats, void* batInitial);
+
+/// Fonctions de visite des noeuds de BFS pour la connexion des châteaux d'eau et d'eau aux habitations / routes.
+
+bool bfs_visiteur_connexite_eau(Case_t* caseActuelle, int distance, Vector_t* resultats, void* batInitial);
+bool bfs_visiteur_connexite_elec(Case_t* caseActuelle, int distance, Vector_t* resultats, void* batInitial);
 
 /// Crée un monde de simulation vide.
 SimWorld_t* sim_world_create(SimRules_t rules, int monnaie) {
@@ -23,7 +27,8 @@ SimWorld_t* sim_world_create(SimRules_t rules, int monnaie) {
         for (int j = 0; j < SIM_MAP_HAUTEUR; j++) {
             world->map[i][j].donnees = NULL;
             world->map[i][j].type = KIND_VIDE;
-            world->map[i][j].connexe = 0;
+            world->map[i][j].connexe_eau = 0;
+            world->map[i][j].connexe_elec = 0;
         }
     }
 
@@ -269,7 +274,8 @@ void sim_update_voisins(SimWorld_t* world) {
 
     for (int i = 0; i < SIM_MAP_LARGEUR; ++i) {
         for (int j = 0; j < SIM_MAP_HAUTEUR; ++j) {
-            world->map[i][j].connexe = false;
+            world->map[i][j].connexe_eau = false;
+            world->map[i][j].connexe_elec = false;
         }
     }
 
@@ -286,7 +292,7 @@ void sim_update_voisins_chateaux(SimWorld_t* world) {
         vector_free_clear(chateau->habitations);
 
         /// on fait le BFS depuis le point mentionné
-        bfs(world, chateau->position, chateau, chateau->habitations, bfs_visiteur_connexite);
+        bfs(world, chateau->position, chateau, chateau->habitations, bfs_visiteur_connexite_eau);
 
         /// on ajoute les chemins
         for (int i = 0; i < chateau->habitations->taille; ++i) {
@@ -306,7 +312,7 @@ void sim_update_voisins_centrales(SimWorld_t* world) {
 
         vector_free_clear(centrale->habitations);
 
-        bfs(world, centrale->position, centrale, centrale->habitations, bfs_visiteur_connexite);
+        bfs(world, centrale->position, centrale, centrale->habitations, bfs_visiteur_connexite_elec);
 
         for (int i = 0; i < centrale->habitations->taille; ++i) {
             HabitationNode_t* node = centrale->habitations->data[i];
@@ -318,9 +324,16 @@ void sim_update_voisins_centrales(SimWorld_t* world) {
 }
 
 /// Fonction visiteuse de noeux qui définit la connexité d'une habitation / route au réseau d'eau.
-bool bfs_visiteur_connexite(Case_t* caseActuelle, int distance, Vector_t* resultats, void* batInitial) {
+bool bfs_visiteur_connexite_eau(Case_t* caseActuelle, int distance, Vector_t* resultats, void* batInitial) {
     if (caseActuelle->type == KIND_ROUTE)
-        caseActuelle->connexe = true;
+        caseActuelle->connexe_eau = true;
+
+    return bfs_visiteur_habitation(caseActuelle, distance, resultats, batInitial);
+}
+
+bool bfs_visiteur_connexite_elec(Case_t* caseActuelle, int distance, Vector_t* resultats, void* batInitial) {
+    if (caseActuelle->type == KIND_ROUTE)
+        caseActuelle->connexe_elec = true;
 
     return bfs_visiteur_habitation(caseActuelle, distance, resultats, batInitial);
 }
