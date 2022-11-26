@@ -36,8 +36,10 @@ typedef struct Case_t {
     void* donnees;
     /// Le type de la case.
     CaseKind_t type;
-    /// Permet d'indiquer si la case est connexe au réseau électrique / d'eau.
-    bool connexe;
+    /// Permet d'indiquer si la case est connexe au réseau d'eau.
+    bool connexe_eau;
+    /// Permet d'indiquer si la case est connexe au réseau électrique.
+    bool connexe_elec;
 } Case_t;
 
 /// Le monde de simulation du jeu.
