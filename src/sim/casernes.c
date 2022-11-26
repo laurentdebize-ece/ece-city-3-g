@@ -2,7 +2,7 @@
 
 CasernePompier_t* alloc_caserne(){
     CasernePompier_t* caserne = malloc(sizeof(CasernePompier_t));
-    caserne->habitations = liste_alloc();
+    caserne->habitations = vector_alloc(10);
     return caserne;
 }
 

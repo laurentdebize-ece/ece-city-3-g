@@ -9,7 +9,7 @@
 
 typedef struct CasernePompier_t {
     /// La liste des bâtiments deservis par la caserne.
-    Vector_t * habitations;
+    Vector_t* habitations;
     /// La position de la caserne sur la carte.
     Vector2I position;
 } CasernePompier_t;

@@ -25,7 +25,7 @@ BFSNode_t *bfs_node_alloc(Vector2I pos, int d) {
 
 /// Tente de mettre a jour un chemin si la distance est plus courte.
 void tryUpdateChemin(Vector_t* vecteur, int d, void* data) {
-    for (int i = 0; i < vecteur->taille; ++i) {
+    for (int i = 0; i < vecteur->taille; i++) {
         HabitationNode_t* node = vecteur->data[i];
         if (node->habitation == data) {
             node->distance = d < node->distance ? d : node->distance;
