@@ -9,8 +9,8 @@ void jeu_run(Jeu_t* jeu, ScreenInfo_t* ecran_depart)
     jeu->should_exit = false;
     jeu->screen = ecran_depart;
 
+    SetExitKey(KEY_NULL);
     SetTargetFPS(60);
-
 
     DBG_LOG("Lancement du jeu sur l'ecran: %s", ecran_depart->screen_name);
 

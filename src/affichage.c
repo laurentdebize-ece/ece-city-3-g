@@ -94,6 +94,13 @@ void affichage_draw_entities(SpriteSheet_t *sheet, SimWorld_t *world, enum Rende
         chateaux = chateaux->next;
     }
 
+    Color casernesColor = (layers & LAYER_CASERNE) != 0 ? WHITE : ColorAlpha(WHITE, 0.5f);
+    struct Maillon_t *casernes = world->casernes->premier;
+    while (casernes) {
+        CasernePompier_t* caserne = (CasernePompier_t*) casernes->data;
+        sprite_sheet_draw_sprite(sheet, SPRITE_CASERNE_4x6, casernesColor, caserne->position.x, caserne->position.y);
+        casernes = casernes->next;
+    }
 
     Color routesColor = (layers & LAYER_HABITATIONS) != 0 ? WHITE : ColorAlpha(WHITE, 0.5f);
     struct Maillon_t *maison = world->habitations->premier;
@@ -101,14 +108,6 @@ void affichage_draw_entities(SpriteSheet_t *sheet, SimWorld_t *world, enum Rende
         Habitation_t *hab = (Habitation_t *) maison->data;
         affichage_draw_habitation(sheet, hab, routesColor);
         maison = maison->next;
-    }
-
-    Color casernesColor = (layers & LAYER_CASERNE) != 0 ? WHITE : ColorAlpha(WHITE, 0.5f);
-    struct Maillon_t *casernes = world->casernes->premier;
-    while (casernes) {
-        CasernePompier_t* caserne= (CasernePompier_t*) casernes->data;
-        sprite_sheet_draw_sprite(sheet, SPRITE_CASERNE_4x6, casernesColor, caserne->position.x, caserne->position.y);
-        casernes = casernes->next;
     }
     ///////////////////////////
     ///////////////////////////
