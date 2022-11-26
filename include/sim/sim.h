@@ -42,6 +42,8 @@ typedef struct Case_t {
     bool connexe_eau;
     /// Permet d'indiquer si la case est connexe au réseau électrique.
     bool connexe_elec;
+
+    bool connexe_caserne;
 } Case_t;
 
 /// Le monde de simulation du jeu.
@@ -92,5 +94,7 @@ bool sim_check_can_place(SimWorld_t* world, bool isBat, int x, int y, int w, int
 
 /// Recalcule les voisins de chacunes des centrales & châteaux.
 void sim_update_voisins(SimWorld_t* world);
+
+bool bfs_visiteur_connexite_caserne(Case_t* caseActuelle, int distance, Vector_t* resultats, void* batInitial);
 
 #endif //ECECITY_SIM_H

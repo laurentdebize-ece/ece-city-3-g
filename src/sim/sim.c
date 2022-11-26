@@ -365,7 +365,7 @@ void sim_update_voisins_casernes(SimWorld_t* world) {
 
         vector_free_clear(caserne->habitations);
 
-        bfs(world, caserne->position, caserne, caserne->habitations);
+        bfs(world, caserne->position, caserne, caserne->habitations, bfs_visiteur_connexite_caserne);
 
         for (int i = 0; i < caserne->habitations->taille; ++i) {
             HabitationNode_t* node = caserne->habitations->data[i];
@@ -376,6 +376,13 @@ void sim_update_voisins_casernes(SimWorld_t* world) {
 
         casernes = casernes->next;
     }
+}
+
+bool bfs_visiteur_connexite_caserne(Case_t* caseActuelle, int distance, Vector_t* resultats, void* batInitial) {
+    if (caseActuelle->type == KIND_ROUTE)
+        caseActuelle->connexe_caserne = true;
+
+    return bfs_visiteur_habitation(caseActuelle, distance, resultats, batInitial);
 }
 
 /// Fonction visiteuse de noeux qui définit la connexité d'une habitation / route au réseau d'eau.
