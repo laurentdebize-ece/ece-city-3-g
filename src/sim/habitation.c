@@ -48,7 +48,6 @@ void habitation_enfeu(Habitation_t *habitation) {
     int a = rand() % 10 - 0 + 1;
     // 1 chance sur 10
     if (a == 1) {
-        printf("Feu %d %d\n", habitation->position.x, habitation->position.y);
         habitation->enfeu = true;
         habitation->enfeu_prochain_cycle = true;
     }

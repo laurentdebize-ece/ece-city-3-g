@@ -355,7 +355,9 @@ void sim_update_voisins_casernes(SimWorld_t* world) {
 
         for (int i = 0; i < caserne->habitations->taille; ++i) {
             HabitationNode_t* node = caserne->habitations->data[i];
-            node->habitation->relie_caserne = true;
+            if (node->distance <= 20) {
+                node->habitation->relie_caserne = true;
+            }
         }
 
         casernes = casernes->next;
