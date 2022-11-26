@@ -38,8 +38,10 @@ typedef struct Case_t {
     void* donnees;
     /// Le type de la case.
     CaseKind_t type;
-    /// Permet d'indiquer si la case est connexe au réseau électrique / d'eau.
-    bool connexe;
+    /// Permet d'indiquer si la case est connexe au réseau d'eau.
+    bool connexe_eau;
+    /// Permet d'indiquer si la case est connexe au réseau électrique.
+    bool connexe_elec;
 } Case_t;
 
 /// Le monde de simulation du jeu.
@@ -66,6 +68,8 @@ typedef struct SimWorld_t {
     SimRules_t rules;
     /// Le temps écoulé depuis le début de la simulation (en ticks).
     int n_ticks;
+    /// La simulation tourne-t-elle ?
+    bool sim_running;
 } SimWorld_t;
 
 /// Crée un monde de simulation vide.

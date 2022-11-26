@@ -63,8 +63,7 @@ void affichage_draw_terrain_background(SpriteSheet_t *sheet, SimWorld_t *world, 
             switch (world->map[i][j].type) {
 
                 case KIND_ROUTE:{
-                    Color col = (elec ? YELLOW : eau ? BLUE : WHITE);
-                    sprite_sheet_draw_sprite(sheet, get_route_sprite_variant(world, i, j),col, i, j);
+                    sprite_sheet_draw_sprite(sheet, get_route_sprite_variant(world, i, j), eau && world->map[i][j].connexe_eau ? BLUE : (elec && world->map[i][j].connexe_elec ? YELLOW : WHITE), i, j);
                     break;
                 }
 

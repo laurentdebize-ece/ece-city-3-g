@@ -54,6 +54,7 @@ void ui_charger_textures(UIState* textures) {
     textures->toolbarIcons[ICON_ADD] = LoadTexture("../assets/textures/icones/add.png");
     textures->toolbarIcons[ICON_CASERNE] = LoadTexture("../assets/textures/icones/caserne-de-pompiers.png");
     textures->toolbarIcons[ICON_FIRE] = LoadTexture("../assets/textures/icones/fire.png");
+    textures->toolbarIcons[ICON_PAUSE] = LoadTexture("../assets/textures/icones/pause.png");
 }
 
 void ui_draw_toolbar(UIState* states, SimWorld_t* sim) {
@@ -72,7 +73,7 @@ void ui_draw_toolbar(UIState* states, SimWorld_t* sim) {
     DrawTexture(states->toolbarIcons[ICON_PEOPLE], 211, 954, WHITE);
     DrawTexture(states->toolbarIcons[ICON_ENERGY], 446, 954, WHITE);
     DrawTexture(states->toolbarIcons[ICON_WATER], 668, 954, WHITE);
-    DrawTexture(states->toolbarIcons[ICON_BUILD], 892, 954, WHITE);
+    DrawTexture(states->toolbarIcons[ICON_PAUSE], 892, 954, sim->sim_running ? WHITE : ORANGE);
     DrawTexture(states->toolbarIcons[ICON_DESTROY], 1376, 954, states->currentBuildMode == BUILD_MODE_DESTROY ? YELLOW : WHITE);
 
     /// icône de l'echelle de temps.
@@ -125,7 +126,15 @@ void ui_draw_toolbar(UIState* states, SimWorld_t* sim) {
     }, 0.2f, 8, (Color) { 0, 194, 255, 191 });
     DrawText(timeToDate(sim), 10, 10, 24, WHITE);
 
-    // dessin de la monnaie
+    // dessin du temps réel écoulé.
+    DrawRectangleRounded((Rectangle) {
+        .x = 205,
+        .y = -5,
+        .width = 200,
+        .height = 50
+    }, 0.2f, 8, DARKGRAY);
+    DrawText(TextFormat("%.2d:%.2d:%.2d", sim->n_ticks / 3600, (sim->n_ticks / 60) % 24, sim->n_ticks % 60), 215, 10, 24, WHITE);
+
     DrawRectangleRounded((Rectangle) {
             .x = FENETRE_JEU_LARGEUR - 195,
             .y = -5,
@@ -133,6 +142,18 @@ void ui_draw_toolbar(UIState* states, SimWorld_t* sim) {
             .height = 50
     }, 0.2f, 8, (Color) { 0, 194, 255, 191 });
     DrawText(TextFormat("%d £", sim->monnaie), FENETRE_JEU_LARGEUR - 190, 10, 24, WHITE);
+
+
+    /// dessin du mode actuel.
+    Color modeCol = sim->rules == Communiste_t ? RED : BLUE;
+    const char *mode = sim->rules == Communiste_t ? "Communiste" : "Capitaliste";
+    DrawRectangleRounded((Rectangle) {
+            .x = FENETRE_JEU_LARGEUR - 415,
+            .y = -5,
+            .width = 200,
+            .height = 50
+    }, 0.2f, 8, modeCol);
+    DrawText(mode, FENETRE_JEU_LARGEUR - 400, 10, 24, WHITE);
 
     if (states->stateToolbar.stateMenuSave.modeMenu)
         draw_affichage_niveaux(states);
@@ -174,6 +195,14 @@ void ui_update_toolbar(UIState* textures, SimWorld_t* sim) {
         if (CheckCollisionPointRec(mousePos, (Rectangle) {668, 954, textures->toolbarIcons[ICON_WATER].width,
                                                           textures->toolbarIcons[ICON_WATER].height})) {
             printf("Water\n");
+        }
+
+        if (CheckCollisionPointRec(mousePos, (Rectangle) {
+                892, 954,
+                .width = textures->toolbarIcons[ICON_PAUSE].width,
+                .height = textures->toolbarIcons[ICON_PAUSE].height
+        })) {
+            sim->sim_running = !sim->sim_running;
         }
 
         if (CheckCollisionPointRec(mousePos, (Rectangle) {892, 954, textures->toolbarIcons[ICON_BUILD].width,
