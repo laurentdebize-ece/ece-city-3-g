@@ -53,7 +53,6 @@ void ui_charger_textures(UIState* textures) {
     textures->toolbarIcons[ICON_CANCEL] = LoadTexture("../assets/textures/icones/cancel.png");
     textures->toolbarIcons[ICON_ADD] = LoadTexture("../assets/textures/icones/add.png");
     textures->toolbarIcons[ICON_CASERNE] = LoadTexture("../assets/textures/icones/caserne-de-pompiers.png");
-    textures->toolbarIcons[ICON_FIRE] = LoadTexture("../assets/textures/icones/fire.png");
     textures->toolbarIcons[ICON_PAUSE] = LoadTexture("../assets/textures/icones/pause.png");
 }
 

@@ -213,3 +213,14 @@ void affichage_debug_draw_voisins_centrale(SpriteSheet_t* sheet, CentraleElectri
         DrawText(TextFormat("#%d", i), oX, oY, 20, WHITE);
     }
 }
+
+void affichage_debug_draw_voisins_caserne(SpriteSheet_t* sheet, CasernePompier_t* caserne, Color teinte) {
+    sprite_sheet_draw_sprite(sheet, SPRITE_CASERNE_4x6, teinte, caserne->position.x, caserne->position.y);
+    for (int i = 0; i < caserne->habitations->taille; ++i) {
+        Habitation_t* hab = ((HabitationNode_t*) caserne->habitations->data[i])->habitation;
+        affichage_draw_habitation(sheet, hab, teinte);
+        int oX = (ORIGINEX * SPRITELARGEUR) + hab->position.x * (SPRITELARGEUR/2) - hab->position.y * (SPRITELARGEUR/2);
+        int oY = (ORIGINEY * SPRITEHAUTEUR) + hab->position.y * (SPRITEHAUTEUR/2) + hab->position.x * (SPRITEHAUTEUR/2);
+        DrawText(TextFormat("#%d (%d: d)", i, ((HabitationNode_t*) caserne->habitations->data[i])->distance), oX, oY, 20, WHITE);
+    }
+}

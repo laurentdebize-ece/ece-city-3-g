@@ -34,6 +34,7 @@ void gameplay_on_enter(Jeu_t *jeu, GameplayScreen_t *gameplay) {
 
     gameplay->dbgDisplayChateauNeighbors = 0;
     gameplay->dbgDisplayCentraleNeighbors = 0;
+    gameplay->dbgDisplayCaserneNeighbors = 0;
 
     gameplay->state.stateToolbar.stateMenuSave.modeMenu = false;
     gameplay->state.stateToolbar.stateMenuSave.modeSave = false;
@@ -102,7 +103,7 @@ void gameplay_draw(Jeu_t *jeu, GameplayScreen_t *gameplay) {
     draw_debug_info(gameplay);
 
     ui_draw_toolbar(&gameplay->state, gameplay->world);
-    draw_enfeu(gameplay);
+    draw_enfeu(gameplay->world, &gameplay->spriteSheet);
     affichage_menu_sauvegarde(gameplay);
 }
 
@@ -177,8 +178,13 @@ void update_debug_info(GameplayScreen_t* gameplay) {
         gameplay->dbgDisplayCentraleNeighbors = (gameplay->dbgDisplayCentraleNeighbors + 1) % (gameplay->world->centrales->taille + 1);
     }
 
+    if (IsKeyPressed(KEY_F)) {
+        gameplay->dbgDisplayCaserneNeighbors = (gameplay->dbgDisplayCaserneNeighbors + 1) % (gameplay->world->casernes->taille + 1);
+    }
+
     gameplay->dbgDisplayChateauNeighbors = MIN(gameplay->dbgDisplayChateauNeighbors, gameplay->world->chateaux->taille + 1);
     gameplay->dbgDisplayCentraleNeighbors = MIN(gameplay->dbgDisplayCentraleNeighbors, gameplay->world->centrales->taille + 1);
+    gameplay->dbgDisplayCaserneNeighbors = MIN(gameplay->dbgDisplayCaserneNeighbors, gameplay->world->casernes->taille + 1);
 }
 
 void draw_debug_info(GameplayScreen_t *gameplay) {
@@ -207,6 +213,20 @@ void draw_debug_info(GameplayScreen_t *gameplay) {
             }
             n++;
             centrales = centrales->next;
+        }
+    }
+
+    if (gameplay->dbgDisplayCaserneNeighbors > 0) {
+        struct Maillon_t* casernes = gameplay->world->casernes->premier;
+        int n = 1;
+        while (casernes) {
+            if (n == gameplay->dbgDisplayCaserneNeighbors) {
+                CasernePompier_t* caserne = casernes->data;
+                affichage_debug_draw_voisins_caserne(&gameplay->spriteSheet, caserne, LIGHTGRAY);
+                break;
+            }
+            n++;
+            casernes = casernes->next;
         }
     }
 }

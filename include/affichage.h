@@ -5,6 +5,7 @@
 #include <raylib.h>
 #include "sim/sim.h"
 #include "spritesheet.h"
+#include "sim/casernes.h"
 
 /// Enumère les composants du jeu à dessiner.
 enum RenderLayer {
@@ -31,5 +32,7 @@ void affichage_draw_build_preview(SpriteSheet_t* sheet, SimWorld_t* world, Vecto
 void affichage_debug_draw_voisins_chateau(SpriteSheet_t* sheet, ChateauEau_t* chateau, Color teinte);
 
 void affichage_debug_draw_voisins_centrale(SpriteSheet_t* sheet, CentraleElectrique_t* centrale, Color teinte);
+
+void affichage_debug_draw_voisins_caserne(SpriteSheet_t* sheet, CasernePompier_t* caserne, Color teinte);
 
 #endif //ECECITY_AFFICHAGE_H

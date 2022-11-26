@@ -6,12 +6,12 @@ CasernePompier_t* alloc_caserne(){
     return caserne;
 }
 
-void draw_enfeu(GameplayScreen_t *gameplay){
-    struct Maillon_t* maison = gameplay->world->habitations->premier;
+void draw_enfeu(SimWorld_t *world, SpriteSheet_t* sheet){
+    struct Maillon_t* maison = world->habitations->premier;
     while (maison) {
         Habitation_t * hab = (Habitation_t*) maison->data;
         if(hab->enfeu == true){
-            DrawTexture(gameplay->state.toolbarIcons[ICON_FIRE], (ORIGINEX * SPRITELARGEUR) + hab->position.x * (SPRITELARGEUR / 2) -
+            DrawTexture(sheet->spriteFeu, (ORIGINEX * SPRITELARGEUR) + hab->position.x * (SPRITELARGEUR / 2) -
                                                                  hab->position.y * (SPRITELARGEUR / 2), (ORIGINEY * SPRITEHAUTEUR) + hab->position.y * (SPRITEHAUTEUR / 2) +
                                                                                                         hab->position.x * (SPRITEHAUTEUR / 2) - 10, WHITE);
         }

@@ -62,6 +62,7 @@ typedef struct SpriteSheet_t {
     Image spriteDetectionTuile;
     Sprite_t sprites[NB_SPRITES];
     Texture2D spritesheetEtatsHabitations;
+    Texture2D spriteFeu;
 } SpriteSheet_t;
 
 void sprite_sheet_load(SpriteSheet_t* spriteSheet);

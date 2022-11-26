@@ -259,6 +259,7 @@ void sprite_sheet_load(SpriteSheet_t* spriteSheet) {
 
 
     spriteSheet->spritesheetEtatsHabitations = LoadTexture("../assets/textures/icones/icones.png");
+    spriteSheet->spriteFeu = LoadTexture("../assets/textures/icones/fire.png");
 }
 
 void sprite_sheet_draw_sprite(SpriteSheet_t* spriteSheet, enum SPRITE_MAP sprite, Color teinte, int x, int y) {
