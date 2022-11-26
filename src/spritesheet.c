@@ -250,6 +250,14 @@ void sprite_sheet_load(SpriteSheet_t* spriteSheet) {
     spriteSheet->sprites[SPRITE_EAU_6X4].decalageXDecor = -60;
     spriteSheet->sprites[SPRITE_EAU_6X4].decalageYDecor = -22;
 
+    spriteSheet->sprites[SPRITE_CASERNE_4x6].rectangle.height = 120;
+    spriteSheet->sprites[SPRITE_CASERNE_4x6].rectangle.width = 200;
+    spriteSheet->sprites[SPRITE_CASERNE_4x6].rectangle.x = 2520;
+    spriteSheet->sprites[SPRITE_CASERNE_4x6].rectangle.y = 0;
+    spriteSheet->sprites[SPRITE_CASERNE_4x6].decalageXDecor = -60;
+    spriteSheet->sprites[SPRITE_CASERNE_4x6].decalageYDecor = -20;
+
+
     spriteSheet->spritesheetEtatsHabitations = LoadTexture("../assets/textures/icones/icones.png");
 }
 

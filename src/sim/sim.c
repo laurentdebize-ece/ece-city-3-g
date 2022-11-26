@@ -2,10 +2,12 @@
 #include <stdio.h>
 #include "sim/sim.h"
 #include "bfs.h"
+#include "sim/casernes.h"
 
 void sim_reset_flow_distribution(SimWorld_t* world);
 void sim_update_voisins_chateaux(SimWorld_t* world);
 void sim_update_voisins_centrales(SimWorld_t* world);
+void sim_update_voisins_casernes(SimWorld_t* world);
 
 
 /// Fonctions de visite des noeuds de BFS pour la connexion des châteaux d'eau et d'eau aux habitations / routes.
@@ -19,7 +21,8 @@ SimWorld_t* sim_world_create(SimRules_t rules, int monnaie) {
     world->habitations = liste_alloc();
     world->centrales = liste_alloc();
     world->chateaux = liste_alloc();
-    world->routes = liste_alloc();
+    world->casernes = liste_alloc();
+    world->casernes = liste_alloc();
     world->nb_total_habitants = 0;
 
     // mise à zéro de la carte.
@@ -45,6 +48,7 @@ void sim_world_destroy(SimWorld_t* world) {
     liste_free(world->habitations);
     liste_free(world->centrales);
     liste_free(world->chateaux);
+    liste_free(world->casernes);
     free(world);
 }
 
@@ -157,7 +161,21 @@ void sim_place_entity(SimWorld_t* world, CaseKind_t type, int x, int y, bool rel
         }
         break;
 
-        case KIND_ROUTE: {
+        case KIND_CASERNE: {
+            CasernePompier_t *casernes = alloc_caserne();
+            casernes->position = (Vector2I) {x, y};
+            for (int i = 0; i < 6; ++i) {
+                for (int j = 0; j < 4; ++j) {
+                    world->map[x + i][y + j].type = KIND_CASERNE;
+                    world->map[x + i][y + j].donnees = casernes;
+                }
+            }
+            liste_ajouter_fin(world->casernes, casernes);
+            break;
+        }
+
+
+            case KIND_ROUTE: {
             world->map[x][y].type = KIND_ROUTE;
             world->map[x][y].donnees = NULL;
         }
@@ -250,6 +268,20 @@ void sim_destroy_entity(SimWorld_t* world, int x, int y) {
             }
             break;
 
+            case KIND_CASERNE:
+            {
+                CasernePompier_t* caserne = (CasernePompier_t *) world->map[x][y].donnees;
+                liste_supprimer(world->casernes, caserne);
+                for (int i = 0; i < 6; ++i) {
+                    for (int j = 0; j < 4; ++j) {
+                        world->map[caserne->position.x + i][caserne->position.y + j].type = KIND_VIDE;
+                        world->map[caserne->position.x + i][caserne->position.y + j].donnees = NULL;
+                    }
+                }
+                caserne_free(caserne);
+            }
+                break;
+
             case KIND_ROUTE: {
                 world->map[x][y].type = KIND_VIDE;
                 world->map[x][y].donnees = NULL;
@@ -269,6 +301,7 @@ void sim_update_voisins(SimWorld_t* world) {
     while (habs) {
         ((Habitation_t*)habs->data)->alimentee_en_eau = false;
         ((Habitation_t*)habs->data)->alimentee_en_electricite = false;
+        ((Habitation_t*)habs->data)->relie_caserne = false;
         habs = habs->next;
     }
 
@@ -281,6 +314,7 @@ void sim_update_voisins(SimWorld_t* world) {
 
     sim_update_voisins_chateaux(world);
     sim_update_voisins_centrales(world);
+    sim_update_voisins_casernes(world);
 }
 
 void sim_update_voisins_chateaux(SimWorld_t* world) {
@@ -320,6 +354,27 @@ void sim_update_voisins_centrales(SimWorld_t* world) {
         }
 
         centrales = centrales->next;
+    }
+}
+
+
+void sim_update_voisins_casernes(SimWorld_t* world) {
+    struct Maillon_t* casernes = world->casernes->premier;
+    while (casernes) {
+        CasernePompier_t* caserne = casernes->data;
+
+        vector_free_clear(caserne->habitations);
+
+        bfs(world, caserne->position, caserne, caserne->habitations);
+
+        for (int i = 0; i < caserne->habitations->taille; ++i) {
+            HabitationNode_t* node = caserne->habitations->data[i];
+            if (node->distance <= 20) {
+                node->habitation->relie_caserne = true;
+            }
+        }
+
+        casernes = casernes->next;
     }
 }
 

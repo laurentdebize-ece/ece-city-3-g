@@ -1,5 +1,6 @@
-
+#include "affichage.h"
 #include "sim/habitation.h"
+#include "stdio.h"
 
 /// Crée une habitation.
 Habitation_t *habitation_alloc(NiveauHabitation_t niveau) {
@@ -10,11 +11,46 @@ Habitation_t *habitation_alloc(NiveauHabitation_t niveau) {
     habitation->alimentee_en_electricite = false;
     habitation->eau = 0;
     habitation->electricite = 0;
+    habitation->enfeu = 0;
+    habitation->enfeu_prochain_cycle = 1;
+
+    return habitation;
 }
 
 /// Détruit une habitation.
 void habitation_free(Habitation_t *habitation) {
     free(habitation);
+}
+
+void habitation_brule(Habitation_t *habitation) {
+    if (habitation->enfeu == true) {
+        if (habitation->enfeu_prochain_cycle == true) {
+            habitation->niveau = NIVEAU_RUINE;
+            habitation->enfeu = false;
+        }
+    }
+}
+
+void habitation_sauvee_connexe_pompier_apres_15s(Habitation_t *habitation) {
+    if (habitation->enfeu_prochain_cycle == false) {
+            habitation->enfeu = false;
+    }
+}
+
+void habitation_sauvee(Habitation_t *habitation) {
+    if(habitation->relie_caserne){
+        habitation->enfeu_prochain_cycle = false;
+    }
+}
+
+void habitation_enfeu(Habitation_t *habitation) {
+    //rand % max - min + 1
+    int a = rand() % 10 - 0 + 1;
+    // 1 chance sur 10
+    if (a == 1) {
+        habitation->enfeu = true;
+        habitation->enfeu_prochain_cycle = true;
+    }
 }
 
 /// Incrémente d'un tick la simulation d'un bâtiment.
@@ -24,13 +60,17 @@ int habitation_step(Habitation_t *habitation, SimRules_t rules) {
     if (habitation->update_ticks >= N_TICKS_EVOLUTION) {
         habitation->update_ticks = 0;
         habitation_evolve(habitation);
+        habitation_sauvee_connexe_pompier_apres_15s(habitation);
+        habitation_brule(habitation);
+        habitation_enfeu(habitation);
+        habitation_sauvee(habitation);
         return habitation_get_nb_habitants(habitation) * IMPOT_PAR_HABITANT;
     }
 
     return 0;
 }
 
-int habitation_get_nb_habitants(Habitation_t* habitation) {
+int habitation_get_nb_habitants(Habitation_t *habitation) {
     switch (habitation->niveau) {
         case NIVEAU_CABANE:
             return 10;
@@ -45,19 +85,19 @@ int habitation_get_nb_habitants(Habitation_t* habitation) {
     }
 }
 
-int habitation_get_required_water(Habitation_t* habitation, SimRules_t rules) {
-        return habitation_get_nb_habitants(habitation);
-}
-
-int habitation_get_remaining_required_water(Habitation_t* habitation, SimRules_t rules) {
-    return habitation_get_required_water(habitation, rules) - habitation->eau;
-}
-
-int habitation_get_required_energy(Habitation_t* habitation, SimRules_t rules) {
+int habitation_get_required_water(Habitation_t *habitation, SimRules_t rules) {
     return habitation_get_nb_habitants(habitation);
 }
 
-int habitation_get_remaining_required_energy(Habitation_t* habitation, SimRules_t rules) {
+int habitation_get_remaining_required_water(Habitation_t *habitation, SimRules_t rules) {
+    return habitation_get_required_water(habitation, rules) - habitation->eau;
+}
+
+int habitation_get_required_energy(Habitation_t *habitation, SimRules_t rules) {
+    return habitation_get_nb_habitants(habitation);
+}
+
+int habitation_get_remaining_required_energy(Habitation_t *habitation, SimRules_t rules) {
     return habitation_get_required_energy(habitation, rules) - habitation->electricite;
 }
 
