@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include <utils/grille.h>
 #include "utils/vector.h"
-#include "sim/sim.h"
 
 #define CHATEAU_PRIX_CONSTRUCTION 100000
 #define CAPACITE_CHATEAU_EAU 5000

@@ -8,16 +8,14 @@
 
 #include "utils/grille.h"
 
-typedef enum SimRules_t {
-    Capitaliste_t,
-    Communiste_t,
-} SimRules_t;
+
 
 
 #define HABITATION_PRIX_CONSTRUCTION 10000
 #define N_TICKS_EVOLUTION 15
 #define IMPOT_PAR_HABITANT 10
 
+/// Enum contenant les différents états possibles pour une habitation allant de la ruine au gratte-ciel
 typedef enum NiveauHabitation_t {
     NIVEAU_RUINE,
     NIVEAU_TERRAIN_VAGUE,
@@ -40,11 +38,11 @@ typedef struct Habitation_t {
     int update_ticks;
     /// La position du bâtiment.
     Vector2I position;
-    /// Distance a la centrale la plus proche
     /// L'habitation est-elle reliée au réseau d'eau?
     bool alimentee_en_eau;
     /// L'habitation est-elle reliée au réseau d'électrique?
     bool alimentee_en_electricite;
+    /// L'habitation est-elle reliée à une caserne à une distance de 20 blocs?
     bool relie_caserne;
     /// Le bat a 1/10 d'etre en feu
     bool enfeu;
@@ -81,8 +79,11 @@ int habitation_get_remaining_required_water(Habitation_t* habitation, SimRules_t
 
 int habitation_tri_par_distance(Habitation_t* a, Habitation_t* b);
 
+/// Chaque habitation lors de son cycle de 15s a une chance sur 10 de prendre feu
 void habitation_enfeu(Habitation_t *habitation);
+/// S'il n'y a pas de casernes autour de l'habitation alors elle tombe en état de ruine
 void habitation_brule(Habitation_t *habitation);
+/// Si une caserne se trouve à une distance de 20 blocs et moins alors l'habitation continue d'évoluer normalement
 void habitation_sauvee(Habitation_t*habitation);
 
 #endif //ECECITY_HABITATION_H
