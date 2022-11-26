@@ -120,7 +120,15 @@ void ui_draw_toolbar(UIState* states, SimWorld_t* sim) {
     }, 0.2f, 8, (Color) { 0, 194, 255, 191 });
     DrawText(timeToDate(sim), 10, 10, 24, WHITE);
 
-    // dessin de la monnaie
+    // dessin du temps réel écoulé.
+    DrawRectangleRounded((Rectangle) {
+        .x = 205,
+        .y = -5,
+        .width = 200,
+        .height = 50
+    }, 0.2f, 8, DARKGRAY);
+    DrawText(TextFormat("%.2d:%.2d:%.2d", sim->n_ticks / 3600, (sim->n_ticks / 60) % 24, sim->n_ticks % 60), 215, 10, 24, WHITE);
+
     DrawRectangleRounded((Rectangle) {
             .x = FENETRE_JEU_LARGEUR - 195,
             .y = -5,
@@ -128,6 +136,18 @@ void ui_draw_toolbar(UIState* states, SimWorld_t* sim) {
             .height = 50
     }, 0.2f, 8, (Color) { 0, 194, 255, 191 });
     DrawText(TextFormat("%d £", sim->monnaie), FENETRE_JEU_LARGEUR - 190, 10, 24, WHITE);
+
+
+    /// dessin du mode actuel.
+    Color modeCol = sim->rules == Communiste_t ? RED : BLUE;
+    const char *mode = sim->rules == Communiste_t ? "Communiste" : "Capitaliste";
+    DrawRectangleRounded((Rectangle) {
+            .x = FENETRE_JEU_LARGEUR - 415,
+            .y = -5,
+            .width = 200,
+            .height = 50
+    }, 0.2f, 8, modeCol);
+    DrawText(mode, FENETRE_JEU_LARGEUR - 400, 10, 24, WHITE);
 
     if (states->stateToolbar.stateMenuSave.modeMenu)
         draw_affichage_niveaux(states);
