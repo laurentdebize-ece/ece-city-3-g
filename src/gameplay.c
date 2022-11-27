@@ -5,6 +5,7 @@
 #include "sauvegarde.h"
 #include "sim/casernes.h"
 #include "sim/habitation.h"
+#include "menu_principal.h"
 
 void try_place_building(GameplayScreen_t *gameplay);
 void draw_debug_info(GameplayScreen_t *gameplay);
@@ -84,6 +85,11 @@ void gameplay_update(Jeu_t *jeu, GameplayScreen_t *gameplay) {
     update_debug_info(gameplay);
 
     sim_step_resources(gameplay->world);
+
+    if (IsKeyPressed(KEY_ESCAPE)) {
+        sim_sauvegarder(gameplay->world, SAVE_AUTO_SAVE_FILENAME);
+        jeu_switch_screen(jeu, menu_principal_alloc());
+    }
 }
 
 void gameplay_draw(Jeu_t *jeu, GameplayScreen_t *gameplay) {
