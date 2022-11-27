@@ -66,6 +66,8 @@ SimWorld_t* sim_world_create(SimRules_t rules, int monnaie) {
     world->monnaie = monnaie;
     world->rules = rules;
     world->n_ticks = 0;
+    world->qte_dispo_eau = 0;
+    world->qte_dispo_elec = 0;
     world->qte_totale_eau = 0;
     world->qte_totale_electricite = 0;
     world->sim_running = true;
@@ -94,32 +96,14 @@ void sim_world_step(SimWorld_t* world) {
 
     world->n_ticks++;
     world->nb_total_habitants = 0;
-    sim_reset_flow_distribution(world);
-
-    world->qte_totale_eau = 0;
-    world->qte_totale_electricite = 0;
-
 
     /// évolution et récolte des impôts des habitations
     struct Maillon_t *maisons = world->habitations->premier;
     while (maisons) {
         Habitation_t *hab = (Habitation_t *) maisons->data;
-        world->monnaie += habitation_step(hab, Communiste_t);
+        world->monnaie += habitation_step(hab, world->rules);
         world->nb_total_habitants += habitation_get_nb_habitants(hab);
         maisons = maisons->next;
-    }
-
-    /// maj des qte d'eau et d'électricité
-    struct Maillon_t* chateaux = world->chateaux->premier;
-    while (chateaux) {
-        world->qte_totale_eau += ((ChateauEau_t*)chateaux->data)->capacite;
-        chateaux = chateaux->next;
-    }
-
-    struct Maillon_t* centrales = world->centrales->premier;
-    while (centrales) {
-        world->qte_totale_electricite += ((CentraleElectrique_t*)centrales->data)->capacite;
-        centrales = centrales->next;
     }
 
     /// quatrième étape: sim des capacités d'évolution des bâtiments.
@@ -150,6 +134,30 @@ void sim_reset_flow_distribution(SimWorld_t* world) {
     }
 }
 
+void sim_step_resources(SimWorld_t* world) {
+    world->qte_dispo_eau = 0;
+    world->qte_dispo_elec = 0;
+    world->qte_max_eau = 0;
+    world->qte_max_elec = 0;
+
+    sim_reset_flow_distribution(world);
+
+    /// maj des qte d'eau et d'électricité
+    struct Maillon_t* chateaux = world->chateaux->premier;
+    while (chateaux) {
+        world->qte_dispo_eau += ((ChateauEau_t*)chateaux->data)->capacite;
+        world->qte_max_eau += CAPACITE_CHATEAU_EAU;
+        chateaux = chateaux->next;
+    }
+
+    struct Maillon_t* centrales = world->centrales->premier;
+    while (centrales) {
+        world->qte_max_elec += CAPACITE_CENTRALE_ELECTRIQUE;
+        world->qte_dispo_elec += ((CentraleElectrique_t*)centrales->data)->capacite;
+        centrales = centrales->next;
+    }
+}
+
 /// Place une entité dans la carte de la simulation aux coordonnées données.
 /// @param world - adresse de structure world allouée dynamiquement - monde de simulation.
 /// @param type - type de case de la simulation du monde (Habitation, route, terrain, ...).
@@ -160,7 +168,8 @@ void sim_place_entity(SimWorld_t* world, CaseKind_t type, int x, int y, bool rel
     switch (type) {
         case KIND_HABITATION:
         {
-            Habitation_t* habitation = habitation_alloc(NIVEAU_TERRAIN_VAGUE);
+            NiveauHabitation_t def_lvl = world->rules == Capitaliste_t ? NIVEAU_TERRAIN_VAGUE_CAP : NIVEAU_TERRAIN_VAGUE;
+            Habitation_t* habitation = habitation_alloc(def_lvl);
             habitation->position = (Vector2I) {x, y};
 
             for (int i = 0; i < 3; ++i) {

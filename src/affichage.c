@@ -163,10 +163,12 @@ void affichage_draw_habitation(SpriteSheet_t *sheet, Habitation_t *habitation, C
 
     switch (habitation->niveau) {
         case NIVEAU_CABANE:
+        case NIVEAU_CABANE_CAP:
             habitation_sprite = SPRITE_CABANE_3X3;
             break;
 
         case NIVEAU_MAISON:
+        case NIVEAU_MAISON_CAP:
             habitation_sprite = SPRITE_MAISON_3X3;
             break;
 
@@ -179,10 +181,12 @@ void affichage_draw_habitation(SpriteSheet_t *sheet, Habitation_t *habitation, C
             break;
 
         case NIVEAU_TERRAIN_VAGUE:
+        case NIVEAU_TERRAIN_VAGUE_CAP:
             habitation_sprite = SPRITE_TERRAIN_VAGUE_3X3;
             break;
 
         case NIVEAU_IMMEUBLE:
+        case NIVEAU_IMMEUBLE_CAP:
             habitation_sprite = SPRITE_IMMEUBLE_3X3;
             break;
 
@@ -201,7 +205,7 @@ void affichage_debug_draw_voisins_chateau(SpriteSheet_t* sheet, ChateauEau_t* ch
         affichage_draw_habitation(sheet, hab, teinte);
         int oX = (ORIGINEX * SPRITELARGEUR) + hab->position.x * (SPRITELARGEUR/2) - hab->position.y * (SPRITELARGEUR/2);
         int oY = (ORIGINEY * SPRITEHAUTEUR) + hab->position.y * (SPRITEHAUTEUR/2) + hab->position.x * (SPRITEHAUTEUR/2);
-        DrawText(TextFormat("#%d", i), oX, oY, 20, WHITE);
+        DrawText(TextFormat("#%d (d: %d)", i, ((HabitationNode_t*) chateau->habitations->data[i])->distance), oX, oY, 20, WHITE);
     }
 }
 
@@ -212,7 +216,7 @@ void affichage_debug_draw_voisins_centrale(SpriteSheet_t* sheet, CentraleElectri
         affichage_draw_habitation(sheet, hab, teinte);
         int oX = (ORIGINEX * SPRITELARGEUR) + hab->position.x * (SPRITELARGEUR/2) - hab->position.y * (SPRITELARGEUR/2);
         int oY = (ORIGINEY * SPRITEHAUTEUR) + hab->position.y * (SPRITEHAUTEUR/2) + hab->position.x * (SPRITEHAUTEUR/2);
-        DrawText(TextFormat("#%d", i), oX, oY, 20, WHITE);
+        DrawText(TextFormat("#%d", i, ((HabitationNode_t*) centrale->habitations->data[i])->distance), oX, oY, 20, WHITE);
     }
 }
 

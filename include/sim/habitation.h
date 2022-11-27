@@ -17,7 +17,11 @@
 
 /// Enum contenant les différents états possibles pour une habitation allant de la ruine au gratte-ciel
 typedef enum NiveauHabitation_t {
-    NIVEAU_RUINE,
+    NIVEAU_TERRAIN_VAGUE_CAP = -99999,
+    NIVEAU_CABANE_CAP,
+    NIVEAU_MAISON_CAP,
+    NIVEAU_IMMEUBLE_CAP,
+    NIVEAU_RUINE = 0,
     NIVEAU_TERRAIN_VAGUE,
     NIVEAU_CABANE,
     NIVEAU_MAISON,
@@ -64,7 +68,7 @@ void habitation_free(Habitation_t* habitation);
 int habitation_step(Habitation_t* habitation, SimRules_t rules);
 
 /// Fait évoluer un bâtiment en fonction des ticks d'évolution / régression.
-void habitation_evolve(Habitation_t* habitation);
+void habitation_evolve(Habitation_t* habitation, SimRules_t rules);
 
 /// Retourne le nombre d'habitants dans l'habitation.
 int habitation_get_nb_habitants(Habitation_t* habitation);

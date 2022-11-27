@@ -19,7 +19,11 @@ void centrale_free(CentraleElectrique_t* centrale) {
 void centrale_step(CentraleElectrique_t* centrale, SimRules_t rules) {
     centrale->capacite = CAPACITE_CENTRALE_ELECTRIQUE;
 
-    for (int i = 0; i < centrale->habitations->taille; i++) {
+    /// On traitera les habitation dans l'ordre de niveaux afin de minimiser les pertes d'habitants.
+    vector_sort(centrale->habitations, trier_noeux_habitations_par_niveau);
+
+    /// distribution de l'elec
+    for (int i = 0; i < centrale->habitations->taille; ++i) {
         HabitationNode_t* habitation = centrale->habitations->data[i];
         habitation->habitation->electricite += centrale_dispense(centrale, habitation_get_remaining_required_energy(habitation->habitation, rules));
     }
