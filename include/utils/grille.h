@@ -9,6 +9,11 @@
 
 #include <raylib.h>
 
+typedef enum SimRules_t {
+    Capitaliste_t,
+    Communiste_t,
+} SimRules_t;
+
 typedef struct Vector2I {
     int x;
     int y;

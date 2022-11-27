@@ -20,6 +20,7 @@ typedef struct CentraleE_t {
     /// Liste des habitations reliées à la centrale.
     Vector_t* habitations;
 
+    /// Position de la centrale sur la carte (en isométrique).
     Vector2I position;
 } CentraleElectrique_t;
 

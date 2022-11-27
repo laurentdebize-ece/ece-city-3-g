@@ -14,6 +14,7 @@ void sim_update_voisins_casernes(SimWorld_t* world);
 
 bool bfs_visiteur_connexite_eau(Case_t* caseActuelle, int distance, Vector_t* resultats, void* batInitial);
 bool bfs_visiteur_connexite_elec(Case_t* caseActuelle, int distance, Vector_t* resultats, void* batInitial);
+bool bfs_visiteur_connexite_caserne(Case_t* caseActuelle, int distance, Vector_t* resultats, void* batInitial);
 
 /// Crée un monde de simulation vide.
 SimWorld_t* sim_world_create(SimRules_t rules, int monnaie) {
@@ -371,10 +372,11 @@ void sim_update_voisins_casernes(SimWorld_t* world) {
         casernes = casernes->next;
     }
 }
-
+/// Fonction visiteuse de noeuds qui définit la connexité d'une habitation / route au réseau des casernes.
 bool bfs_visiteur_connexite_caserne(Case_t* caseActuelle, int distance, Vector_t* resultats, void* batInitial) {
-    if (caseActuelle->type == KIND_ROUTE)
+    if (caseActuelle->type == KIND_ROUTE){
         caseActuelle->connexe_caserne = true;
+    }
 
     if (caseActuelle->type == KIND_HABITATION) {
         Habitation_t* hab = (Habitation_t*) caseActuelle->donnees;
@@ -386,7 +388,7 @@ bool bfs_visiteur_connexite_caserne(Case_t* caseActuelle, int distance, Vector_t
     return false;
 }
 
-/// Fonction visiteuse de noeux qui définit la connexité d'une habitation / route au réseau d'eau.
+/// Fonction visiteuse de noeuds qui définit la connexité d'une habitation / route au réseau d'eau.
 bool bfs_visiteur_connexite_eau(Case_t* caseActuelle, int distance, Vector_t* resultats, void* batInitial) {
     if (caseActuelle->type == KIND_ROUTE)
         caseActuelle->connexe_eau = true;
@@ -394,6 +396,7 @@ bool bfs_visiteur_connexite_eau(Case_t* caseActuelle, int distance, Vector_t* re
     return bfs_visiteur_habitation(caseActuelle, distance, resultats, batInitial);
 }
 
+/// Fonction visiteuse de noeuds qui définit la connexité d'une habitation / route au réseau électrique.
 bool bfs_visiteur_connexite_elec(Case_t* caseActuelle, int distance, Vector_t* resultats, void* batInitial) {
     if (caseActuelle->type == KIND_ROUTE)
         caseActuelle->connexe_elec = true;

@@ -9,7 +9,7 @@
 #define CASERNE_PRIX_CONSTRUCTION 10000
 
 typedef struct CasernePompier_t {
-    /// La liste des bâtiments deservis par la caserne.
+    /// La liste des bâtiments desservis par la caserne.
     Vector_t* habitations;
     /// La position de la caserne sur la carte.
     Vector2I position;
@@ -18,6 +18,7 @@ typedef struct CasernePompier_t {
 ///Créer une caserne
 CasernePompier_t* alloc_caserne();
 
+/// Affichage d'une icône "feu" quand une habitation est en feu
 void draw_enfeu(SimWorld_t *world, SpriteSheet_t* sheet);
 
 /// Détruit une caserne.
