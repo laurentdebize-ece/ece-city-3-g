@@ -49,7 +49,8 @@ SimWorld_t* sim_world_create(SimRules_t rules, int monnaie) {
 }
 
 /// Détruit un monde de simulation.
-/// @param world - monde de simulation.
+/// @param world - adresse de structure world allouée dynamiquement - monde de simulation.
+/// @return void.
 void sim_world_destroy(SimWorld_t* world) {
     liste_free(world->habitations);
     liste_free(world->centrales);
@@ -59,7 +60,8 @@ void sim_world_destroy(SimWorld_t* world) {
 }
 
 /// Avance d'une étape la simulation du monde.
-/// @param world - monde de simulation.
+/// @param world - adresse de structure world allouée dynamiquement - monde de simulation.
+/// @return void.
 void sim_world_step(SimWorld_t* world) {
 
     if (!world->sim_running)
@@ -100,6 +102,7 @@ void sim_world_step(SimWorld_t* world) {
 
 /// Remet à zéro la répartition de l'eau et de l'électricité pour les bâtiments.
 /// @param world - adresse de structure world allouée dynamiquement - monde de simulation
+/// @return void.
 void sim_reset_flow_distribution(SimWorld_t* world) {
     struct Maillon_t *maisons = world->habitations->premier;
     while (maisons) {
@@ -127,6 +130,7 @@ void sim_reset_flow_distribution(SimWorld_t* world) {
 /// @param type - type de case de la simulation du monde (Habitation, route, terrain, ...).
 /// @param x, y - coordonnées en isométrique du placement sur le monde de simulation.
 /// @param reload - si l'entité placée est une centrale, caserne, château d'eau alors permet d'actualiser ses voisins.
+/// @return void.
 void sim_place_entity(SimWorld_t* world, CaseKind_t type, int x, int y, bool reload) {
     switch (type) {
         case KIND_HABITATION:
@@ -241,6 +245,7 @@ bool sim_check_can_place(SimWorld_t* world, bool isBat, int x, int y, int w, int
 /// Détruit l'entité sélectionnée.
 /// @param world - adresse de structure world allouée dynamiquement - monde de simulation.
 /// @param x, y - coordonnées en isométrique de la destruction sur le monde de simulation.
+/// @return void.
 void sim_destroy_entity(SimWorld_t* world, int x, int y) {
     if (x >= SIM_MAP_LARGEUR || y >= SIM_MAP_HAUTEUR || x < 0 || y < 0)
         return;
@@ -317,6 +322,8 @@ void sim_destroy_entity(SimWorld_t* world, int x, int y) {
     }
 }
 
+/// @param world - adresse de structure world allouée dynamiquement - monde de simulation.
+/// @return void.
 void sim_update_voisins(SimWorld_t* world) {
     struct Maillon_t* habs = world->habitations->premier;
     while (habs) {
@@ -339,6 +346,8 @@ void sim_update_voisins(SimWorld_t* world) {
     sim_update_voisins_casernes(world);
 }
 
+/// @param world - adresse de structure world allouée dynamiquement - monde de simulation.
+/// @return void.
 void sim_update_voisins_chateaux(SimWorld_t* world) {
     struct Maillon_t* chateaux = world->chateaux->premier;
     while (chateaux) {
@@ -361,6 +370,8 @@ void sim_update_voisins_chateaux(SimWorld_t* world) {
     }
 }
 
+/// @param world - adresse de structure world allouée dynamiquement - monde de simulation.
+/// @return void.
 void sim_update_voisins_centrales(SimWorld_t* world) {
     struct Maillon_t* centrales = world->centrales->premier;
     while (centrales) {
@@ -379,7 +390,8 @@ void sim_update_voisins_centrales(SimWorld_t* world) {
     }
 }
 
-
+/// @param world - adresse de structure world allouée dynamiquement - monde de simulation.
+/// @return void.
 void sim_update_voisins_casernes(SimWorld_t* world) {
     struct Maillon_t* casernes = world->casernes->premier;
     while (casernes) {
@@ -392,7 +404,13 @@ void sim_update_voisins_casernes(SimWorld_t* world) {
         casernes = casernes->next;
     }
 }
+
 /// Fonction visiteuse de noeuds qui définit la connexité d'une habitation / route au réseau des casernes.
+/// @param caseActuelle - adresse de structure Case_t - case sur laquelle s'effectue le bfs.
+/// @param distance - int - distance à laquelle se trouve la caserne de la caseActuelle
+/// @param resultats - adresse de structure Vector_t - ?
+/// @param batInitial - void* pointeur sur structure CasernePompier_t - permet de connaître le bâtiment depuis lequel on effectue le parcours en largeur.
+/// @return booléen - true si l'habitation de la caseActuelle est à moins de 20 blocs d'une caserne - false sinon.
 bool bfs_visiteur_connexite_caserne(Case_t* caseActuelle, int distance, Vector_t* resultats, void* batInitial) {
     if (caseActuelle->type == KIND_ROUTE){
         caseActuelle->connexe_caserne = true;
@@ -409,6 +427,11 @@ bool bfs_visiteur_connexite_caserne(Case_t* caseActuelle, int distance, Vector_t
 }
 
 /// Fonction visiteuse de noeuds qui définit la connexité d'une habitation / route au réseau d'eau.
+/// @param caseActuelle - adresse de structure Case_t - case sur laquelle s'effectue le bfs.
+/// @param distance - int - distance à laquelle se trouve la caserne de la caseActuelle
+/// @param resultats - adresse de structure Vector_t - ?
+/// @param batInitial - void* pointeur sur structure CasernePompier_t - permet de connaître le bâtiment depuis lequel on effectue le parcours en largeur.
+/// @return booléen - true si l'habitation est connectée au réseau d'eau - false sinon.
 bool bfs_visiteur_connexite_eau(Case_t* caseActuelle, int distance, Vector_t* resultats, void* batInitial) {
     if (caseActuelle->type == KIND_ROUTE)
         caseActuelle->connexe_eau = true;
@@ -417,6 +440,11 @@ bool bfs_visiteur_connexite_eau(Case_t* caseActuelle, int distance, Vector_t* re
 }
 
 /// Fonction visiteuse de noeuds qui définit la connexité d'une habitation / route au réseau électrique.
+/// @param caseActuelle - adresse de structure Case_t - case sur laquelle s'effectue le bfs.
+/// @param distance - int - distance à laquelle se trouve la caserne de la caseActuelle
+/// @param resultats - adresse de structure Vector_t - ?
+/// @param batInitial - void* pointeur sur structure CasernePompier_t - permet de connaître le bâtiment depuis lequel on effectue le parcours en largeur.
+/// @return booléen - true si l'habitation est connectée au réseau électrique - false sinon.
 bool bfs_visiteur_connexite_elec(Case_t* caseActuelle, int distance, Vector_t* resultats, void* batInitial) {
     if (caseActuelle->type == KIND_ROUTE)
         caseActuelle->connexe_elec = true;
