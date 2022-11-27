@@ -79,7 +79,7 @@ int habitation_step(Habitation_t *habitation, SimRules_t rules) {
         /// Reset des ticks.
         habitation->update_ticks = 0;
         /// L'habitation évolue selon les modes de jeu.
-        habitation_evolve(habitation);
+        habitation_evolve(habitation, rules);
         /// On check d'abord si lors de son précédent cycle l'habitation a été en feu et sauvée par une caserne.
         habitation_sauvee_connexe_pompier_apres_15s(habitation);
         /// Sinon elle brûle et devient une ruine.

@@ -68,8 +68,8 @@ SimWorld_t* sim_world_create(SimRules_t rules, int monnaie) {
     world->n_ticks = 0;
     world->qte_dispo_eau = 0;
     world->qte_dispo_elec = 0;
-    world->qte_totale_eau = 0;
-    world->qte_totale_electricite = 0;
+    world->qte_max_eau = 0;
+    world->qte_max_elec = 0;
     world->sim_running = true;
 
     return world;

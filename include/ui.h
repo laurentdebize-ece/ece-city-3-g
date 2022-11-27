@@ -96,10 +96,13 @@ typedef struct UIState {
     ToolbarHoverState_t stateToolbar;
 } UIState;
 
+/// Charger les textures pour l'interface utilisateur.
 void ui_charger_textures(UIState* textures);
 
+/// Dessine l'interface utilisateur.
 void ui_draw_toolbar(UIState* states, SimWorld_t* sim);
 
+/// Met a jour l'état des boutons de l'UI.
 void ui_update_toolbar(UIState* textures, SimWorld_t* sim);
 
 CaseKind_t ui_buildmode_to_casekind(BuildMode mode);

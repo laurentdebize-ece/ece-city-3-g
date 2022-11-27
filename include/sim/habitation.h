@@ -84,6 +84,7 @@ int habitation_get_remaining_required_energy(Habitation_t* habitation, SimRules_
 
 int habitation_get_remaining_required_water(Habitation_t* habitation, SimRules_t rules);
 
+/// Fonction de tri pour trier les habitations par distance lors de la distribution.
 int habitation_tri_par_distance(Habitation_t* a, Habitation_t* b);
 
 /// Chaque habitation lors de son cycle de 15s a une chance sur 10 de prendre feu
