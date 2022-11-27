@@ -34,6 +34,9 @@ void centrale_free(CentraleElectrique_t* centrale);
 /// A appeler au début de chaque tick de simulation.
 void centrale_step(CentraleElectrique_t* centrale, SimRules_t rules);
 
+/// Répartit la capacité restante de la centrale
+void centrale_step_communist(CentraleElectrique_t* centrale, int* remaining_total_cap);
+
 /// Donne de l'électricité à une habitation.
 int centrale_dispense(CentraleElectrique_t* centrale, int quantite);
 
