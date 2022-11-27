@@ -6,6 +6,9 @@
 #include "time.h"
 #include "assert.h"
 
+/// Donne la date de la sauvegarde effectuée.
+/// @param gameplay - structure générale du jeu.
+/// @return void.
 void get_time_sauvegarde(GameplayScreen_t *gameplay) {
     time_t t;
     time(&t);
@@ -14,6 +17,8 @@ void get_time_sauvegarde(GameplayScreen_t *gameplay) {
             &t);
 }
 
+/// Fonction qui trouve les noms et le nombre de sauvegardes dans le dossier du jeu.
+/// @return int - nombre de sauvegardes dans le dossier de sauvegarde.
 int nombredeSauvegardes(GameplayScreen_t *gameplay) {
     int nbSauvegarde = 0, compteur = 0, i;
 

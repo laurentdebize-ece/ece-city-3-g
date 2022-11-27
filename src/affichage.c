@@ -4,6 +4,10 @@
 #include "bfs.h"
 #include "sim/casernes.h"
 
+/// Fonction qui permet de trier les routes selon le nombre de voisins adjacents.
+/// @param eceCity - Structure du monde de simulation alloué dynamiquement.
+/// @param x, y - coordonnées isométriques de la route en question.
+/// @return SPRITE_MAP - sprite correspondante pour une route donnée.
 enum SPRITE_MAP get_route_sprite_variant(SimWorld_t *eceCity, int x, int y) {
     if (eceCity->map[x][y + 1].type == KIND_ROUTE &&
         eceCity->map[x][y - 1].type == KIND_ROUTE &&
@@ -57,6 +61,11 @@ enum SPRITE_MAP get_route_sprite_variant(SimWorld_t *eceCity, int x, int y) {
     return SPRITE_ROUTE_0;
 }
 
+/// Dessine le fond de la map (arbres, herbe, ...).
+/// @param sheet - Structure de SpriteSheet - contenant tous les assets pour l'affichage.
+/// @param world - Structure du monde de simulation alloué dynamiquement.
+/// @param eau, elec - factorise cette fonction pour l'affichage des différents niveaux (0, -1, -2).
+/// @return void.
 void affichage_draw_terrain_background(SpriteSheet_t *sheet, SimWorld_t *world, bool eau, bool elec) {
     for (int i = -25; i < 120; ++i) {
         for (int j = -25; j < 130; ++j) {
@@ -84,6 +93,10 @@ void affichage_draw_terrain_background(SpriteSheet_t *sheet, SimWorld_t *world, 
 }
 
 /// Dessine les tuiles de la carte.
+/// @param sheet - Structure de SpriteSheet - contenant tous les assets pour l'affichage.
+/// @param world - Structure du monde de simulation alloué dynamiquement.
+/// @param layers - enum RenderLayer - permet d'afficher un niveau de transparence pour les bâtiments lors du placement de la route.
+/// @return void.
 void affichage_draw_entities(SpriteSheet_t *sheet, SimWorld_t *world, enum RenderLayer layers) {
 
     Color centralesColor = (layers & LAYER_CENTRALES) != 0 ? WHITE : ColorAlpha(WHITE, 0.5f);
@@ -121,6 +134,10 @@ void affichage_draw_entities(SpriteSheet_t *sheet, SimWorld_t *world, enum Rende
     ///////////////////////////
 }
 
+/// Dessine les bâtiments quand on les a en mains.
+/// @param sheet - Structure de SpriteSheet - contenant tous les assets pour l'affichage.
+/// @param world - Structure du monde de simulation alloué dynamiquement.
+/// @return void.
 void affichage_draw_build_preview(SpriteSheet_t *sheet, SimWorld_t *world, Vector2I v, CaseKind_t type) {
     int w = 0;
     int h = 0;
@@ -164,6 +181,11 @@ void affichage_draw_build_preview(SpriteSheet_t *sheet, SimWorld_t *world, Vecto
     sprite_sheet_draw_sprite(sheet, bat, is_valid ? GREEN : RED, v.x, v.y);
 }
 
+/// Dessine les habitations en fonciton de leur niveau (Ruine, Maison, ...).
+/// @param sheet - Structure de SpriteSheet - contenant tous les assets pour l'affichage.
+/// @param habitation - adresse de structure habitation allouée dynamiquement.
+/// @param teinte - Structure Color - permet d'afficher l'habitation selon plusieurs teintes
+/// @return void.
 void affichage_draw_habitation(SpriteSheet_t *sheet, Habitation_t *habitation, Color teinte) {
     enum SPRITE_MAP habitation_sprite = SPRITE_TERRAIN_VAGUE_3X3;
 
@@ -203,6 +225,7 @@ void affichage_draw_habitation(SpriteSheet_t *sheet, Habitation_t *habitation, C
     sprite_sheet_draw_sprite(sheet, habitation_sprite, teinte, habitation->position.x, habitation->position.y);
 }
 
+/// @return void.
 void affichage_debug_draw_voisins_chateau(SpriteSheet_t *sheet, ChateauEau_t *chateau, Color teinte) {
     sprite_sheet_draw_sprite(sheet, SPRITE_EAU_4X6, teinte, chateau->position.x, chateau->position.y);
 
@@ -218,6 +241,7 @@ void affichage_debug_draw_voisins_chateau(SpriteSheet_t *sheet, ChateauEau_t *ch
     }
 }
 
+/// @return void.
 void affichage_debug_draw_voisins_centrale(SpriteSheet_t *sheet, CentraleElectrique_t *centrale, Color teinte) {
     sprite_sheet_draw_sprite(sheet, SPRITE_ENERGY_6X4, teinte, centrale->position.x, centrale->position.y);
     for (int i = 0; i < centrale->habitations->taille; ++i) {
@@ -232,6 +256,7 @@ void affichage_debug_draw_voisins_centrale(SpriteSheet_t *sheet, CentraleElectri
     }
 }
 
+/// @return void.
 void affichage_debug_draw_voisins_caserne(SpriteSheet_t *sheet, CasernePompier_t *caserne, Color teinte) {
     sprite_sheet_draw_sprite(sheet, SPRITE_CASERNE_4x6, teinte, caserne->position.x, caserne->position.y);
     for (int i = 0; i < caserne->habitations->taille; ++i) {

@@ -8,13 +8,20 @@ typedef struct BFSNode_t {
     int distance;
 } BFSNode_t;
 
+/// Alloue un noeud pour le bfs
+/// @param habitation - adresse de structure habitation allouée dynamiquement.
+/// @param distance - int - distance depuis le sommet initial.
+/// @return HabitationNode_t* - adresse de structure node allouée dynamiquement.
 HabitationNode_t* node_alloc(Habitation_t* habitation, int distance) {
     HabitationNode_t* node = malloc(sizeof(HabitationNode_t));
     node->habitation = habitation;
     node->distance = distance;
     return node;
 }
-
+/// Alloue un noeud pour le bfs
+/// @param pos - vecteur de deux dimension - position sur la carte.
+/// @param d - int - distance depuis le sommet initial.
+/// @return BFSNode_t* - adresse de structure node allouée dynamiquement.
 BFSNode_t *bfs_node_alloc(Vector2I pos, int d) {
     BFSNode_t *bfs = malloc(sizeof(BFSNode_t));
     bfs->pos = pos;
@@ -23,6 +30,10 @@ BFSNode_t *bfs_node_alloc(Vector2I pos, int d) {
 }
 
 /// Tente de mettre a jour un chemin si la distance est plus courte.
+/// @param vecteur - tableau dynamique pour stocker les habitations découvertes.
+/// @param d - int - distance depuis le sommet initial.
+/// @param data - adresse de structure habitation allouée dynamiquement.
+/// @return void.
 void bfs_try_add_chemin(Vector_t* vecteur, int d, void* data) {
     for (int i = 0; i < vecteur->taille; ++i) {
         HabitationNode_t* node = vecteur->data[i];
@@ -43,7 +54,12 @@ bool bfs_visiteur_habitation(Case_t* caseActuelle, int distance, Vector_t* resul
     return false;
 }
 
-
+/// BFS
+/// @param chemins - tableau dynamique pour stocker les habitations découvertes.
+/// @param data - adresse de structure bâtiment allouée dynamiquement depuis lequel on effectue le bfs.
+/// @param start - vecteur de deux dimension - position initiale sur la carte pour effectuer le bfs.
+/// @param world - Structure du monde de simulation alloué dynamiquement.
+/// @return void.
 void bfs(SimWorld_t* world, Vector2I start, void* batId, Vector_t* chemins, VisiteurBFS_t visiteur) {
 
     BFSNode_t *start_node = bfs_node_alloc(start, 0);
