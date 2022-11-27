@@ -30,9 +30,22 @@ void chateau_step(ChateauEau_t* chateau, SimRules_t rules) {
     if (demande > CAPACITE_CHATEAU_EAU)
         vector_sort(chateau->habitations, trier_noeux_habitations_par_niveau);
 
-    /// distribution de l'eau.
+    /// distribution de l'eau pour remplir jusqu'à la demande du niveau actuel (demande du mode communiste)
     for (int i = 0; i < chateau->habitations->taille; ++i) {
         HabitationNode_t* habitation = chateau->habitations->data[i];
         habitation->habitation->eau += chateau_dispense(chateau, habitation_get_remaining_required_water(habitation->habitation, rules));
+    }
+}
+
+void chateau_step_remaining(ChateauEau_t* chateau, int* quantite_restante_globale) {
+    /// distribution de l'eau restante pour remplir jusqu'à la demande du niveau actuel (demande du mode communiste)
+    for (int i = 0; i < chateau->habitations->taille; ++i) {
+        HabitationNode_t* habitation = chateau->habitations->data[i];
+        int needed_rem = habitation_get_required_for_next_level(habitation->habitation) - habitation->habitation->eau;
+        if (needed_rem <= *quantite_restante_globale) {
+            int dispensed = chateau_dispense(chateau, needed_rem);
+            habitation->habitation->eau += dispensed;
+            *quantite_restante_globale -= dispensed;
+        }
     }
 }

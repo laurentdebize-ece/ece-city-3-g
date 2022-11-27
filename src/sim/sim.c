@@ -142,19 +142,55 @@ void sim_step_resources(SimWorld_t* world) {
 
     sim_reset_flow_distribution(world);
 
-    /// maj des qte d'eau et d'électricité
-    struct Maillon_t* chateaux = world->chateaux->premier;
-    while (chateaux) {
-        world->qte_dispo_eau += ((ChateauEau_t*)chateaux->data)->capacite;
-        world->qte_max_eau += CAPACITE_CHATEAU_EAU;
-        chateaux = chateaux->next;
+    {
+        /// maj des qte d'eau et d'électricité
+        struct Maillon_t *chateaux = world->chateaux->premier;
+        while (chateaux) {
+            world->qte_dispo_eau += ((ChateauEau_t *) chateaux->data)->capacite;
+            world->qte_max_eau += CAPACITE_CHATEAU_EAU;
+            chateaux = chateaux->next;
+        }
     }
+
+    if (world->rules == Communiste_t)
+    {
+        {
+            /// l'eau qui reste pour la deuxieme passe.
+            int remaining_water = world->qte_dispo_eau;
+            struct Maillon_t *chateaux = world->chateaux->premier;
+            while (chateaux) {
+                ChateauEau_t *chateau = (ChateauEau_t *) chateaux->data;
+                chateau_step_remaining(chateau, &remaining_water);
+                chateaux = chateaux->next;
+            }
+
+            world->qte_dispo_eau = remaining_water;
+        }
+    }
+
+
 
     struct Maillon_t* centrales = world->centrales->premier;
     while (centrales) {
         world->qte_max_elec += CAPACITE_CENTRALE_ELECTRIQUE;
         world->qte_dispo_elec += ((CentraleElectrique_t*)centrales->data)->capacite;
         centrales = centrales->next;
+    }
+
+    if (world->rules == Communiste_t)
+    {
+        {
+            /// l'électricité qui reste pour la deuxieme passe.
+            int remaining_elec = world->qte_dispo_elec;
+            struct Maillon_t *centrales = world->centrales->premier;
+            while (centrales) {
+                CentraleElectrique_t *centrale = (CentraleElectrique_t *) centrales->data;
+                centrale_step_communist(centrale, &remaining_elec);
+                centrales = centrales->next;
+            }
+
+            world->qte_dispo_elec = remaining_elec;
+        }
     }
 }
 

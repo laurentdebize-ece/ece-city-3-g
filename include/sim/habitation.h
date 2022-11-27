@@ -8,9 +8,6 @@
 
 #include "utils/grille.h"
 
-
-
-
 #define HABITATION_PRIX_CONSTRUCTION 10000
 #define N_TICKS_EVOLUTION 15
 #define IMPOT_PAR_HABITANT 10
@@ -73,15 +70,19 @@ void habitation_evolve(Habitation_t* habitation, SimRules_t rules);
 /// Retourne le nombre d'habitants dans l'habitation.
 int habitation_get_nb_habitants(Habitation_t* habitation);
 
-/// Retourne la qte d'eau nécessaire pour l'habitation pour qu'elle évolue.
+/// Retourne la qte d'eau nécessaire pour l'habitation pour qu'elle évolue (MODE CAPITALISTE)
 int habitation_get_required_water(Habitation_t* habitation, SimRules_t rules);
 
-/// Retourne la qte d'eau nécessaire pour l'habitation pour qu'elle évolue.
+/// Retourne la qte de ressource (eau / elec) nécessaire pour passer au niveau suivant (MODE COMMUNISTE)
+int habitation_get_required_for_next_level(Habitation_t* habitation);
+
+/// Retourne la qte d'eau nécessaire pour l'habitation pour qu'elle évolue. (MODE CAPITALISTE)
 int habitation_get_required_energy(Habitation_t* habitation, SimRules_t rules);
 
-/// Retourne la qte d'energie nécessaire pour l'habitation pour qu'elle évolue.
+/// Retourne la qte d'energie nécessaire pour l'habitation pour qu'elle évolue. (MODE CAPITALISTE)
 int habitation_get_remaining_required_energy(Habitation_t* habitation, SimRules_t rules);
 
+/// Retourne la qte d'eau nécessaire pour l'habitation pour qu'elle évolue. (MODE CAPITALISTE)
 int habitation_get_remaining_required_water(Habitation_t* habitation, SimRules_t rules);
 
 /// Fonction de tri pour trier les habitations par distance lors de la distribution.
