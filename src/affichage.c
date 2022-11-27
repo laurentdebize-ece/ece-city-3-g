@@ -58,20 +58,26 @@ enum SPRITE_MAP get_route_sprite_variant(SimWorld_t *eceCity, int x, int y) {
 }
 
 void affichage_draw_terrain_background(SpriteSheet_t *sheet, SimWorld_t *world, bool eau, bool elec) {
-    for (int i = 0; i < 45; ++i) {
-        for (int j = 0; j < 35; ++j) {
-            switch (world->map[i][j].type) {
+    for (int i = -25; i < 120; ++i) {
+        for (int j = -25; j < 130; ++j) {
+            if (i > 0 && i < 45 && j > 0 && j < 35) {
+                switch (world->map[i][j].type) {
+                    case KIND_ROUTE: {
+                        sprite_sheet_draw_sprite(sheet, get_route_sprite_variant(world, i, j),
+                                                 eau && world->map[i][j].connexe_eau ? BLUE : (elec &&
+                                                                                               world->map[i][j].connexe_elec
+                                                                                               ? YELLOW : WHITE), i,
+                                                 j);
+                        break;
+                    }
 
-                case KIND_ROUTE:{
-                    sprite_sheet_draw_sprite(sheet, get_route_sprite_variant(world, i, j), eau && world->map[i][j].connexe_eau ? BLUE : (elec && world->map[i][j].connexe_elec ? YELLOW : WHITE), i, j);
-                    break;
+                    default: {
+                        sprite_sheet_draw_sprite(sheet, world->map[i][j].sprite_terrain, WHITE, i, j);
+                        break;
+                    }
                 }
-
-                default:{
-                    sprite_sheet_draw_sprite(sheet, world->map[i][j].sprite_terrain, WHITE, i, j);
-                    break;
-                }
-
+            } else {
+                sprite_sheet_draw_sprite(sheet, SPRITE_TERRAIN_3, WHITE, i, j);
             }
         }
     }
@@ -99,7 +105,7 @@ void affichage_draw_entities(SpriteSheet_t *sheet, SimWorld_t *world, enum Rende
     Color casernesColor = (layers & LAYER_CASERNE) != 0 ? WHITE : ColorAlpha(WHITE, 0.5f);
     struct Maillon_t *casernes = world->casernes->premier;
     while (casernes) {
-        CasernePompier_t* caserne = (CasernePompier_t*) casernes->data;
+        CasernePompier_t *caserne = (CasernePompier_t *) casernes->data;
         sprite_sheet_draw_sprite(sheet, SPRITE_CASERNE_4x6, casernesColor, caserne->position.x, caserne->position.y);
         casernes = casernes->next;
     }
@@ -197,36 +203,45 @@ void affichage_draw_habitation(SpriteSheet_t *sheet, Habitation_t *habitation, C
     sprite_sheet_draw_sprite(sheet, habitation_sprite, teinte, habitation->position.x, habitation->position.y);
 }
 
-void affichage_debug_draw_voisins_chateau(SpriteSheet_t* sheet, ChateauEau_t* chateau, Color teinte) {
+void affichage_debug_draw_voisins_chateau(SpriteSheet_t *sheet, ChateauEau_t *chateau, Color teinte) {
     sprite_sheet_draw_sprite(sheet, SPRITE_EAU_4X6, teinte, chateau->position.x, chateau->position.y);
 
-   for (int i = 0; i < chateau->habitations->taille; ++i) {
-        Habitation_t* hab = ((HabitationNode_t*) chateau->habitations->data[i])->habitation;
+    for (int i = 0; i < chateau->habitations->taille; ++i) {
+        Habitation_t *hab = ((HabitationNode_t *) chateau->habitations->data[i])->habitation;
         affichage_draw_habitation(sheet, hab, teinte);
-        int oX = (ORIGINEX * SPRITELARGEUR) + hab->position.x * (SPRITELARGEUR/2) - hab->position.y * (SPRITELARGEUR/2);
-        int oY = (ORIGINEY * SPRITEHAUTEUR) + hab->position.y * (SPRITEHAUTEUR/2) + hab->position.x * (SPRITEHAUTEUR/2);
-        DrawText(TextFormat("#%d (d: %d)", i, ((HabitationNode_t*) chateau->habitations->data[i])->distance), oX, oY, 20, WHITE);
+        int oX = (ORIGINEX * SPRITELARGEUR) + hab->position.x * (SPRITELARGEUR / 2) -
+                 hab->position.y * (SPRITELARGEUR / 2);
+        int oY = (ORIGINEY * SPRITEHAUTEUR) + hab->position.y * (SPRITEHAUTEUR / 2) +
+                 hab->position.x * (SPRITEHAUTEUR / 2);
+        DrawText(TextFormat("#%d (d: %d)", i, ((HabitationNode_t *) chateau->habitations->data[i])->distance), oX, oY,
+                 20, WHITE);
     }
 }
 
-void affichage_debug_draw_voisins_centrale(SpriteSheet_t* sheet, CentraleElectrique_t* centrale, Color teinte) {
+void affichage_debug_draw_voisins_centrale(SpriteSheet_t *sheet, CentraleElectrique_t *centrale, Color teinte) {
     sprite_sheet_draw_sprite(sheet, SPRITE_ENERGY_6X4, teinte, centrale->position.x, centrale->position.y);
     for (int i = 0; i < centrale->habitations->taille; ++i) {
-        Habitation_t* hab = ((HabitationNode_t*) centrale->habitations->data[i])->habitation;
+        Habitation_t *hab = ((HabitationNode_t *) centrale->habitations->data[i])->habitation;
         affichage_draw_habitation(sheet, hab, teinte);
-        int oX = (ORIGINEX * SPRITELARGEUR) + hab->position.x * (SPRITELARGEUR/2) - hab->position.y * (SPRITELARGEUR/2);
-        int oY = (ORIGINEY * SPRITEHAUTEUR) + hab->position.y * (SPRITEHAUTEUR/2) + hab->position.x * (SPRITEHAUTEUR/2);
-        DrawText(TextFormat("#%d", i, ((HabitationNode_t*) centrale->habitations->data[i])->distance), oX, oY, 20, WHITE);
+        int oX = (ORIGINEX * SPRITELARGEUR) + hab->position.x * (SPRITELARGEUR / 2) -
+                 hab->position.y * (SPRITELARGEUR / 2);
+        int oY = (ORIGINEY * SPRITEHAUTEUR) + hab->position.y * (SPRITEHAUTEUR / 2) +
+                 hab->position.x * (SPRITEHAUTEUR / 2);
+        DrawText(TextFormat("#%d", i, ((HabitationNode_t *) centrale->habitations->data[i])->distance), oX, oY, 20,
+                 WHITE);
     }
 }
 
-void affichage_debug_draw_voisins_caserne(SpriteSheet_t* sheet, CasernePompier_t* caserne, Color teinte) {
+void affichage_debug_draw_voisins_caserne(SpriteSheet_t *sheet, CasernePompier_t *caserne, Color teinte) {
     sprite_sheet_draw_sprite(sheet, SPRITE_CASERNE_4x6, teinte, caserne->position.x, caserne->position.y);
     for (int i = 0; i < caserne->habitations->taille; ++i) {
-        Habitation_t* hab = ((HabitationNode_t*) caserne->habitations->data[i])->habitation;
+        Habitation_t *hab = ((HabitationNode_t *) caserne->habitations->data[i])->habitation;
         affichage_draw_habitation(sheet, hab, teinte);
-        int oX = (ORIGINEX * SPRITELARGEUR) + hab->position.x * (SPRITELARGEUR/2) - hab->position.y * (SPRITELARGEUR/2);
-        int oY = (ORIGINEY * SPRITEHAUTEUR) + hab->position.y * (SPRITEHAUTEUR/2) + hab->position.x * (SPRITEHAUTEUR/2);
-        DrawText(TextFormat("#%d (%d: d)", i, ((HabitationNode_t*) caserne->habitations->data[i])->distance), oX, oY, 20, WHITE);
+        int oX = (ORIGINEX * SPRITELARGEUR) + hab->position.x * (SPRITELARGEUR / 2) -
+                 hab->position.y * (SPRITELARGEUR / 2);
+        int oY = (ORIGINEY * SPRITEHAUTEUR) + hab->position.y * (SPRITEHAUTEUR / 2) +
+                 hab->position.x * (SPRITEHAUTEUR / 2);
+        DrawText(TextFormat("#%d (%d: d)", i, ((HabitationNode_t *) caserne->habitations->data[i])->distance), oX, oY,
+                 20, WHITE);
     }
 }
