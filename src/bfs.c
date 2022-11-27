@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "bfs.h"
 
 /// Un noeud pour le parcours en largeur.
@@ -24,7 +23,7 @@ BFSNode_t *bfs_node_alloc(Vector2I pos, int d) {
 }
 
 /// Tente de mettre a jour un chemin si la distance est plus courte.
-void tryUpdateChemin(Vector_t* vecteur, int d, void* data) {
+void bfs_try_add_chemin(Vector_t* vecteur, int d, void* data) {
     for (int i = 0; i < vecteur->taille; ++i) {
         HabitationNode_t* node = vecteur->data[i];
         if (node->habitation == data) {
@@ -35,9 +34,17 @@ void tryUpdateChemin(Vector_t* vecteur, int d, void* data) {
     vector_push(vecteur, node_alloc(data, d));
 }
 
+bool bfs_visiteur_habitation(Case_t* caseActuelle, int distance, Vector_t* resultats, void* batId) {
+    if (caseActuelle->type == KIND_HABITATION) {
+        Habitation_t* habitation = caseActuelle->donnees;
+        bfs_try_add_chemin(resultats, distance, habitation);
+        return true;
+    }
+    return false;
+}
 
-//todo: trier les résultats par ordre de distance.
-void bfs(SimWorld_t* world, Vector2I start, void* batId, Vector_t* chemins) {
+
+void bfs(SimWorld_t* world, Vector2I start, void* batId, Vector_t* chemins, VisiteurBFS_t visiteur) {
 
     BFSNode_t *start_node = bfs_node_alloc(start, 0);
     bool visited[SIM_MAP_LARGEUR][SIM_MAP_HAUTEUR] = {false};
@@ -66,15 +73,11 @@ void bfs(SimWorld_t* world, Vector2I start, void* batId, Vector_t* chemins) {
             continue;
         }
 
-        if (world->map[node->pos.x][node->pos.y].type == KIND_HABITATION) {
-            Habitation_t* habitation = world->map[node->pos.x][node->pos.y].donnees;
-            tryUpdateChemin(chemins, node->distance, habitation);
+        // si la fonction de visite de noeud retourne true, ne pas visiter les voisins.
+        if (visiteur != NULL && visiteur(&world->map[node->pos.x][node->pos.y], node->distance, chemins, batId)) {
             free(node);
             continue;
         }
-
-        if (world->map[node->pos.x][node->pos.y].type == KIND_ROUTE)
-            world->map[node->pos.x][node->pos.y].connexe = true;
 
         for (int i = -1; i < 2; ++i) {
             for (int j = -1; j < 2; ++j) {
@@ -99,6 +102,7 @@ void bfs(SimWorld_t* world, Vector2I start, void* batId, Vector_t* chemins) {
                             break;
 
                         case KIND_CENTRALE:
+                        case KIND_CASERNE:
                         case KIND_CHATEAU:
                             if (world->map[nextPos.x][nextPos.y].donnees == batId)
                                 liste_ajouter_fin(file, bfs_node_alloc(nextPos, node->distance));

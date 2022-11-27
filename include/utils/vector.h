@@ -7,7 +7,7 @@
 
 /// Un tableau dynamique générique.
 typedef struct Vector_t {
-    void **data;
+    void** data;
     size_t taille;
     size_t capacite;
 } Vector_t;

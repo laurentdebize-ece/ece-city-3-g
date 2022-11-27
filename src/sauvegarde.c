@@ -164,6 +164,11 @@ void sim_charger(SimWorld_t *world, const char *nomFichier) {
                 }
                     break;
 
+                case 'P': {
+                    data[j][i].type = KIND_CASERNE;
+                    ++j;
+                }
+
                 default:
                     break;
             }
@@ -210,6 +215,16 @@ void sim_charger(SimWorld_t *world, const char *nomFichier) {
                     }
                         break;
 
+                    case KIND_CASERNE: {
+                        for (int k = 0; k < 6; ++k) {
+                            for (int l = 0; l < 4; ++l) {
+                                visited[j + k][i + l] = true;
+                            }
+                        }
+                        sim_place_entity(world, KIND_CASERNE, j, i, false);
+                    }
+                        break;
+
                     default:
                         break;
                 }
@@ -246,6 +261,9 @@ void sim_sauvegarder(SimWorld_t *world, const char *nomFichier) {
                     break;
                 case KIND_CHATEAU:
                     fprintf(fichier, "W");
+                    break;
+                case KIND_CASERNE:
+                    fprintf(fichier, "P");
                     break;
                 default:
                     break;

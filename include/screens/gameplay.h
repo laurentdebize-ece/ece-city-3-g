@@ -31,6 +31,7 @@ typedef struct GameplayScreen_t {
     /// Débogage
     int dbgDisplayChateauNeighbors;
     int dbgDisplayCentraleNeighbors;
+    int dbgDisplayCaserneNeighbors;
 } GameplayScreen_t;
 
 /// Crée un écran de gameplay prêt à être utilisé.

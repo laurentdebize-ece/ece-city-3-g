@@ -46,6 +46,7 @@ enum SPRITE_MAP {
     SPRITE_ENERGY_6X4,
     SPRITE_EAU_4X6,
     SPRITE_EAU_6X4,
+    SPRITE_CASERNE_4x6,
     SPRITE_VIDE,
     NB_SPRITES
 };
@@ -61,6 +62,7 @@ typedef struct SpriteSheet_t {
     Image spriteDetectionTuile;
     Sprite_t sprites[NB_SPRITES];
     Texture2D spritesheetEtatsHabitations;
+    Texture2D spriteFeu;
 } SpriteSheet_t;
 
 void sprite_sheet_load(SpriteSheet_t* spriteSheet);

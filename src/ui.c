@@ -52,6 +52,8 @@ void ui_charger_textures(UIState* textures) {
     textures->toolbarIcons[ICON_CHECK] = LoadTexture("../assets/textures/icones/check.png");
     textures->toolbarIcons[ICON_CANCEL] = LoadTexture("../assets/textures/icones/cancel.png");
     textures->toolbarIcons[ICON_ADD] = LoadTexture("../assets/textures/icones/add.png");
+    textures->toolbarIcons[ICON_CASERNE] = LoadTexture("../assets/textures/icones/caserne-de-pompiers.png");
+    textures->toolbarIcons[ICON_PAUSE] = LoadTexture("../assets/textures/icones/pause.png");
 }
 
 void ui_draw_toolbar(UIState* states, SimWorld_t* sim) {
@@ -70,7 +72,7 @@ void ui_draw_toolbar(UIState* states, SimWorld_t* sim) {
     DrawTexture(states->toolbarIcons[ICON_PEOPLE], 211, 954, WHITE);
     DrawTexture(states->toolbarIcons[ICON_ENERGY], 446, 954, WHITE);
     DrawTexture(states->toolbarIcons[ICON_WATER], 668, 954, WHITE);
-    DrawTexture(states->toolbarIcons[ICON_BUILD], 892, 954, WHITE);
+    DrawTexture(states->toolbarIcons[ICON_PAUSE], 892, 954, sim->sim_running ? WHITE : ORANGE);
     DrawTexture(states->toolbarIcons[ICON_DESTROY], 1376, 954, states->currentBuildMode == BUILD_MODE_DESTROY ? YELLOW : WHITE);
 
     /// icône de l'echelle de temps.
@@ -88,6 +90,7 @@ void ui_draw_toolbar(UIState* states, SimWorld_t* sim) {
     DrawTexture(states->toolbarIcons[ICON_PEOPLE], 211, 954, WHITE);
     DrawTexture(states->toolbarIcons[ICON_ENERGY], 446, 954, WHITE);
     DrawTexture(states->toolbarIcons[ICON_WATER], 668, 954, WHITE);
+
 
     if (states->currentBuildMode == BUILD_MODE_DESTROY)
         DrawCircle(1395, 975, 30 , (Color) { 0, 0, 0, 45 });
@@ -109,6 +112,10 @@ void ui_draw_toolbar(UIState* states, SimWorld_t* sim) {
         DrawCircle(1247, 975, 30 ,  (Color) { 0, 0, 0, 45 });
     DrawTexture(states->toolbarIcons[ICON_CHATEAU], 1229, 954, states->currentBuildMode == BUILD_MODE_CHATEAU ? YELLOW : WHITE);
 
+    if (states->currentBuildMode == BUILD_MODE_CASERNE)
+        DrawCircle(1317, 975, 30, (Color) {0, 0, 0, 45});
+    DrawTexture(states->toolbarIcons[ICON_CASERNE], 1297, 954, states->currentBuildMode == BUILD_MODE_CASERNE ? YELLOW : WHITE);
+
     // dessin du temps actuel
     DrawRectangleRounded((Rectangle) {
         .x = -5,
@@ -118,7 +125,15 @@ void ui_draw_toolbar(UIState* states, SimWorld_t* sim) {
     }, 0.2f, 8, (Color) { 0, 194, 255, 191 });
     DrawText(timeToDate(sim), 10, 10, 24, WHITE);
 
-    // dessin de la monnaie
+    // dessin du temps réel écoulé.
+    DrawRectangleRounded((Rectangle) {
+        .x = 205,
+        .y = -5,
+        .width = 200,
+        .height = 50
+    }, 0.2f, 8, DARKGRAY);
+    DrawText(TextFormat("%.2d:%.2d:%.2d", sim->n_ticks / 3600, (sim->n_ticks / 60) % 24, sim->n_ticks % 60), 215, 10, 24, WHITE);
+
     DrawRectangleRounded((Rectangle) {
             .x = FENETRE_JEU_LARGEUR - 195,
             .y = -5,
@@ -126,6 +141,18 @@ void ui_draw_toolbar(UIState* states, SimWorld_t* sim) {
             .height = 50
     }, 0.2f, 8, (Color) { 0, 194, 255, 191 });
     DrawText(TextFormat("%d £", sim->monnaie), FENETRE_JEU_LARGEUR - 190, 10, 24, WHITE);
+
+
+    /// dessin du mode actuel.
+    Color modeCol = sim->rules == Communiste_t ? RED : BLUE;
+    const char *mode = sim->rules == Communiste_t ? "Communiste" : "Capitaliste";
+    DrawRectangleRounded((Rectangle) {
+            .x = FENETRE_JEU_LARGEUR - 415,
+            .y = -5,
+            .width = 200,
+            .height = 50
+    }, 0.2f, 8, modeCol);
+    DrawText(mode, FENETRE_JEU_LARGEUR - 400, 10, 24, WHITE);
 
     if (states->stateToolbar.stateMenuSave.modeMenu)
         draw_affichage_niveaux(states);
@@ -169,6 +196,14 @@ void ui_update_toolbar(UIState* textures, SimWorld_t* sim) {
             printf("Water\n");
         }
 
+        if (CheckCollisionPointRec(mousePos, (Rectangle) {
+                892, 954,
+                .width = textures->toolbarIcons[ICON_PAUSE].width,
+                .height = textures->toolbarIcons[ICON_PAUSE].height
+        })) {
+            sim->sim_running = !sim->sim_running;
+        }
+
         if (CheckCollisionPointRec(mousePos, (Rectangle) {892, 954, textures->toolbarIcons[ICON_BUILD].width,
                                                           textures->toolbarIcons[ICON_BUILD].height})) {
             textures->stateToolbar.stateMenuSave.modeMenu = false;
@@ -177,7 +212,8 @@ void ui_update_toolbar(UIState* textures, SimWorld_t* sim) {
 
         if (CheckCollisionPointRec(mousePos, (Rectangle) {1376, 954, textures->toolbarIcons[ICON_DESTROY].width,
                                                           textures->toolbarIcons[ICON_DESTROY].height})) {
-            textures->currentBuildMode = (textures->currentBuildMode == BUILD_MODE_DESTROY ? BUILD_MODE_NONE : BUILD_MODE_DESTROY);
+            textures->currentBuildMode = (textures->currentBuildMode == BUILD_MODE_DESTROY ? BUILD_MODE_NONE
+                                                                                           : BUILD_MODE_DESTROY);
             textures->stateToolbar.stateMenuSave.modeMenu = false;
             textures->stateToolbar.stateMenuSave.modeMenu = false;
         }
@@ -191,22 +227,25 @@ void ui_update_toolbar(UIState* textures, SimWorld_t* sim) {
         }
 
         if (CheckCollisionPointRec(mousePos, (Rectangle) {1012, 954, textures->toolbarIcons[ICON_ROAD].width,
-                                                          textures->toolbarIcons[ICON_ROAD].height})){
-            textures->currentBuildMode = (textures->currentBuildMode == BUILD_MODE_ROUTE ? BUILD_MODE_NONE : BUILD_MODE_ROUTE);
+                                                          textures->toolbarIcons[ICON_ROAD].height})) {
+            textures->currentBuildMode = (textures->currentBuildMode == BUILD_MODE_ROUTE ? BUILD_MODE_NONE
+                                                                                         : BUILD_MODE_ROUTE);
             textures->stateToolbar.stateMenuSave.modeMenu = false;
             textures->stateToolbar.stateMenuSave.modeMenu = false;
         }
 
         if (CheckCollisionPointRec(mousePos, (Rectangle) {1082, 954, textures->toolbarIcons[ICON_HABITATION].width,
-                                                          textures->toolbarIcons[ICON_HABITATION].height})){
+                                                          textures->toolbarIcons[ICON_HABITATION].height})) {
             textures->stateToolbar.stateMenuSave.modeMenu = false;
             textures->stateToolbar.stateMenuSave.modeMenu = false;
-            textures->currentBuildMode = (textures->currentBuildMode == BUILD_MODE_HABITATION ? BUILD_MODE_NONE : BUILD_MODE_HABITATION);
+            textures->currentBuildMode = (textures->currentBuildMode == BUILD_MODE_HABITATION ? BUILD_MODE_NONE
+                                                                                              : BUILD_MODE_HABITATION);
         }
 
         if (CheckCollisionPointRec(mousePos, (Rectangle) {1159, 954, textures->toolbarIcons[ICON_CENTRALE].width,
-                                                          textures->toolbarIcons[ICON_CENTRALE].height})){
-            textures->currentBuildMode = (textures->currentBuildMode == BUILD_MODE_CENTRALE ? BUILD_MODE_NONE : BUILD_MODE_CENTRALE);
+                                                          textures->toolbarIcons[ICON_CENTRALE].height})) {
+            textures->currentBuildMode = (textures->currentBuildMode == BUILD_MODE_CENTRALE ? BUILD_MODE_NONE
+                                                                                            : BUILD_MODE_CENTRALE);
             textures->stateToolbar.stateMenuSave.modeMenu = false;
             textures->stateToolbar.stateMenuSave.modeMenu = false;
         }
@@ -216,6 +255,13 @@ void ui_update_toolbar(UIState* textures, SimWorld_t* sim) {
             textures->stateToolbar.stateMenuSave.modeMenu = false;
             textures->currentBuildMode = (textures->currentBuildMode == BUILD_MODE_CHATEAU ? BUILD_MODE_NONE
                                                                                            : BUILD_MODE_CHATEAU);
+        }
+        if (CheckCollisionPointRec(mousePos, (Rectangle) {1297, 954, textures->toolbarIcons[ICON_CASERNE].width,
+                                                          textures->toolbarIcons[ICON_CASERNE].height})) {
+            textures->stateToolbar.stateMenuSave.modeMenu = false;
+            textures->stateToolbar.stateMenuSave.modeMenu = false;
+            textures->currentBuildMode = (textures->currentBuildMode == BUILD_MODE_CASERNE ? BUILD_MODE_NONE
+                                                                                           : BUILD_MODE_CASERNE);
         }
         if (textures->stateToolbar.stateMenuSave.modeMenu) {
             if (CheckCollisionPointRec(mousePos, (Rectangle) {40, 851, textures->toolbarIcons[ICON_GRID].width,
@@ -230,6 +276,7 @@ void ui_update_toolbar(UIState* textures, SimWorld_t* sim) {
                                                               textures->toolbarIcons[ICON_WATER_GRID].height})) {
                 textures->affichageNiveau = AFFICHAGE_NIVEAU_EAU;
             }
+
         }
     }
 }
@@ -244,6 +291,8 @@ CaseKind_t ui_buildmode_to_casekind(BuildMode mode) {
             return KIND_CENTRALE;
         case BUILD_MODE_CHATEAU:
             return KIND_CHATEAU;
+        case BUILD_MODE_CASERNE:
+            return KIND_CASERNE;
         default:
             return KIND_VIDE;
     }
