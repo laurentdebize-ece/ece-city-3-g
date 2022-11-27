@@ -44,6 +44,8 @@ typedef struct Case_t {
     bool connexe_elec;
     /// Permet d'indiquer si la case est connexe aux casernes de pompier.
     bool connexe_caserne;
+    /// Enum SPRITE_MAP pour avoir un fond de terrai non uniforme (arbres, herbe, ...).
+    enum SPRITE_MAP sprite_terrain;
 } Case_t;
 
 /// Le monde de simulation du jeu.

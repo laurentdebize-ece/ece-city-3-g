@@ -16,6 +16,30 @@ bool bfs_visiteur_connexite_eau(Case_t* caseActuelle, int distance, Vector_t* re
 bool bfs_visiteur_connexite_elec(Case_t* caseActuelle, int distance, Vector_t* resultats, void* batInitial);
 bool bfs_visiteur_connexite_caserne(Case_t* caseActuelle, int distance, Vector_t* resultats, void* batInitial);
 
+
+/// Fonction qui génére un fond de map aléatoire (arbres, herbe, terre, ...).
+/// @return enum SPRITE_MAP - sprite du terrain du fond de la carte de simulation.
+enum SPRITE_MAP rand_sprite_terrain(){
+    int rand_sprite_terrain = rand() % 1001;
+    enum SPRITE_MAP sprite_terrain;
+    if(rand_sprite_terrain < 800){
+        sprite_terrain = SPRITE_TERRAIN_0;
+    } else if (rand_sprite_terrain > 800 && rand_sprite_terrain < 840){
+        sprite_terrain = SPRITE_TERRAIN_1;
+    } else if (rand_sprite_terrain > 840 && rand_sprite_terrain < 880){
+        sprite_terrain = SPRITE_TERRAIN_2;
+    } else if (rand_sprite_terrain > 880 && rand_sprite_terrain < 920){
+        sprite_terrain = SPRITE_TERRAIN_3;
+    } else if (rand_sprite_terrain > 920 && rand_sprite_terrain < 960){
+        sprite_terrain = SPRITE_TERRAIN_4;
+    } else if (rand_sprite_terrain > 960 && rand_sprite_terrain < 1000){
+        sprite_terrain = SPRITE_TERRAIN_5;
+    } else {
+        sprite_terrain = SPRITE_TERRAIN_6;
+    }
+    return sprite_terrain;
+}
+
 /// Crée un monde de simulation vide.
 /// @param monnaie, rules - monnaie (argent dans le jeu), mode de jeu (communiste, capitaliste) - valeurs lues depuis le fichier txt.
 /// @return SimWorld_t* world - monde de simulation.
@@ -35,6 +59,7 @@ SimWorld_t* sim_world_create(SimRules_t rules, int monnaie) {
             world->map[i][j].type = KIND_VIDE;
             world->map[i][j].connexe_eau = 0;
             world->map[i][j].connexe_elec = 0;
+            world->map[i][j].sprite_terrain = rand_sprite_terrain();
         }
     }
 

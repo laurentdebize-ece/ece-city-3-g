@@ -67,9 +67,11 @@ void affichage_draw_terrain_background(SpriteSheet_t *sheet, SimWorld_t *world, 
                     break;
                 }
 
-                default:
-                    sprite_sheet_draw_sprite(sheet, SPRITE_TERRAIN_0, WHITE, i, j);
+                default:{
+                    sprite_sheet_draw_sprite(sheet, world->map[i][j].sprite_terrain, WHITE, i, j);
                     break;
+                }
+
             }
         }
     }
