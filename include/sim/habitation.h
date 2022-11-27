@@ -51,9 +51,12 @@ typedef struct Habitation_t {
 } Habitation_t;
 
 /// Crée une habitation.
+/// @param niveau - niveau de l'habitation a alloué (Ruine, Terrain vague, etc.).
+/// @return Habitation_t habitation - adresse structure habitation allouée dynamiquement.
 Habitation_t* habitation_alloc(NiveauHabitation_t niveau);
 
 /// Détruit une habitation.
+/// @param habitation - adresse structure habitation allouée dynamiquement.
 void habitation_free(Habitation_t* habitation);
 
 /// Incrémente d'un tick la simulation d'un bâtiment.

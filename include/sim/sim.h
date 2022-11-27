@@ -75,21 +75,36 @@ typedef struct SimWorld_t {
 } SimWorld_t;
 
 /// Crée un monde de simulation vide.
+/// @param monnaie, rules - monnaie (argent dans le jeu), mode de jeu (communiste, capitaliste) - valeurs lues depuis le fichier txt.
+/// @return SimWorld_t* world - monde de simulation.
 SimWorld_t* sim_world_create(SimRules_t rules, int monnaie);
 
 /// Avance d'une étape la simulation.
+/// @param world - monde de simulation.
 void sim_world_step(SimWorld_t* world);
 
 /// Détruit un monde de simulation.
+/// @param world - monde de simulation.
 void sim_world_destroy(SimWorld_t* world);
 
 /// Détruit l'entitée séléctionnée.
+/// @param world - adresse de structure world allouée dynamiquement - monde de simulation.
+/// @param x, y - coordonnées en isométrique de la destruction sur le monde de simulation.
 void sim_destroy_entity(SimWorld_t* world, int x, int y);
 
 /// Place une entité dans la carte de la simulation aux coordonnées données.
+/// @param world - adresse de structure world allouée dynamiquement - monde de simulation.
+/// @param type - type de case de la simulation du monde (Habitation, route, terrain, ...).
+/// @param x, y - coordonnées en isométrique du placement sur le monde de simulation.
+/// @param reload - si l'entité placée est une centrale, caserne, château d'eau alors permet d'actualiser ses voisins.
 void sim_place_entity(SimWorld_t* world, CaseKind_t type, int x, int y, bool reload);
 
-/// Vérifie si un bâtiment de dimensions précisés peut être placé à une position donnée.
+/// Vérifie si un bâtiment de dimensions précisées peut être placé à une position donnée.
+/// @param world - adresse de structure world allouée dynamiquement - monde de simulation.
+/// @param isBat - différencie le placement d'une route (1X1) et d'un bâtiment (3X3, 4X6, 6X4) où il faut vérifier les cases adjacentes pour placer l'entité.
+/// @param x, y - coordonnées en isométrique du placement sur le monde de simulation.
+/// @param w, h - hauteur et largeur de l'entité à placer.
+/// @return booléen - true si le placement de l'entité est possible - false sinon.
 bool sim_check_can_place(SimWorld_t* world, bool isBat, int x, int y, int w, int h);
 
 /// Recalcule les voisins de chacunes des centrales & châteaux.

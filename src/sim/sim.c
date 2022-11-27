@@ -17,6 +17,8 @@ bool bfs_visiteur_connexite_elec(Case_t* caseActuelle, int distance, Vector_t* r
 bool bfs_visiteur_connexite_caserne(Case_t* caseActuelle, int distance, Vector_t* resultats, void* batInitial);
 
 /// Crée un monde de simulation vide.
+/// @param monnaie, rules - monnaie (argent dans le jeu), mode de jeu (communiste, capitaliste) - valeurs lues depuis le fichier txt.
+/// @return SimWorld_t* world - monde de simulation.
 SimWorld_t* sim_world_create(SimRules_t rules, int monnaie) {
     SimWorld_t* world = malloc(sizeof(SimWorld_t));
     world->habitations = liste_alloc();
@@ -42,9 +44,12 @@ SimWorld_t* sim_world_create(SimRules_t rules, int monnaie) {
     world->qte_totale_eau = 0;
     world->qte_totale_electricite = 0;
     world->sim_running = true;
+
+    return world;
 }
 
 /// Détruit un monde de simulation.
+/// @param world - monde de simulation.
 void sim_world_destroy(SimWorld_t* world) {
     liste_free(world->habitations);
     liste_free(world->centrales);
@@ -53,6 +58,8 @@ void sim_world_destroy(SimWorld_t* world) {
     free(world);
 }
 
+/// Avance d'une étape la simulation du monde.
+/// @param world - monde de simulation.
 void sim_world_step(SimWorld_t* world) {
 
     if (!world->sim_running)
@@ -92,6 +99,7 @@ void sim_world_step(SimWorld_t* world) {
 }
 
 /// Remet à zéro la répartition de l'eau et de l'électricité pour les bâtiments.
+/// @param world - adresse de structure world allouée dynamiquement - monde de simulation
 void sim_reset_flow_distribution(SimWorld_t* world) {
     struct Maillon_t *maisons = world->habitations->premier;
     while (maisons) {
@@ -115,6 +123,10 @@ void sim_reset_flow_distribution(SimWorld_t* world) {
 }
 
 /// Place une entité dans la carte de la simulation aux coordonnées données.
+/// @param world - adresse de structure world allouée dynamiquement - monde de simulation.
+/// @param type - type de case de la simulation du monde (Habitation, route, terrain, ...).
+/// @param x, y - coordonnées en isométrique du placement sur le monde de simulation.
+/// @param reload - si l'entité placée est une centrale, caserne, château d'eau alors permet d'actualiser ses voisins.
 void sim_place_entity(SimWorld_t* world, CaseKind_t type, int x, int y, bool reload) {
     switch (type) {
         case KIND_HABITATION:
@@ -190,6 +202,12 @@ void sim_place_entity(SimWorld_t* world, CaseKind_t type, int x, int y, bool rel
         sim_update_voisins(world);
 }
 
+/// Vérifie si un bâtiment de dimensions précisées peut être placé à une position donnée.
+/// @param world - adresse de structure world allouée dynamiquement - monde de simulation.
+/// @param isBat - différencie le placement d'une route (1X1) et d'un bâtiment (3X3, 4X6, 6X4) où il faut vérifier les cases adjacentes pour placer l'entité.
+/// @param x, y - coordonnées en isométrique du placement sur le monde de simulation.
+/// @param w, h - hauteur et largeur de l'entité à placer.
+/// @return booléen - true si le placement de l'entité est possible - false sinon.
 bool sim_check_can_place(SimWorld_t* world, bool isBat, int x, int y, int w, int h) {
     // Si le bâtiment dépasse du terrain, on ne peut pas le placer.
     if (x < 0 || y < 0 || x + w > SIM_MAP_LARGEUR || y + h > SIM_MAP_HAUTEUR)
@@ -220,7 +238,9 @@ bool sim_check_can_place(SimWorld_t* world, bool isBat, int x, int y, int w, int
     return false;
 }
 
-/// Détruit l'entitée séléctionnée.
+/// Détruit l'entité sélectionnée.
+/// @param world - adresse de structure world allouée dynamiquement - monde de simulation.
+/// @param x, y - coordonnées en isométrique de la destruction sur le monde de simulation.
 void sim_destroy_entity(SimWorld_t* world, int x, int y) {
     if (x >= SIM_MAP_LARGEUR || y >= SIM_MAP_HAUTEUR || x < 0 || y < 0)
         return;
