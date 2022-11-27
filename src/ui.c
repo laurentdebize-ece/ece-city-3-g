@@ -7,7 +7,7 @@ const char* timeToDate(SimWorld_t* s) {
 
     int year = (s->n_ticks / N_TICKS_EVOLUTION) / 12;
     int month = (s->n_ticks / N_TICKS_EVOLUTION) % 12;
-    return TextFormat("%s %d", months[month], 2000 + year);
+    return TextFormat("%s %d", months[month], (s->rules == Communiste_t ? 1949 : 2000) + year);
 }
 
 void draw_affichage_niveaux(UIState* textures){
