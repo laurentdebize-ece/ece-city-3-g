@@ -160,7 +160,7 @@ void sim_step_resources(SimWorld_t* world) {
             struct Maillon_t *chateaux = world->chateaux->premier;
             while (chateaux) {
                 ChateauEau_t *chateau = (ChateauEau_t *) chateaux->data;
-                chateau_step_remaining(chateau, &remaining_water);
+                chateau_step_communist(chateau, &remaining_water);
                 chateaux = chateaux->next;
             }
 

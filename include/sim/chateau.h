@@ -29,7 +29,7 @@ void chateau_free(ChateauEau_t* chateau);
 void chateau_step(ChateauEau_t* chateau, SimRules_t rules);
 
 /// Distribue l'eau restante aux bâtiments.
-void chateau_step_remaining(ChateauEau_t* chateau, int* remaining_total_cap);
+void chateau_step_communist(ChateauEau_t* chateau, int* remaining_total_cap);
 
 /// Donne de l'eau à un bâtiment.
 int chateau_dispense(ChateauEau_t* chateau, int quantite);
