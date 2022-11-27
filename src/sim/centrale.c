@@ -29,6 +29,19 @@ void centrale_step(CentraleElectrique_t* centrale, SimRules_t rules) {
     }
 }
 
+void centrale_step_communist(CentraleElectrique_t* centrale, int* remaining_total_cap) {
+    /// distribution de l'elec restante pour remplir jusqu'à la demande du niveau actuel (demande du mode communiste)
+    for (int i = 0; i < centrale->habitations->taille; ++i) {
+        HabitationNode_t* habitation = centrale->habitations->data[i];
+        int needed_rem = habitation_get_required_for_next_level(habitation->habitation) - habitation->habitation->electricite;
+        if (needed_rem <= *remaining_total_cap) {
+            int dispensed = centrale_dispense(centrale, needed_rem);
+            habitation->habitation->electricite += dispensed;
+            *remaining_total_cap -= dispensed;
+        }
+    }
+}
+
 int centrale_dispense(CentraleElectrique_t* centrale, int quantite) {
     if (centrale->capacite >= quantite) {
         centrale->capacite -= quantite;

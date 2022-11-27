@@ -132,6 +132,23 @@ int habitation_get_remaining_required_energy(Habitation_t *habitation, SimRules_
     return habitation_get_required_energy(habitation, rules) - habitation->electricite;
 }
 
+int habitation_get_required_for_next_level(Habitation_t* hab) {
+    switch (hab->niveau) {
+        case NIVEAU_TERRAIN_VAGUE:
+        case NIVEAU_RUINE:
+            return 10;
+        case NIVEAU_CABANE:
+            return 50;
+        case NIVEAU_MAISON:
+            return 100;
+        case NIVEAU_IMMEUBLE:
+        case NIVEAU_GRATTE_CIEL:
+            return 1000;
+        default:
+            return 0;
+    }
+}
+
 void habitation_evolve(Habitation_t *habitation, SimRules_t rules) {
     bool alimentee = habitation->alimentee_en_eau && habitation->alimentee_en_electricite;
     if (rules == Capitaliste_t) {
@@ -148,8 +165,14 @@ void habitation_evolve(Habitation_t *habitation, SimRules_t rules) {
                 habitation->niveau = habitation_level_down(habitation->niveau, alimentee);
         }
     } else {
-        if (alimentee)
+        int next_level_water = habitation_get_required_for_next_level(habitation), next_level_elec = next_level_water;
+
+        /// On a les conditions d'évolution pour le prochain niveau, on évolue.
+        if (habitation->eau == next_level_water && habitation->electricite == next_level_elec && alimentee)
             habitation->niveau = habitation_level_up(habitation->niveau, alimentee);
+        else if (habitation->eau == habitation_get_required_water(habitation, rules)
+        && habitation->electricite == habitation_get_required_energy(habitation, rules) && alimentee)
+            return;
         else
             habitation->niveau = habitation_level_down(habitation->niveau, alimentee);
     }
