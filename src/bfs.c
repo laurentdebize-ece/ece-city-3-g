@@ -130,3 +130,8 @@ int trier_noeux_habitations_par_niveau(HabitationNode_t* node, HabitationNode_t*
     int d = node2->habitation->niveau - node->habitation->niveau;
     return d;
 }
+
+int trier_noeux_habitations_par_eau(HabitationNode_t* node, HabitationNode_t* node2) {
+    int d = node2->habitation->eau - node->habitation->eau;
+    return d;
+}

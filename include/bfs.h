@@ -16,6 +16,8 @@ int trier_noeux_habitations_par_distance(HabitationNode_t* node, HabitationNode_
 
 int trier_noeux_habitations_par_niveau(HabitationNode_t* node, HabitationNode_t* node2);
 
+int trier_noeux_habitations_par_eau(HabitationNode_t* node, HabitationNode_t* node2);
+
 /// Un pointeur de fonction sur une fonction visiteuse de noeud.
 /// Retourne true si les voisins du noeud ne doivent pas êtres visités.
 typedef bool (*VisiteurBFS_t)(Case_t* caseActuelle, int distance, Vector_t* resultats, void* batId);
